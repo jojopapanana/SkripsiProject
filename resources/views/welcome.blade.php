@@ -1,4 +1,4 @@
-<x-layout title="Welcome">
+<x-layout title="Hello">
     <p>helo world</p>
     <p>ini project skripsi</p>
 
