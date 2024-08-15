@@ -1,1 +1,38 @@
-// file ini untuk scss (css) custom yaaps, misal pake class atau id
+#navbar-container{
+    width: 20%;
+    background-color: rgba(30, 3, 66, 1);
+    height: 100%;
+    position: fixed;
+    padding-left: 32px;
+    font-weight: 500;
+    font-size: 1.3rem;
+}
+
+table{
+    margin: 0;
+    padding-left: 0;
+}
+
+td a {
+    display: block;
+    color: white; 
+    text-decoration: none;
+    font-weight: 500;
+}
+
+td a:hover {
+    opacity: 50%;
+}
+
+body{
+    background-color: rgba(225, 247, 245, 1);
+}
+
+main{
+    margin-left: 20%;
+    padding-left: 72px;
+}
+
+#profile{
+    float: bottom;
+}
