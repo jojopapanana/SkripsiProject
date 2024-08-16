@@ -1,10 +1,4 @@
 <div class="container ms-0" id="navbar-container">
-  {{-- <ul>
-      <li><a href="">Transaksi</a></li>
-      <li><a href="">Arus Kas</a></li>
-      <li><a href="">Laba / Rugi</a></li>
-      <li><a href="">Analisis Tren</a></li>
-  </ul> --}}
 
   <table id="navbar-container">
     <tr>
