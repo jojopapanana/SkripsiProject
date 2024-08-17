@@ -5,7 +5,7 @@
       <td valign="top" class="pt-5"><a href="">LOGO</a></td>
     </tr>
     <tr>
-      <td><a href="">Transaksi</a></td>
+      <td><a href="{{ route('transaksi') }}">Transaksi</a></td>
     </tr>
     <tr>
       <td><a href="">Arus Kas</a></td>

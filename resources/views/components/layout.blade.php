@@ -8,6 +8,7 @@
         <!-- Favicon -->
     {{-- <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"> --}}
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
+
 </head>
 <body>
     <div class="d-flex flex-row" id="app">
