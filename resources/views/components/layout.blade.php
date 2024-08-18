@@ -8,10 +8,12 @@
         <!-- Favicon -->
     {{-- <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"> --}}
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
+
 </head>
 <body>
-    <div id="app">
-        <main class="mt-5 pt-5 d-flex flex-column min-vh-100">
+    <div class="d-flex flex-row" id="app">
+        <x-navbar></x-navbar>
+        <main class="min-vh-100 mt-5">
             {{ $slot }}
         </main>
         {{-- <x-footer></x-footer> --}}
