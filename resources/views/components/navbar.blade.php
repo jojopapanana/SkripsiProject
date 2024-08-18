@@ -11,7 +11,7 @@
       <td><a href="">Arus Kas</a></td>
     </tr>
     <tr>
-      <td><a href="">Laba Rugi</a></td>
+      <td><a href="{{ route('stok') }}">Laba Rugi</a></td>
     </tr>
     <tr>
       <td><a href="">Stok Barang</a></td>
