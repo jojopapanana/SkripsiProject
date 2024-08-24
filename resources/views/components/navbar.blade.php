@@ -11,10 +11,10 @@
       <td><a href="">Arus Kas</a></td>
     </tr>
     <tr>
-      <td><a href="{{ route('stok') }}">Laba Rugi</a></td>
+      <td><a href="{{ route('labarugi') }}">Laba Rugi</a></td>
     </tr>
     <tr>
-      <td><a href="">Stok Barang</a></td>
+      <td><a href="{{ route('stok') }}">Stok Barang</a></td>
     </tr>
     <tr>
       <td><a href="">Analisis Tren</a></td>
@@ -30,4 +30,5 @@
   </table>
 
   
+</div>
 </div>

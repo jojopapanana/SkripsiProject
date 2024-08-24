@@ -1,6 +1,6 @@
 <x-layout title="Transaksi">
     <div class="d-flex justify-content-center" style="width: 70vw">
-        <h1 class="fw-bold">STOK BARANG</h1>
+        <h1 class="fw-bold">LAPORAN LABA RUGI</h1>
     </div>
     <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
       <div class="dropdown">
@@ -20,7 +20,7 @@
               <li><a class="dropdown-item" href="#">Oktober</a></li>
               <li><a class="dropdown-item" href="#">November</a></li>
               <li><a class="dropdown-item" href="#">Desember</a></li>
-          </ul>
+          </ul>1
       </div>
 
       <div class="dropdown" id="dropdown-tahun-transaksi">
@@ -36,22 +36,22 @@
   </div>
     <div class="card mt-4">
         <div class="card-body">
-            <h5 class="fw-bold">Penjualan Terbanyak</h4>
+            <h6 class="fw-bold">Pemasukan</h6>
             <div class="row">
                 <div class="col">
                     <div class="justify-content-start">
-                        <h3 class="text-start fs-6 fw-normal mt-2">Handphone</h3>
+                        <h3 class="text-start fs-6 fw-normal mt-2">Penjualan Barang</h3>
                     </div>
                     <div class="justify-content-start">
-                        <h3 class="text-start fs-6 fw-normal mt-3">Charger</h3>
+                        <h3 class="text-start fs-6 fw-normal mt-3">Penjualan Barang</h3>
                     </div>
                 </div>
                 <div class="col">
                     <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-normal">20</h3>
+                        <h3 class="text-end fs-6 fw-bold text-success">Rp. 15.000.000</h3>
                     </div>
                     <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-normal">10</h3>
+                        <h3 class="text-end fs-6 fw-bold text-success">Rp. 10.000.000</h3>
                     </div>
                 </div>
             </div>
@@ -59,50 +59,60 @@
             <div class="row">
                 <div class="col">
                     <div class="justify-content-start">
-                        <h5 class="text-start fs-6 fw-bold">Total Terjual</h4>
+                        <h5 class="text-start fs-6 fw-bold">Total Pemasukan</h4>
                     </div>
                 </div>
                 <div class="col">
                     <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold">30</h3>
+                        <h3 class="text-end fs-6 fw-bold">Rp. 25.000.000</h3>
                     </div>
                 </div>
             </div>
+            <br>
+            <h6 class="fw-bold">Pengeluaran</h6>
+            <div class="row">
+                <div class="col">
+                    <div class="justify-content-start">
+                        <h3 class="text-start fs-6 fw-normal mt-2">Biaya Sewa</h3>
+                    </div>
+                    <div class="justify-content-start">
+                        <h3 class="text-start fs-6 fw-normal mt-3">Pembayaran Vendor</h3>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="justify-content-end">
+                        <h3 class="text-end fs-6 fw-bold text-danger">- Rp. 10.000.000</h3>
+                    </div>
+                    <div class="justify-content-end">
+                        <h3 class="text-end fs-6 fw-bold text-danger">- Rp. 10.000.000</h3>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col">
+                    <div class="justify-content-start">
+                        <h5 class="text-start fs-6 fw-bold">Total Pengeluaran</h4>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="justify-content-end">
+                        <h3 class="text-end fs-6 fw-bold">Rp. 20.000.000</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="justify-content-start">
+                        <h5 class="text-start fs-6 fw-bold">Total Laba/Rugi</h4>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="justify-content-end">
+                        <h3 class="text-end fs-6 fw-bold text-success">Rp. 5.000.000</h3>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="table-container mt-4" style="overflow: hidden; border-radius: 10px">
-      <table class="table" style="border: none">
-        <thead>
-          <tr>
-            <th scope="col">Kode Stok</th>
-            <th scope="col">Nama</th>
-            <th scope="col">Nominal</th>
-            <th scope="col">Sisa</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-  
-        <tbody class="mt-3">
-            <tr>
-                <td scope="row">ST001</td>
-                <td>Handphone</td>
-                <td>Rp. 100.000</td>
-                <td>30</td>
-                <td>
-                  <div class="d-flex gap-4">
-                      <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal">
-                      <i class="bi bi-pencil-fill"></i>
-                      </button>
-
-                      <button type="button" class="btn p-0" style="color: red; border: none" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                      <i class="bi bi-trash3-fill"></i>
-                      </button>
-                  </div>
-                </td>
-            </tr>
-        </tbody>
-      </table>
     </div>
 </x-layout>
