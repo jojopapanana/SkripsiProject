@@ -8,7 +8,7 @@
       <td><a href="{{ route('transaksi') }}">Transaksi</a></td>
     </tr>
     <tr>
-      <td><a href="">Arus Kas</a></td>
+      <td><a href="{{ route('aruskas') }}">Arus Kas</a></td>
     </tr>
     <tr>
       <td><a href="">Laba Rugi</a></td>

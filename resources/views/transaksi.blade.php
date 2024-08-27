@@ -6,12 +6,21 @@
     <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
         <div class="dropdown">
             <button class="dropdown-toggle fs-5 p-2 fw-bold" id="dropdown-bulan-transaksi" data-bs-toggle="dropdown" aria-expanded="true" style="border: 2px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
-              AGUSTUS
+              BULAN
             </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <ul class="dropdown-menu" aria-labelledby="dropdown-bulan-transaksi">
+              <li><a class="dropdown-item" href="#">JANUARI</a></li>
+              <li><a class="dropdown-item" href="#">FEBRUARI</a></li>
+              <li><a class="dropdown-item" href="#">MARET</a></li>
+              <li><a class="dropdown-item" href="#">APRIL</a></li>
+              <li><a class="dropdown-item" href="#">MEI</a></li>
+              <li><a class="dropdown-item" href="#">JUNI</a></li>
+              <li><a class="dropdown-item" href="#">JULI</a></li>
+              <li><a class="dropdown-item" href="#">AGUSTUS</a></li>
+              <li><a class="dropdown-item" href="#">SEPTEMBER</a></li>
+              <li><a class="dropdown-item" href="#">OKTOBER</a></li>
+              <li><a class="dropdown-item" href="#">NOVEMBER</a></li>
+              <li><a class="dropdown-item" href="#">DESEMBER</a></li>
             </ul>
         </div>
     
@@ -20,9 +29,9 @@
               2024
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item" href="#">2022</a></li>
+              <li><a class="dropdown-item" href="#">2023</a></li>
+              <li><a class="dropdown-item" href="#">2024</a></li>
             </ul>
         </div>
     </div>
@@ -42,13 +51,14 @@
         </thead>
   
         <tbody class="mt-3">
+          @forEach($transactions as $transaction)
           <tr>
             <td scope="row">TR001</td>
-            <td>08-08-2024</td>
-            <td>Rp. 100.000</td>
-            <td>Pemasukan</td>
-            <td>Operasional</td>
-            <td>Tunai</td>
+            <td>{{ $transaction->timestamp }}</td>
+            <td>Rp. {{ $transaction->nominal }}</td>
+            <td>{{ $transaction->type }}</td>
+            <td>{{ $transaction->category }}</td>
+            <td>{{ $transaction->method }}</td>
             <td>
               <div class="d-flex gap-4">
                 <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal">
@@ -61,6 +71,7 @@
               </div>
             </td>
           </tr>
+          @endforeach
         </tbody>
       </table>
     </div>
@@ -136,5 +147,18 @@
       </div>
     </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
+        const dropdownToggle = document.querySelector('#dropdown-bulan-transaksi');
+
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function() {
+                dropdownToggle.textContent = this.textContent;
+            });
+        });
+    });
+</script>
 
 </x-layout>

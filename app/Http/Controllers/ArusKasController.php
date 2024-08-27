@@ -4,17 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\TransactionDetail;
+use App\Models\Product;
 use App\Models\Transaksi;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Number;
 
-class TransaksiController extends Controller
+class ArusKasController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $transactions = Transaksi::all();
-        return view('transaksi', ['transactions' => $transactions]);
+        $pendapatan_operasional = DB::table('transaksis')->select('transaksis.nominal')
+                                                        ->where([
+                                                            ['transaksis.category', '=', 'Operasional'], 
+                                                            ['transaksis.type', '=', 'Pemasukan'], 
+                                                            ['transaksis.method', '=', 'Tunai']])
+                                                        ->sum('transaksis.nominal');
+        $formatted_pendapatan_operasional = Number::format($pendapatan_operasional);
+        return view('aruskas', ['pendapatan_operasional' => $formatted_pendapatan_operasional]);
     }
 
     /**
