@@ -1,20 +1,14 @@
 <div class="container ms-0" id="navbar-container">
-  {{-- <ul>
-      <li><a href="">Transaksi</a></li>
-      <li><a href="">Arus Kas</a></li>
-      <li><a href="">Laba / Rugi</a></li>
-      <li><a href="">Analisis Tren</a></li>
-  </ul> --}}
 
   <table id="navbar-container">
     <tr>
       <td valign="top" class="pt-5"><a href="">LOGO</a></td>
     </tr>
     <tr>
-      <td><a href="">Transaksi</a></td>
+      <td><a href="{{ route('transaksi') }}">Transaksi</a></td>
     </tr>
     <tr>
-      <td><a href="">Arus Kas</a></td>
+      <td><a href="{{ route('aruskas') }}">Arus Kas</a></td>
     </tr>
     <tr>
       <td><a href="">Laba Rugi</a></td>

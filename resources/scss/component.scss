@@ -1,3 +1,5 @@
+// NAVBAR
+
 #navbar-container{
     width: 20%;
     background-color: rgba(30, 3, 66, 1);
@@ -35,4 +37,76 @@ main{
 
 #profile{
     float: bottom;
+}
+
+
+//DASHBOARD
+
+.dashboard-card{
+    background-color: white;
+    height: 15vh;
+    width: 35vw;
+    padding: 24px 36px;
+    margin-top: 5vh;
+}
+
+.dashboard-trenkeuntungan{
+    background-color: white;
+    height: 50vh;
+    width: 71.7vw;
+    padding: 16px;
+    margin-top: 5vh;
+}
+
+#dashboard-button-full{
+    width: 35vw;
+    background-color: rgba(30, 3, 66, 1);
+    margin-top: 8vh;
+    color: white;
+}
+
+#dashboard-button-full:hover{
+    background-color: white;
+    color: rgba(30, 3, 66, 1);
+}
+
+
+#dashboard-button-outline{
+    width: 35vw;
+    background-color: white;
+    margin-top: 8vh;
+    color: rgba(30, 3, 66, 1);
+}
+
+#dashboard-button-outline:hover{
+    background-color: rgba(30, 3, 66, 1);
+    color: white;
+}
+
+
+//TRANSAKSI
+
+#judul-tabel-transaksi, #konten-tabel-transaksi{
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+}
+
+.table-container{
+    border: none;
+    border-radius: 10px;
+}
+
+
+//ARUS KAS
+
+.aruskas-container{
+    width: 72vw;
+    height: 70vh;
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+    margin-top: 5vh;
+    padding: 21px 45px;
 }
