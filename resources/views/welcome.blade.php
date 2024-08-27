@@ -27,7 +27,7 @@
 
     <div class="dashboard-trenkeuntungan">
         <h3 class="fw-bold">Tren Keuntungan-mu!</h3>
-        <canvas id="myChart" style="width: 70vw; height: 40vh"></canvas>
+        {{-- <canvas id="myChart" style="width: 70vw; height: 40vh"></canvas> --}}
     </div>
 
     
@@ -43,7 +43,7 @@
         </button>
     </div>
     
-    <script type="module">
+    {{-- <script type="module">
     const data = {
         labels: @json($data->map(fn ($data) => $data->date)),
         datasets: [{
@@ -64,5 +64,5 @@
         document.getElementById('myChart'),
         config
     );
-    </script>
+    </script> --}}
 </x-layout>

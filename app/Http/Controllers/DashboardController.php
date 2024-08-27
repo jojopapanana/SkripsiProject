@@ -13,11 +13,11 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $data = User::selectRaw("date_format(created_at, '%Y-%m-%d') as date, count(*) as aggregate")
-            ->whereDate('created_at', '>=', now()->subDays(30))
-            ->groupBy('date')
-            ->get();
-        return view('welcome', compact('data'));
+        // $data = User::selectRaw("date_format(created_at, '%Y-%m-%d') as date, count(*) as aggregate")
+        //     ->whereDate('created_at', '>=', now()->subDays(30))
+        //     ->groupBy('date')
+        //     ->get();
+        return view('welcome');
     }
 
     /**
