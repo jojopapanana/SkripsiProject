@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Transaksi;
 
 class TransaksiController extends Controller
 {
@@ -12,7 +13,8 @@ class TransaksiController extends Controller
      */
     public function index()
     {
-        return view('transaksi');
+        $transactions = Transaksi::all();
+        return view('transaksi', ['transactions' => $transactions]);
     }
 
     /**

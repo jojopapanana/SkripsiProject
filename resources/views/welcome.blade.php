@@ -27,13 +27,10 @@
 
     <div class="dashboard-trenkeuntungan">
         <h3 class="fw-bold">Tren Keuntungan-mu!</h3>
-        {{-- @foreach($data as $d){
-            <p>{{ $d->date }}</p>
-        }
-        @endforeach --}}
+        {{-- <canvas id="myChart" style="width: 70vw; height: 40vh"></canvas> --}}
     </div>
 
-    <canvas id="myChart" style="width: 400px; height: 400px"></canvas>
+    
     
 
     <div class="d-flex gap-4">
@@ -46,7 +43,7 @@
         </button>
     </div>
     
-    <script type="module">
+    {{-- <script type="module">
     const data = {
         labels: @json($data->map(fn ($data) => $data->date)),
         datasets: [{
@@ -67,5 +64,5 @@
         document.getElementById('myChart'),
         config
     );
-    </script>
+    </script> --}}
 </x-layout>
