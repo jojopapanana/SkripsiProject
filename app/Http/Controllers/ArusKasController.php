@@ -17,14 +17,14 @@ class ArusKasController extends Controller
      */
     public function index()
     {
-        $pendapatan_operasional = DB::table('transaksis')->select('transaksis.nominal')
-                                                        ->where([
-                                                            ['transaksis.category', '=', 'Operasional'], 
-                                                            ['transaksis.type', '=', 'Pemasukan'], 
-                                                            ['transaksis.method', '=', 'Tunai']])
-                                                        ->sum('transaksis.nominal');
-        $formatted_pendapatan_operasional = Number::format($pendapatan_operasional);
-        return view('aruskas', ['pendapatan_operasional' => $formatted_pendapatan_operasional]);
+        // $pendapatan_operasional = DB::table('transaksis')->select('transaksis.nominal')
+        //                                                 ->where([
+        //                                                     ['transaksis.category', '=', 'Operasional'], 
+        //                                                     ['transaksis.type', '=', 'Pemasukan'], 
+        //                                                     ['transaksis.method', '=', 'Tunai']])
+        //                                                 ->sum('transaksis.nominal');
+        // $formatted_pendapatan_operasional = Number::format($pendapatan_operasional);
+        return view('aruskas');
     }
 
     /**

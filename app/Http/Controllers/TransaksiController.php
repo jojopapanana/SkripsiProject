@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
+use App\Models\TransactionDetail;
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Number;
 
 class TransaksiController extends Controller
 {
@@ -14,7 +18,12 @@ class TransaksiController extends Controller
     public function index()
     {
         $transactions = Transaksi::all();
-        return view('transaksi', ['transactions' => $transactions]);
+        $totals = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+                                        ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                        ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as productTotal'))
+                                        ->groupBy('transaksis.id')
+                                        ->get();
+        return view('transaksi', ['transactions' => $transactions], ['totals' => $totals]);
     }
 
     /**
