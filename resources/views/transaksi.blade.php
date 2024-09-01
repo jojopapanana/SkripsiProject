@@ -55,7 +55,11 @@
           <tr>
             <td scope="row">TR001</td>
             <td>{{ $transaction->timestamp }}</td>
-            <td>Rp. {{ $transaction->nominal }}</td>
+            @forEach($totals as $total)
+            @if ($transaction->id == $total->id)
+              <td>Rp. {{ $total->productTotal }}</td>
+            @endif
+            @endforeach
             <td>{{ $transaction->type }}</td>
             <td>{{ $transaction->category }}</td>
             <td>{{ $transaction->method }}</td>

@@ -41,7 +41,7 @@
         <p class="fw-bold">Arus Kas Operasional</p>
         <div class="d-flex justify-content-between">
             <p>Penerimaan kas penjualan</p>
-            <p class="fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ $pendapatan_operasional }}</p>
+            <p class="fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. 15.000.000</p>
         </div>
 
         <div class="d-flex justify-content-between" style="border-bottom: 1px solid black; border-bottom-color: black">
