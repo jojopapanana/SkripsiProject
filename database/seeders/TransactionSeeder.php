@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\Transaksi;
+use Carbon\Carbon;
 
 class TransactionSeeder extends Seeder
 {
@@ -16,60 +17,80 @@ class TransactionSeeder extends Seeder
     {
         DB::table('transaksis')->insert([
             [
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
                 'method' => 'Tunai',
                 'description' => 'Hasil penjualan'
             ],
             [
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
                 'method' => 'Tunai',
                 'description' => 'Hasil penjualan'
             ],
             [
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'nominal' => 100000,
                 'type' => 'Pengeluaran',
                 'category' => 'Operasional',
                 'method' => 'Tunai',
                 'description' => 'Uang makan'
             ],
             [
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
                 'method' => 'Non-Tunai',
                 'description' => 'Hasil penjualan'
             ],
             [
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
                 'method' => 'Non-Tunai',
                 'description' => 'Hasil penjualan'
             ],
             [
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'nominal' => 200000,
                 'type' => 'Pengeluaran',
                 'category' => 'Finansial',
                 'method' => 'Non-Tunai',
                 'description' => 'Pembayaran'
             ],
             [
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'nominal' => 150000,
                 'type' => 'Pengeluaran',
                 'category' => 'Operasional',
                 'method' => 'Non-Tunai',
                 'description' => 'Pembayaran gaji karyawan'
             ],
             [
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
                 'method' => 'Tunai',
                 'description' => 'Hasil penjualan'
             ],
             [
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
                 'method' => 'Non-Tunai',
                 'description' => 'Hasil penjualan'
             ],
             [
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'nominal' => 300000,
                 'type' => 'Pengeluaran',
                 'category' => 'Finansial',
                 'method' => 'Tunai',

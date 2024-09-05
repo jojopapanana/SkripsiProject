@@ -5,23 +5,21 @@
     
     <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
         <div class="dropdown">
-            <button class="dropdown-toggle fs-5 p-2 fw-bold" id="dropdown-bulan-transaksi" data-bs-toggle="dropdown" aria-expanded="true" style="border: 2px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
-              BULAN
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdown-bulan-transaksi">
-              <li><a class="dropdown-item" href="#">JANUARI</a></li>
-              <li><a class="dropdown-item" href="#">FEBRUARI</a></li>
-              <li><a class="dropdown-item" href="#">MARET</a></li>
-              <li><a class="dropdown-item" href="#">APRIL</a></li>
-              <li><a class="dropdown-item" href="#">MEI</a></li>
-              <li><a class="dropdown-item" href="#">JUNI</a></li>
-              <li><a class="dropdown-item" href="#">JULI</a></li>
-              <li><a class="dropdown-item" href="#">AGUSTUS</a></li>
-              <li><a class="dropdown-item" href="#">SEPTEMBER</a></li>
-              <li><a class="dropdown-item" href="#">OKTOBER</a></li>
-              <li><a class="dropdown-item" href="#">NOVEMBER</a></li>
-              <li><a class="dropdown-item" href="#">DESEMBER</a></li>
-            </ul>
+            <select id="month-dropdown" name="month" class="form-select">
+                <option class="dropdown-item-month" value=0>BULAN</option>
+                <option class="dropdown-item-month" value=1>JANUARI</option>
+                <option class="dropdown-item-month" value=2>FEBRUARI</option>
+                <option class="dropdown-item-month" value=3>MARET</option>
+                <option class="dropdown-item-month" value=4>APRIL</option>
+                <option class="dropdown-item-month" value=5>MEI</option>
+                <option class="dropdown-item-month" value=6>JUNI</option>
+                <option class="dropdown-item-month" value=7>JULI</option>
+                <option class="dropdown-item-month" value=8>AGUSTUS</option>
+                <option class="dropdown-item-month" value=9>SEPTEMBER</option>
+                <option class="dropdown-item-month" value=10>OKTOBER</option>
+                <option class="dropdown-item-month" value=11>NOVEMBER</option>
+                <option class="dropdown-item-month" value=12>DESEMBER</option>
+              </select>
         </div>
     
         <div class="dropdown" id="dropdown-tahun-transaksi">
@@ -41,12 +39,16 @@
         <p class="fw-bold">Arus Kas Operasional</p>
         <div class="d-flex justify-content-between">
             <p>Penerimaan kas penjualan</p>
-            <p class="fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. 15.000.000</p>
+            @foreach ($pendapatan_operasional as $p)
+                <p class="fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }}</p>
+            @endforeach
         </div>
 
         <div class="d-flex justify-content-between" style="border-bottom: 1px solid black; border-bottom-color: black">
-            <p>Biaya operasional perusahaan</p>
-            <p class="fw-bold" style="color: rgba(255, 0, 0, 1)">-Rp. 1.000.000</p>
+            <p>Biaya operasional usaha</p>
+            @foreach ($pengeluaran_operasional as $p)
+                <p class="fw-bold" style="color: rgba(255, 0, 0, 1)">- Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }}</p>
+            @endforeach
         </div>
 
         <div class="d-flex justify-content-between">
@@ -54,4 +56,32 @@
             <p class="fw-bold">Rp. 14.000.000</p>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const monthDropdown = document.getElementById('month-dropdown');
+            
+            monthDropdown.addEventListener('change', function() {
+                // Get the text of the selected option
+                const selectedOptionText = this.options[this.selectedIndex].text;
+                
+                // Change the text displayed on the dropdown button (if any)
+                const dropdownToggle = document.querySelector('.dropdown-toggle');
+                if (dropdownToggle) {
+                    dropdownToggle.textContent = selectedOptionText;
+                }
+
+                // Optionally, navigate to another page with the selected month
+                const selectedMonthValue = this.value;
+                window.location.href = `{{ route('aruskas') }}?month=${selectedMonthValue}`;
+            });
+        });
+
+        // document.getElementById('month-dropdown').addEventListener('change', function() {
+        //     const months = ['JANUARI', 'FEBRUARI', 'MARET'];
+        //     const selectedMonth = this.value;
+            
+        //     window.location.href = `{{ route('aruskas') }}?month=${selectedMonth}`;
+        // });
+    </script>
 </x-layout>
