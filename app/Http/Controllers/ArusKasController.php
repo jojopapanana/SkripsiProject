@@ -15,16 +15,31 @@ class ArusKasController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $pendapatan_operasional = DB::table('transaksis')->select('transaksis.nominal')
-        //                                                 ->where([
-        //                                                     ['transaksis.category', '=', 'Operasional'], 
-        //                                                     ['transaksis.type', '=', 'Pemasukan'], 
-        //                                                     ['transaksis.method', '=', 'Tunai']])
-        //                                                 ->sum('transaksis.nominal');
-        // $formatted_pendapatan_operasional = Number::format($pendapatan_operasional);
-        return view('aruskas');
+        $selectedMonth = $request->get('month', date('n'));
+        $pendapatan_operasional = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+                                                        ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                                        ->where([
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
+                                                            ['transaksis.category', '=', 'Operasional'], 
+                                                            ['transaksis.type', '=', 'Pemasukan'], 
+                                                            ['transaksis.method', '=', 'Tunai']])
+                                                        ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalPerMonth'))
+                                                        ->groupBy('transactionMonth')
+                                                        ->get();
+
+        $pengeluaran_operasional = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+                                                        ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                                        ->where([
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
+                                                            ['transaksis.category', '=', 'Operasional'], 
+                                                            ['transaksis.type', '=', 'Pengeluaran'], 
+                                                            ['transaksis.method', '=', 'Tunai']])
+                                                        ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalPerMonth'))
+                                                        ->groupBy('transactionMonth')
+                                                        ->get();
+        return view('aruskas', ['pendapatan_operasional' => $pendapatan_operasional], ['pengeluaran_operasional' => $pengeluaran_operasional]);
     }
 
     /**

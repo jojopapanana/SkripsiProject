@@ -18,11 +18,19 @@ class TransaksiController extends Controller
     public function index()
     {
         $transactions = Transaksi::all();
-        $totals = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+        $income_totals = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                         ->join('products', 'transaction_details.productID', '=', 'products.id')
-                                        ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as productTotal'))
-                                        ->groupBy('transaksis.id')
-                                        ->get();
+                                        ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalNominal'))
+                                        ->whereNull('transaksis.nominal')
+                                        ->groupBy('transaksis.id');
+
+        $expense_total = DB::table('transaksis')->select('transaksis.id as id', 'transaksis.nominal as totalNominal')
+                                                ->whereNotNull('transaksis.nominal')
+                                                ->union($income_totals)
+                                                ->orderBy('id')
+                                                ->get();
+
+        $totals = $expense_total;
         return view('transaksi', ['transactions' => $transactions], ['totals' => $totals]);
     }
 

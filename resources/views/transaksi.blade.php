@@ -53,12 +53,12 @@
         <tbody class="mt-3">
           @forEach($transactions as $transaction)
           <tr>
-            <td scope="row">TR001</td>
-            <td>{{ $transaction->timestamp }}</td>
+            <td scope="row">{{ $transaction->id }}</td>
+            <td>{{ $transaction->created_at }}</td>
             @forEach($totals as $total)
-            @if ($transaction->id == $total->id)
-              <td>Rp. {{ $total->productTotal }}</td>
-            @endif
+              @if ($transaction->id == $total->id)
+                <td>Rp. {{ $total->totalNominal }}</td>
+              @endif
             @endforeach
             <td>{{ $transaction->type }}</td>
             <td>{{ $transaction->category }}</td>

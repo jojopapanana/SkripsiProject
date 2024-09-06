@@ -23,7 +23,8 @@ td a {
 }
 
 td a:hover {
-    opacity: 50%;
+    text-decoration: none;
+    color: gray;
 }
 
 body{
@@ -155,10 +156,6 @@ main{
 .custom-modal-btn:active {
     outline: none; /* Completely remove focus outline */
     box-shadow: none; /* Remove any focus-related box shadow */
-}
-
-body{
-    background: #ffffff;
 }
 
 .left-side,
@@ -389,7 +386,6 @@ body{
         z-index: 5;
     }
 }
-=======
 
 //DASHBOARD
 
@@ -460,4 +456,10 @@ body{
     border-radius: 10px;
     margin-top: 5vh;
     padding: 21px 45px;
+}
+
+.dropdown-item-month, .dropdown-item-month:hover{
+    text-decoration: none;
+    color: black;
+    padding: 5px;
 }

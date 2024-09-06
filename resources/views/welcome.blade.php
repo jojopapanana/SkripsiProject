@@ -1,4 +1,3 @@
-
 <x-layout title="Dashboard">
     <h1 class="fw-bold">DASHBOARD</h1>
 
