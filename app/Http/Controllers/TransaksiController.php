@@ -47,7 +47,30 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate the input
+        $validatedData = $request->validate([
+            'tanggal' => 'required|date',
+            'jenisTransaksi' => 'required|string',
+            'jenisBarang' => 'required|string',
+            'jumlahBarang' => 'required|integer',
+            'nominal' => 'required|numeric',
+            'metode' => 'required|string',
+        ]);
+
+        // Store the transaction
+        DB::table('transaksis')->insert([
+            [
+                'created_at' => $validatedData['tanggal'],
+                'nominal' => NULL,
+                'type' => $validatedData['jenisTransaksi'],
+                'category' => 'Operasional',
+                'method' => $validatedData['metode'],
+                'description' => 'Hasil penjualan'
+            ]
+        ]);
+
+        // Redirect or return response
+        return redirect()->back()->with('success', 'Transaksi berhasil ditambahkan!');
     }
 
     /**

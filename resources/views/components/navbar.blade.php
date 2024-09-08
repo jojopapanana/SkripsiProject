@@ -2,7 +2,7 @@
 
   <table id="navbar-container">
     <tr>
-      <td valign="top" class="pt-5"><a href="">LOGO</a></td>
+      <td valign="top" class="pt-5"><a href="{{ route('Dashboard') }}">LOGO</a></td>
     </tr>
     <tr>
       <td><a href="{{ route('transaksi') }}" style="text-decoration: none">Transaksi</a></td>
@@ -23,7 +23,7 @@
       <td valign="bottom">
         <div class="d-flex gap-3 pb-5" id="profile" style="color: white">
           <i class="bi bi-person-circle"></i>
-          <a href="" class="p-0 m-0">Profil</a>
+          <a href="{{ route('register') }}" class="p-0 m-0">Profil</a>
         </div>
       </td>
     </tr>

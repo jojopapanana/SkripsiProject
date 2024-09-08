@@ -8,18 +8,18 @@
                     <h4 class="fw-bold">Keuntunganmu bulan ini</h4>
                     <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1)">Rp. 100.000</h4>
                 </div>
-                
+
                 <i class="bi bi-file-bar-graph-fill fs-1"></i>
             </div>
         </div>
-    
+
         <div class="dashboard-card">
             <div class="d-flex justify-content-between align-items-top">
                 <div>
                     <h4 class="fw-bold">Kasmu bulan ini</h4>
                     <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1)">Rp. 2.000.000</h4>
                 </div>
-                
+
                 <i class="bi bi-cash fs-1"></i>
             </div>
         </div>
@@ -47,21 +47,23 @@
                     <p class="modal-title" id="exampleModalLabel">Tambah Transaksi</p>
                 </div>
                 <div class="modal-body">
-                    <form class="mb-2">
+                    <form action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
+                        @csrf
                         <div class="form-group position-relative mb-2">
                             <label for="tanggal" class="col-form-label" id="inputModalLabel">Tanggal</label>
-                            <input type="text" class="form-control border-style tanggal" id="tanggal" value="" readonly>
+                            <input type="text" class="form-control border-style tanggal" name="tanggal" id="tanggal" value="" readonly>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis Transaksi</label>
-                            <input type="text" class="form-control border-style" id="jenisTransaksi" value="Pemasukan" readonly>
+                            <input type="text" class="form-control border-style" id="jenisTransaksi" name="jenisTransaksi" value="Pemasukan" readonly>
                         </div>
                         <div class="form-group-select position-relative mb-2">
                             <label for="jenisBarang" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
-                            <select class="form-control border-style" id="jenisBarang">
+                            <select class="form-control border-style" id="jenisBarang" name="jenisBarang">
                                 <option value="none">None</option>
-                                <option value="none">None</option>
-                                <option value="none">None</option>
+                                @foreach($products as $product)
+                                    <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group position-relative mb-2">
@@ -70,7 +72,7 @@
                                 <button class="btn" type="button" id="decrement">
                                     <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
                                 </button>
-                                <input type="text" class="form-control border-style text-center" id="jumlahBarang" value="0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <input type="text" class="form-control border-style text-center" name="jumlahBarang" id="jumlahBarang" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                 <button class="btn" type="button" id="increment">
                                     <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
                                 </button>
@@ -78,17 +80,16 @@
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="nominal" class="col-form-label" id="inputModalLabel">Nominal</label>
-                            <input type="text" class="form-control border-style" id="nominal" value="Rp. 0,-" readonly>
+                            <input type="text" class="form-control border-style" id="nominal" name="nominal" value="Rp. 0,-" readonly>
                         </div>
                         <div class="form-group-select position-relative mb-2">
                             <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
-                            <select class="form-control border-style" id="metode">
-                                <option value="none">None</option>
-                                <option value="none">None</option>
-                                <option value="none">None</option>
+                            <select class="form-control border-style" id="metode" name="metode">
+                                <option value="none">Tunai</option>
+                                <option value="none">Non-Tunai</option>
                             </select>
                         </div>
-                     </form>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary custom-btn mt-2 mb-2">Tambah</button>
@@ -129,8 +130,9 @@
                                 <label for="jenisBarang" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
                                 <select class="form-control border-style" id="jenisBarang">
                                     <option value="none">None</option>
-                                    <option value="none">None</option>
-                                    <option value="none">None</option>
+                                    @foreach($products as $product)
+                                        <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group position-relative mb-2" id="jumlahBarangField">
@@ -139,7 +141,7 @@
                                     <button class="btn" type="button" id="decrementPengeluaran">
                                         <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
                                     </button>
-                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" value="0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                     <button class="btn" type="button" id="incrementPengeluaran">
                                         <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
                                     </button>
@@ -155,7 +157,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary custom-btn mt-2 mb-2">Tambah</button>
                 </div>
-    
+
     {{-- <script type="module">
     const data = {
         labels: @json($data->map(fn ($data) => $data->date)),
@@ -178,7 +180,7 @@
         config
     );
     </script> --}}
-    
+
     <!-- jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -207,9 +209,9 @@
             function updateNominal() {
                 var jenisBarang = document.getElementById('jenisBarang');
                 var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
-                var pricePerItem = parseInt(selectedOption.getAttribute('data-price'));
+                var pricePerItem = parseInt(selectedOption.getAttribute('data-price')) || 0;
 
-                var jumlahBarang = parseInt(document.getElementById('jumlahBarang').value);
+                var jumlahBarang = parseInt(document.getElementById('jumlahBarang').value) || 0;
                 var nominal = pricePerItem * jumlahBarang;
 
                 document.getElementById('nominal').value = 'Rp. ' + nominal.toLocaleString('id-ID') + ',-';
@@ -320,8 +322,9 @@
                             <label for="jenisBarang" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
                             <select class="form-control border-style" id="jenisBarang">
                                 <option value="none">None</option>
-                                <option value="none">None</option>
-                                <option value="none">None</option>
+                                @foreach($products as $product)
+                                    <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group position-relative mb-2" id="jumlahBarangField">

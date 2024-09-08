@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Product;
 
 class DashboardController extends Controller
 {
@@ -17,7 +18,8 @@ class DashboardController extends Controller
         //     ->whereDate('created_at', '>=', now()->subDays(30))
         //     ->groupBy('date')
         //     ->get();
-        return view('welcome');
+        $products = Product::all(); // Fetch all products
+        return view('welcome', compact('products'));
     }
 
     /**
