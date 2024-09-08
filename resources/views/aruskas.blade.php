@@ -47,13 +47,36 @@
         <div class="d-flex justify-content-between" style="border-bottom: 1px solid black; border-bottom-color: black">
             <p>Biaya operasional usaha</p>
             @foreach ($pengeluaran_operasional as $p)
-                <p class="fw-bold" style="color: rgba(255, 0, 0, 1)">- Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }}</p>
+                <p class="fw-bold" style="color: rgba(255, 0, 0, 1)">(Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }})</p>
             @endforeach
         </div>
 
         <div class="d-flex justify-content-between">
             <p class="fw-bold">Total Arus Kas Operasional</p>
-            <p class="fw-bold">Rp. 14.000.000</p>
+            <p class="fw-bold">Rp. {{ number_format($total_arus_kas_operasional, 0, ',', '.') }}</p>
+        </div>
+
+        <br><br><br>
+
+
+        <p class="fw-bold">Arus Kas Investasi</p>
+        <div class="d-flex justify-content-between">
+            <p>Penerimaan kas investasi</p>
+            @foreach ($pendapatan_investasi as $p)
+                <p class="fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }}</p>
+            @endforeach
+        </div>
+
+        <div class="d-flex justify-content-between" style="border-bottom: 1px solid black; border-bottom-color: black">
+            <p>Biaya investasi usaha</p>
+            @foreach ($pengeluaran_investasi as $p)
+                <p class="fw-bold" style="color: rgba(255, 0, 0, 1)">(Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }})</p>
+            @endforeach
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <p class="fw-bold">Total Arus Kas Investasi</p>
+            <p class="fw-bold">Rp. {{ number_format($total_arus_kas_investasi, 0, ',', '.') }}</p>
         </div>
     </div>
 
