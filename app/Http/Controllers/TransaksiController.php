@@ -61,7 +61,7 @@ class TransaksiController extends Controller
         DB::table('transaksis')->insert([
             [
                 'created_at' => $validatedData['tanggal'],
-                'nominal' => NULL,
+                'nominal' => $validatedData['nominal'],
                 'type' => $validatedData['jenisTransaksi'],
                 'category' => 'Operasional',
                 'method' => $validatedData['metode'],

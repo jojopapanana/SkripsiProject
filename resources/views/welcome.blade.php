@@ -82,17 +82,17 @@
                             <label for="nominal" class="col-form-label" id="inputModalLabel">Nominal</label>
                             <input type="text" class="form-control border-style" id="nominal" name="nominal" value="Rp. 0,-" readonly>
                         </div>
-                        <div class="form-group-select position-relative mb-2">
+                        <div class="form-group-select position-relative mb-4">
                             <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
                             <select class="form-control border-style" id="metode" name="metode">
                                 <option value="none">Tunai</option>
                                 <option value="none">Non-Tunai</option>
                             </select>
                         </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
+                        </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary custom-btn mt-2 mb-2">Tambah</button>
                 </div>
             </div>
         </div>
@@ -109,15 +109,15 @@
                     <form class="mb-2">
                         <div class="form-group position-relative mb-2">
                             <label for="tanggal" class="col-form-label" id="inputModalLabel">Tanggal</label>
-                            <input type="text" class="form-control border-style tanggal" id="tanggal" value="" readonly>
+                            <input type="text" class="form-control border-style tanggal" id="tanggal" name="tanggal" value="" readonly>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis Transaksi</label>
-                            <input type="text" class="form-control border-style" id="jenisTransaksi" value="Pengeluaran" readonly>
+                            <input type="text" class="form-control border-style" id="jenisTransaksi" name="jenisTransaksi" value="Pengeluaran" readonly>
                         </div>
                         <div class="form-group-select position-relative mb-2">
                             <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
-                            <select class="form-control border-style" id="deskripsi">
+                            <select class="form-control border-style" id="deskripsi" name="deskripsi">
                                 <option value="none">None</option>
                                 <option value="none">None</option>
                                 <option value="none">None</option>
@@ -128,7 +128,7 @@
                         <div id="dynamicFields">
                             <div class="form-group-select position-relative mb-2" id="jenisBarangField">
                                 <label for="jenisBarang" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
-                                <select class="form-control border-style" id="jenisBarang">
+                                <select class="form-control border-style" id="jenisBarang" name="jenisBarang">
                                     <option value="none">None</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
@@ -141,23 +141,22 @@
                                     <button class="btn" type="button" id="decrementPengeluaran">
                                         <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
                                     </button>
-                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                     <button class="btn" type="button" id="incrementPengeluaran">
                                         <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
                                     </button>
                                 </div>
                             </div>
-                            <div class="form-group position-relative mb-2" id="nominalField">
+                            <div class="form-group position-relative mb-4" id="nominalField">
                                 <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Nominal</label>
-                                <input type="text" class="form-control border-style" id="nominalPengeluaran" value="Rp. " onkeydown="preventBackspace(event)" oninput="enforceNumericInput(event)" onblur="addCurrencySuffix()">
+                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. " onkeydown="preventBackspace(event)" oninput="enforceNumericInput(event)" onblur="addCurrencySuffix()">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
                             </div>
                         </div>
-                     </form>
+                    </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary custom-btn mt-2 mb-2">Tambah</button>
-                </div>
-
     {{-- <script type="module">
     const data = {
         labels: @json($data->map(fn ($data) => $data->date)),
@@ -188,6 +187,14 @@
 
     <!-- Iconify icon -->
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            let nominalField = document.getElementById('nominal');
+            nominalField.value = nominalField.value.replace(/\D/g, '');  // Replace all non-numeric characters
+        });
+    </script>
+
 
     <!-- Set current date -->
     <script>
@@ -300,27 +307,30 @@
                     $('#dynamicFields').html(`
                         <div class="form-group position-relative mb-2">
                             <label for="deskripsiTransaksi" class="col-form-label" id="inputModalLabel">Deskripsi Transaksi</label>
-                            <textarea class="form-control border-style" id="deskripsiTransaksi" placeholder="Masukkan deskripsi transaksi" rows="3"></textarea>
+                            <textarea class="form-control border-style" id="deskripsiTransaksi" name="deskripsiTransaksi" placeholder="Masukkan deskripsi transaksi" rows="3"></textarea>
                         </div>
                         <div class="form-group-select position-relative mb-2">
                             <label for="kategori" class="col-form-label" id="inputModalLabel">Kategori</label>
-                            <select class="form-control border-style" id="kategori">
+                            <select class="form-control border-style" id="kategori" name="kategori">
                                 <option value="none">None</option>
                                 <option value="kategori1">Kategori 1</option>
                                 <option value="kategori2">Kategori 2</option>
                                 <option value="kategori3">Kategori 3</option>
                             </select>
                         </div>
-                        <div class="form-group position-relative mb-2">
+                        <div class="form-group position-relative mb-4">
                             <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Nominal</label>
-                            <input type="text" class="form-control border-style" id="nominalPengeluaran" value="Rp. ">
+                            <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
                         </div>
                     `);
                 } else {
                     $('#dynamicFields').html(`
                         <div class="form-group-select position-relative mb-2" id="jenisBarangField">
                             <label for="jenisBarang" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
-                            <select class="form-control border-style" id="jenisBarang">
+                            <select class="form-control border-style" id="jenisBarang" name="jenisBarang">
                                 <option value="none">None</option>
                                 @foreach($products as $product)
                                     <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
@@ -333,15 +343,18 @@
                                 <button class="btn" type="button" id="decrementPengeluaran">
                                     <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
                                 </button>
-                                <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" value="0" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                 <button class="btn" type="button" id="incrementPengeluaran">
                                     <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
                                 </button>
                             </div>
                         </div>
-                        <div class="form-group position-relative mb-2" id="nominalField">
+                        <div class="form-group position-relative mb-4" id="nominalField">
                             <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Nominal</label>
-                            <input type="text" class="form-control border-style" id="nominalPengeluaran" value="Rp. ">
+                            <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
                         </div>
                     `);
                 }
