@@ -89,7 +89,7 @@ class TransaksiController extends Controller
                     'tanggal' => 'required|date',
                     'jenisTransaksi' => 'required|string',
                     'deskripsi' => 'required|string',
-                    'jenisBarang' => 'required|string',
+                    'jenisBarangPengeluaran' => 'required|string',
                     'metode' => 'required|string',
                     'jumlahBarangPengeluaran' => 'required|integer',
                     'nominalPengeluaran' => 'required|numeric'
@@ -97,7 +97,7 @@ class TransaksiController extends Controller
 
                 // Update product stock
                 DB::table('products')
-                    ->where('id', $validatedData['jenisBarang'])
+                    ->where('id', $validatedData['jenisBarangPengeluaran'])
                     ->increment('productStock', $validatedData['jumlahBarangPengeluaran']);
 
                 DB::table('transaksis')->insert([

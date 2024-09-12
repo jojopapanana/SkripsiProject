@@ -61,9 +61,11 @@
                         <div class="form-group-select position-relative mb-2">
                             <label for="jenisBarang" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
                             <select class="form-control border-style" id="jenisBarang" name="jenisBarang">
-                                <option value="none">None</option>
+                                <option value="None">None</option>
                                 @foreach($products as $product)
-                                    <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                    @if($product->productStock > 0)
+                                        <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
@@ -129,8 +131,8 @@
                         <input type="hidden" name="modalType1" value="tambahStok">
                         <div id="dynamicFields">
                             <div class="form-group-select position-relative mb-2" id="jenisBarangField">
-                                <label for="jenisBarang" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
-                                <select class="form-control border-style" id="jenisBarang" name="jenisBarang">
+                                <label for="jenisBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
+                                <select class="form-control border-style" id="jenisBarangPengeluaran" name="jenisBarangPengeluaran">
                                     <option value="None">None</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
@@ -197,6 +199,12 @@
     <!-- Iconify icon -->
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
+    @if (session('success'))
+        <script>
+            alert('{{ session('success') }}');
+        </script>
+    @endif
+
     <script>
         // Select all forms on the page, including both modals
         document.querySelectorAll('form').forEach(function(form) {
@@ -240,6 +248,13 @@
                 var nominal = pricePerItem * jumlahBarang;
 
                 document.getElementById('nominal').value = 'Rp. ' + nominal.toLocaleString('id-ID') + ',-';
+
+                // Ensure the value doesn't exceed available stock
+                if (jumlahBarang > productStock) {
+                    alert('Stok tidak mencukupi! Stok tersedia: ' + productStock);
+                    document.getElementById('jumlahBarang').value = productStock;
+                    updateNominal(); // Update the nominal after adjusting the quantity
+                }
             }
 
             $('#jenisBarang, #jumlahBarang').on('change input', function() {
@@ -248,12 +263,32 @@
 
             $('#increment').on('click', function() {
                 var jumlahBarang = $('#jumlahBarang');
-                jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
+                var jenisBarang = document.getElementById('jenisBarang');
+                var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
+                var productStock = parseInt(selectedOption.getAttribute('data-stock')) || 0;
+
+                if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
+                    alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                    return;
+                }
+
+                if (parseInt(jumlahBarang.val()) < productStock) {
+                    jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
+                } else {
+                    alert('Stok tidak mencukupi! Stok tersedia: ' + productStock);
+                }
                 updateNominal();
             });
 
             $('#decrement').on('click', function() {
                 var jumlahBarang = $('#jumlahBarang');
+                var jenisBarang = document.getElementById('jenisBarang');
+
+                if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
+                    alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                    return;
+                }
+
                 if (parseInt(jumlahBarang.val()) > 1) {
                     jumlahBarang.val(parseInt(jumlahBarang.val()) - 1);
                     updateNominal();
@@ -269,11 +304,24 @@
             function rebindPengeluaranEvents() {
                 $('#incrementPengeluaran').on('click', function() {
                     var jumlahBarang = $('#jumlahBarangPengeluaran');
+                    var jenisBarang = document.getElementById('jenisBarangPengeluaran');
+
+                    if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
+                        alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                        return;
+                    }
                     jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
                 });
 
                 $('#decrementPengeluaran').on('click', function() {
                     var jumlahBarang = $('#jumlahBarangPengeluaran');
+                    var jenisBarang = document.getElementById('jenisBarangPengeluaran');
+
+                    if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
+                        alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                        return;
+                    }
+
                     if (parseInt(jumlahBarang.val()) > 1) {
                         jumlahBarang.val(parseInt(jumlahBarang.val()) - 1);
                     }
@@ -355,8 +403,8 @@
                         <input type="hidden" name="modalType1" value="tambahStok">
                         <div id="dynamicFields">
                             <div class="form-group-select position-relative mb-2" id="jenisBarangField">
-                                <label for="jenisBarang" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
-                                <select class="form-control border-style" id="jenisBarang" name="jenisBarang">
+                                <label for="jenisBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
+                                <select class="form-control border-style" id="jenisBarangPengeluaran" name="jenisBarangPengeluaran">
                                     <option value="None">None</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
