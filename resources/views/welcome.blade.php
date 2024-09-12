@@ -49,6 +49,7 @@
                 <div class="modal-body">
                     <form action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
                         @csrf
+                        <input type="hidden" name="modalType" value="pemasukan">
                         <div class="form-group position-relative mb-2">
                             <label for="tanggal" class="col-form-label" id="inputModalLabel">Tanggal</label>
                             <input type="text" class="form-control border-style tanggal" name="tanggal" id="tanggal" value="" readonly>
@@ -85,8 +86,8 @@
                         <div class="form-group-select position-relative mb-4">
                             <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
                             <select class="form-control border-style" id="metode" name="metode">
-                                <option value="none">Tunai</option>
-                                <option value="none">Non-Tunai</option>
+                                <option value="Tunai">Tunai</option>
+                                <option value="Non-Tunai">Non-Tunai</option>
                             </select>
                         </div>
                         <div class="modal-footer">
@@ -106,7 +107,9 @@
                     <p class="modal-title" id="exampleModalLabel">Tambah Transaksi</p>
                 </div>
                 <div class="modal-body">
-                    <form class="mb-2">
+                    <form action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
+                        @csrf
+                        <input type="hidden" name="modalType" value="pengeluaran">
                         <div class="form-group position-relative mb-2">
                             <label for="tanggal" class="col-form-label" id="inputModalLabel">Tanggal</label>
                             <input type="text" class="form-control border-style tanggal" id="tanggal" name="tanggal" value="" readonly>
@@ -118,18 +121,17 @@
                         <div class="form-group-select position-relative mb-2">
                             <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
                             <select class="form-control border-style" id="deskripsi" name="deskripsi">
-                                <option value="none">None</option>
-                                <option value="none">None</option>
-                                <option value="none">None</option>
-                                <option value="lainnya">Lainnya</option>
+                                <option value="Tambah Stok">Tambah Stok</option>
+                                <option value="Lainnya">Lainnya</option>
                             </select>
                         </div>
                         <!-- Changing form group based on selected Deskripsi option -->
+                        <input type="hidden" name="modalType1" value="tambahStok">
                         <div id="dynamicFields">
                             <div class="form-group-select position-relative mb-2" id="jenisBarangField">
                                 <label for="jenisBarang" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
                                 <select class="form-control border-style" id="jenisBarang" name="jenisBarang">
-                                    <option value="none">None</option>
+                                    <option value="None">None</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
                                     @endforeach
@@ -147,9 +149,16 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="form-group position-relative mb-4" id="nominalField">
+                            <div class="form-group position-relative mb-2" id="nominalField">
                                 <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Nominal</label>
-                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. " onkeydown="preventBackspace(event)" oninput="enforceNumericInput(event)" onblur="addCurrencySuffix()">
+                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
+                            </div>
+                            <div class="form-group-select position-relative mb-4">
+                                <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
+                                <select class="form-control border-style" id="metode" name="metode">
+                                    <option value="Tunai">Tunai</option>
+                                    <option value="Non-Tunai">Non-Tunai</option>
+                                </select>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
@@ -189,9 +198,18 @@
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
     <script>
-        document.querySelector('form').addEventListener('submit', function(event) {
-            let nominalField = document.getElementById('nominal');
-            nominalField.value = nominalField.value.replace(/\D/g, '');  // Replace all non-numeric characters
+        // Select all forms on the page, including both modals
+        document.querySelectorAll('form').forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                let nominalFields = form.querySelectorAll('#nominal, #nominalPengeluaran');  // Select nominal and nominalPengeluaran within the current form
+
+                nominalFields.forEach(function(field) {
+                    if (field) {
+                        field.value = field.value.replace(/\D/g, '');  // Replace all non-numeric characters
+                        console.log(field.value);
+                    }
+                });
+            });
         });
     </script>
 
@@ -267,15 +285,8 @@
                 $('#nominalPengeluaran').on('blur', addCurrencySuffix);
             }
 
-            function preventBackspace(event) {
-                var input = document.getElementById('nominalPengeluaran');
-                if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
-                    event.preventDefault();
-                }
-            }
-
             function enforceNumericInput(event) {
-                var input = document.getElementById('nominalPengeluaran');
+                var input = event.target;
                 var value = input.value;
 
                 // Remove any non-digit characters except the prefix
@@ -286,6 +297,13 @@
 
                 // Update the input value with the formatted number
                 input.value = 'Rp. ' + formattedValue;
+            }
+
+            function preventBackspace(event) {
+                var input = document.getElementById('nominalPengeluaran');
+                if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
+                    event.preventDefault();
+                }
             }
 
             function addCurrencySuffix() {
@@ -303,8 +321,9 @@
 
             // Handle 'Deskripsi' change event to switch between dynamic fields
             $('#deskripsi').on('change', function() {
-                if ($(this).val() === 'lainnya') {
+                if ($(this).val() === 'Lainnya') {
                     $('#dynamicFields').html(`
+                        <input type="hidden" name="modalType1" value="tambahLainnya">
                         <div class="form-group position-relative mb-2">
                             <label for="deskripsiTransaksi" class="col-form-label" id="inputModalLabel">Deskripsi Transaksi</label>
                             <textarea class="form-control border-style" id="deskripsiTransaksi" name="deskripsiTransaksi" placeholder="Masukkan deskripsi transaksi" rows="3"></textarea>
@@ -312,15 +331,20 @@
                         <div class="form-group-select position-relative mb-2">
                             <label for="kategori" class="col-form-label" id="inputModalLabel">Kategori</label>
                             <select class="form-control border-style" id="kategori" name="kategori">
-                                <option value="none">None</option>
-                                <option value="kategori1">Kategori 1</option>
-                                <option value="kategori2">Kategori 2</option>
-                                <option value="kategori3">Kategori 3</option>
+                                <option value="Operasional">Operasional</option>
+                                <option value="Finansial">Finansial</option>
                             </select>
                         </div>
-                        <div class="form-group position-relative mb-4">
+                        <div class="form-group position-relative mb-2">
                             <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Nominal</label>
                             <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
+                        </div>
+                        <div class="form-group-select position-relative mb-4">
+                            <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
+                            <select class="form-control border-style" id="metode" name="metode">
+                                <option value="Tunai">Tunai</option>
+                                <option value="Non-Tunai">Non-Tunai</option>
+                            </select>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
@@ -328,33 +352,43 @@
                     `);
                 } else {
                     $('#dynamicFields').html(`
-                        <div class="form-group-select position-relative mb-2" id="jenisBarangField">
-                            <label for="jenisBarang" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
-                            <select class="form-control border-style" id="jenisBarang" name="jenisBarang">
-                                <option value="none">None</option>
-                                @foreach($products as $product)
-                                    <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group position-relative mb-2" id="jumlahBarangField">
-                            <label for="jumlahBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jumlah Barang</label>
-                            <div class="input-group input-group-outline border-style">
-                                <button class="btn" type="button" id="decrementPengeluaran">
-                                    <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
-                                </button>
-                                <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                                <button class="btn" type="button" id="incrementPengeluaran">
-                                    <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
-                                </button>
+                        <input type="hidden" name="modalType1" value="tambahStok">
+                        <div id="dynamicFields">
+                            <div class="form-group-select position-relative mb-2" id="jenisBarangField">
+                                <label for="jenisBarang" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
+                                <select class="form-control border-style" id="jenisBarang" name="jenisBarang">
+                                    <option value="None">None</option>
+                                    @foreach($products as $product)
+                                        <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                        </div>
-                        <div class="form-group position-relative mb-4" id="nominalField">
-                            <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Nominal</label>
-                            <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
+                            <div class="form-group position-relative mb-2" id="jumlahBarangField">
+                                <label for="jumlahBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jumlah Barang</label>
+                                <div class="input-group input-group-outline border-style">
+                                    <button class="btn" type="button" id="decrementPengeluaran">
+                                        <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
+                                    </button>
+                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <button class="btn" type="button" id="incrementPengeluaran">
+                                        <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group position-relative mb-2" id="nominalField">
+                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Nominal</label>
+                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
+                            </div>
+                            <div class="form-group-select position-relative mb-4">
+                                <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
+                                <select class="form-control border-style" id="metode" name="metode">
+                                    <option value="Tunai">Tunai</option>
+                                    <option value="Non-Tunai">Non-Tunai</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
+                            </div>
                         </div>
                     `);
                 }
