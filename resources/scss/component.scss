@@ -340,6 +340,7 @@ main{
 #main{
     overflow: hidden;
 }
+
 .transitionClassSignUp, .transitionClassSignIn {
     position: absolute;
     top: 0;
@@ -458,8 +459,9 @@ main{
     padding: 21px 45px;
 }
 
-.dropdown-item-month, .dropdown-item-month:hover{
-    text-decoration: none;
-    color: black;
-    padding: 5px;
+#monthDropdownButton, #yearDropdownButton{
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: white;
+    padding: 10px;
 }
