@@ -17,6 +17,7 @@ Route::post('/transaksi/store', [TransaksiController::class, 'store'])->name('tr
 // Route::post('/register', [SignUpController::class, 'register']);
 Route::get('/', [DashboardController::class, 'index'])->name('Dashboard');
 Route::get('transaksi', [TransaksiController::class, 'index'])->name('transaksi');
+Route::get('/transaksi_export', [TransaksiController::class, 'export'])->name('transaksi_export');
 Route::get('stok', [StokController::class, 'index'])->name('stok');
 Route::get('labarugi', [LabaRugiController::class, 'index'])->name('labarugi');
 Route::get('aruskas', [ArusKasController::class, 'index'])->name('aruskas');

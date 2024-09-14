@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TransaksiExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
@@ -9,15 +10,24 @@ use App\Models\TransactionDetail;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Number;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TransaksiController extends Controller
 {
+
+    public function export(){
+        return Excel::download(new TransaksiExport, 'transaksi.xlsx');
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaksi::all();
+        $selectedMonth = $request->get('month', date('n'));
+        $transactions = DB::table('transaksis')->select('*')
+                                                    ->where(DB::raw('month(transaksis.created_at)'), '=', $selectedMonth)
+                                                    ->orderBy('id')
+                                                    ->get();
         $income_totals = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                         ->join('products', 'transaction_details.productID', '=', 'products.id')
                                         ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalNominal'))
