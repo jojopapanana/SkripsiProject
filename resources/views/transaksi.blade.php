@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
       <div class="dropdown">
           <button class="btn dropdown-toggle fw-bold" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-              {{ date('F') }}
+              {{ strtoupper(date('F')) }}
           </button>
           <ul class="dropdown-menu" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
               <li><a class="dropdown-item" href="#" data-value="1">JANUARI</a></li>
@@ -65,7 +65,7 @@
             <td>{{ $transaction->method }}</td>
             <td>
               <div class="d-flex gap-4">
-                <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal-{{ $transaction->id }}">
+                <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal">
                   <i class="bi bi-pencil-fill"></i>
                 </button>
 
@@ -79,11 +79,25 @@
         </tbody>
       </table>
 
-      <a href="{{ route('transaksi_export') }}" class="btn btn-primary">Export Data</a>
+      {{-- <a href="{{ route('transaksi_export') }}" class="btn btn-primary">Export Data</a> --}}
+      
+      <div class="d-flex justify-content-end">
+        <div class="dropdown">
+          <button class="btn dropdown-toggle fw-semibold" type="button" id="exportDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+              Ekspor
+          </button>
+          <ul class="dropdown-menu" id="export-dropdown-menu" aria-labelledby="exportDropdownButton">
+              <li><a class="dropdown-item" href="{{ route('transaksi_export_excel', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">xlsx</a></li>
+              <li><a class="dropdown-item" href="{{ route('transaksi_export_csv') }}">csv</a></li>
+              <li><a class="dropdown-item" href="{{ route('transaksi_export_pdf') }}">pdf</a></li>
+          </ul>
+        </div>
+      </div>
+      
     </div>
     
   <!-- Modal -->
-  <div class="modal fade" id="editModal-{{ $transaction->id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -94,15 +108,15 @@
           <form>
             <div class="mb-3">
               <label for="kodeTransaksi" class="form-label">Kode Transaksi</label>
-              <input type="text" class="form-control" id="kodeTransaksi" placeholder={{ $transaction->id }} disabled>
+              <input type="text" class="form-control" id="kodeTransaksi" disabled>
             </div>
             <div class="mb-3">
               <label for="tanggalTransaksi" class="form-label">Tanggal Transaksi</label>
-              <input type="date" class="form-control disabled" id="tanggalTransaksi" placeholder={{ $transaction->created_at }} disabled>
+              <input type="date" class="form-control disabled" id="tanggalTransaksi" disabled>
             </div>
             <div class="mb-3">
               <label for="nominalTransaksi" class="form-label">Nominal</label>
-              <input type="text" class="form-control" id="nominalTransaksi" placeholder={{ $transaction->nominal }}>
+              <input type="text" class="form-control" id="nominalTransaksi">
             </div>
             <div class="mb-3">
               <label for="jenisTransaksi" class="form-label">Jenis Transaksi</label>
@@ -201,27 +215,6 @@
                 yearDropdownButton.textContent = selectedItem.textContent;
             }
         }
-    });
-
-    $(document).ready(function () {
-        // Populate modal with transaction data when the modal is shown
-        $("#editModal").on("show.bs.modal", function (e) {
-            var button = $(e.relatedTarget);  // The button that triggered the modal
-            var id = button.data('data-target-id');  // Get the transaction ID from the button
-            
-            // Find the transaction in the Blade collection using jQuery
-            var transaction = @json($transactions).find(t => t.id == id);
-            
-            if (transaction) {
-                // Populate the fields with the transaction values
-                $('#kodeTransaksi').val(transaction.id); // Assuming ID is the transaction code
-                $('#tanggalTransaksi').val(transaction.created_at.split(' ')[0]); // Date
-                $('#nominalTransaksi').val(transaction.nominal); // Nominal value
-                $('#jenisTransaksi').val(transaction.type); // Transaction type
-                $('#kategoriTransaksi').val(transaction.category); // Category
-                $('#metodeTransaksi').val(transaction.method); // Method
-            }
-        });
     });
 </script>
 

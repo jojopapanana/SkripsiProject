@@ -15,8 +15,16 @@ use Maatwebsite\Excel\Facades\Excel;
 class TransaksiController extends Controller
 {
 
-    public function export(){
-        return Excel::download(new TransaksiExport, 'transaksi.xlsx');
+    public function export_excel($month, $year){
+        return Excel::download(new TransaksiExport($month, $year), 'transaksi.xlsx');
+    }
+
+    public function export_csv($month, $year){
+        return Excel::download(new TransaksiExport($month, $year), 'transaksi.csv');
+    }
+
+    public function export_pdf($month, $year){
+        return Excel::download(new TransaksiExport($month, $year), 'transaksi.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
     }
     /**
      * Display a listing of the resource.
