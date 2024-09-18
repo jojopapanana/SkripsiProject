@@ -68,40 +68,47 @@
             </div>
             </div>
         </div>
+        <div class="card mt-3">
+            <div class="card-body py-2">
+                <table class="w-100">
+                    <thead>
+                        <tr>
+                            <th class="text-start" style="width: 20%;">Kode Stok</th>
+                            <th class="text-start" style="width: 30%;">Nama</th>
+                            <th class="text-start" style="width: 25%;">Nominal</th>
+                            <th class="text-start" style="width: 15%;">Sisa</th>
+                            <th class="text-start" style="width: 10%;"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        @foreach($stokData as $stok)
+            <div class="card mt-3">
+                <div class="card-body py-2">
+                    <table class="w-100">
+                        <tbody>
+                            <tr>
+                                <td class="text-start" style="width: 20%;">{{ $stok->stok_id }}</td>
+                                <td class="text-start" style="width: 30%;">{{ $stok->nama }}</td>
+                                <td class="text-start" style="width: 25%;">Rp. {{ number_format($stok->nominal, 0, ',', '.') }}</td>
+                                <td class="text-start" style="width: 15%;">{{ $stok->sisa }}</td>
+                                <td class="text-start" style="width: 10%;">
+                                    <div class="d-flex gap-4">
+                                        <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </button>
+                                        <button type="button" class="btn p-0" style="color: red; border: none" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endforeach
+        <br>
     </div>
-
-    <!-- <div class="table-container mt-4" style="overflow: hidden; border-radius: 10px">
-      <table class="table" style="border: none">
-        <thead>
-          <tr>
-            <th scope="col">Kode Stok</th>
-            <th scope="col">Nama</th>
-            <th scope="col">Nominal</th>
-            <th scope="col">Sisa</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-
-  
-        <tbody class="mt-3">
-            <tr>
-                <td scope="row">ST001</td>
-                <td>Handphone</td>
-                <td>Rp. 100.000</td>
-                <td>30</td>
-                <td>
-                  <div class="d-flex gap-4">
-                      <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal">
-                      <i class="bi bi-pencil-fill"></i>
-                      </button>
-
-                      <button type="button" class="btn p-0" style="color: red; border: none" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                      <i class="bi bi-trash3-fill"></i>
-                      </button>
-                  </div>
-                </td>
-            </tr>
-        </tbody>
-      </table>
-    </div> -->
 </x-layout>
