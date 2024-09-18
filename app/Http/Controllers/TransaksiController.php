@@ -47,7 +47,94 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Handle Pemasukan
+        if ($request->input('modalType') === 'pemasukan') {
+            $validatedData = $request->validate([ //ini buat nanti
+                'tanggal' => 'required|date',
+                'jenisTransaksi' => 'required|string',
+                'nominal' => 'required|numeric',
+                'metode' => 'required|string',
+                'jenisBarang' => 'required|string',
+                'jumlahBarang' => 'required|integer',
+            ]);
+
+            // Update product stock
+            DB::table('products')
+                ->where('id', $validatedData['jenisBarang'])
+                ->decrement('productStock', $validatedData['jumlahBarang']);
+
+            // Insert into 'transaksis' and get the transaction ID
+            $transactionID = DB::table('transaksis')->insertGetId([
+                'created_at' => $validatedData['tanggal'],
+                'type' => $validatedData['jenisTransaksi'],
+                'category' => 'Operasional',
+                'method' => $validatedData['metode'],
+                'description' => 'Hasil penjualan'
+            ]);
+
+            // Insert into 'transaction_details' using the retrieved transaction ID
+            DB::table('transaction_details')->insert([
+                [
+                    'transactionID' => $transactionID,
+                    'productID' => $validatedData['jenisBarang'],
+                    'productQuantity' => $validatedData['jumlahBarang']
+                ]
+            ]);
+
+        // Handle Pengeluaran
+        } elseif ($request->input('modalType') === 'pengeluaran') {
+            if ($request->input('modalType1') === 'tambahStok') {
+                // dd('Just printing something');
+                $validatedData = $request->validate([
+                    'tanggal' => 'required|date',
+                    'jenisTransaksi' => 'required|string',
+                    'deskripsi' => 'required|string',
+                    'jenisBarangPengeluaran' => 'required|string',
+                    'metode' => 'required|string',
+                    'jumlahBarangPengeluaran' => 'required|integer',
+                    'nominalPengeluaran' => 'required|numeric'
+                ]);
+
+                // Update product stock
+                DB::table('products')
+                    ->where('id', $validatedData['jenisBarangPengeluaran'])
+                    ->increment('productStock', $validatedData['jumlahBarangPengeluaran']);
+
+                DB::table('transaksis')->insert([
+                    [
+                        'created_at' => $validatedData['tanggal'],
+                        'nominal' => $validatedData['nominalPengeluaran'],
+                        'type' => $validatedData['jenisTransaksi'],
+                        'category' => 'Operasional',
+                        'method' => $validatedData['metode'],
+                        'description' => $validatedData['deskripsi']
+                    ]
+                ]);
+            } else {
+                $validatedData = $request->validate([
+                    'tanggal' => 'required|date',
+                    'jenisTransaksi' => 'required|string',
+                    'deskripsiTransaksi' => 'required|string',
+                    'metode' => 'required|string',
+                    'kategori' => 'required|string',
+                    'nominalPengeluaran' => 'required|numeric'
+                ]);
+
+                DB::table('transaksis')->insert([
+                    [
+                        'created_at' => $validatedData['tanggal'],
+                        'nominal' => $validatedData['nominalPengeluaran'],
+                        'type' => $validatedData['jenisTransaksi'],
+                        'category' => $validatedData['kategori'],
+                        'method' => $validatedData['metode'],
+                        'description' => $validatedData['deskripsiTransaksi']
+                    ]
+                ]);
+            }
+        }
+
+        // Redirect or return response
+        return redirect()->back()->with('success', 'Transaksi berhasil ditambahkan!');
     }
 
     /**

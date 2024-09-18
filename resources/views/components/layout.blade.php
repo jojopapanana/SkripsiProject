@@ -13,7 +13,7 @@
 <body>
     <div class="d-flex flex-row" id="app">
         <x-navbar></x-navbar>
-        <main class="min-vh-100 mt-5">
+        <main class="max-vh-100 mt-5">
             {{ $slot }}
         </main>
         {{-- <x-footer></x-footer> --}}

@@ -29,17 +29,51 @@ class ArusKasController extends Controller
                                                         ->groupBy('transactionMonth')
                                                         ->get();
 
-        $pengeluaran_operasional = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
-                                                        ->join('products', 'transaction_details.productID', '=', 'products.id')
-                                                        ->where([
+        $pengeluaran_operasional = DB::table('transaksis')->where([
                                                             [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
                                                             ['transaksis.category', '=', 'Operasional'], 
                                                             ['transaksis.type', '=', 'Pengeluaran'], 
                                                             ['transaksis.method', '=', 'Tunai']])
-                                                        ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalPerMonth'))
+                                                        ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
-        return view('aruskas', ['pendapatan_operasional' => $pendapatan_operasional], ['pengeluaran_operasional' => $pengeluaran_operasional]);
+
+        $totalPendapatan = $pendapatan_operasional->isNotEmpty() ? $pendapatan_operasional->first()->totalPerMonth : 0;
+        $totalPengeluaran = $pengeluaran_operasional->isNotEmpty() ? $pengeluaran_operasional->first()->totalPerMonth : 0;
+
+        $total_arus_kas_operasional = $totalPendapatan - $totalPengeluaran;
+
+
+        $pendapatan_investasi = DB::table('transaksis')->where([
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
+                                                            ['transaksis.category', '=', 'Finansial'], 
+                                                            ['transaksis.type', '=', 'Pemasukan'], 
+                                                            ['transaksis.method', '=', 'Tunai']])
+                                                        ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
+                                                        ->groupBy('transactionMonth')
+                                                        ->get();
+
+        $pengeluaran_investasi = DB::table('transaksis')->where([
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
+                                                            ['transaksis.category', '=', 'Finansial'], 
+                                                            ['transaksis.type', '=', 'Pengeluaran'], 
+                                                            ['transaksis.method', '=', 'Tunai']])
+                                                        ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
+                                                        ->groupBy('transactionMonth')
+                                                        ->get();
+
+        $totalPendapatanInvestasi = $pendapatan_investasi->isNotEmpty() ? $pendapatan_investasi->first()->totalPerMonth : 0;
+        $totalPengeluaranInvestasi = $pengeluaran_investasi->isNotEmpty() ? $pengeluaran_investasi->first()->totalPerMonth : 0;
+
+        $total_arus_kas_investasi = $totalPendapatanInvestasi - $totalPengeluaranInvestasi;
+        return view('aruskas', [
+            'pendapatan_operasional' => $pendapatan_operasional,
+            'pengeluaran_operasional' => $pengeluaran_operasional,
+            'total_arus_kas_operasional' => $total_arus_kas_operasional,
+            'pendapatan_investasi' => $pendapatan_investasi,
+            'pengeluaran_investasi' => $pengeluaran_investasi,
+            'total_arus_kas_investasi' => $total_arus_kas_investasi
+        ]);
     }
 
     /**
