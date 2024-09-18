@@ -20,7 +20,7 @@
               <li><a class="dropdown-item" href="#">Oktober</a></li>
               <li><a class="dropdown-item" href="#">November</a></li>
               <li><a class="dropdown-item" href="#">Desember</a></li>
-          </ul>1
+          </ul>
       </div>
 
       <div class="dropdown" id="dropdown-tahun-transaksi">
@@ -39,20 +39,18 @@
             <h6 class="fw-bold">Pemasukan</h6>
             <div class="row">
                 <div class="col">
-                    <div class="justify-content-start">
-                        <h3 class="text-start fs-6 fw-normal mt-2">Penjualan Barang</h3>
-                    </div>
-                    <div class="justify-content-start">
-                        <h3 class="text-start fs-6 fw-normal mt-3">Penjualan Barang</h3>
-                    </div>
+                    @forEach($laba as $profits)
+                        <div class="justify-content-start">
+                            <h3 class="text-start fs-6 fw-normal mt-2">{{ $profits->description }}</h3>
+                        </div>
+                    @endforeach
                 </div>
                 <div class="col">
-                    <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold text-success">Rp. 15.000.000</h3>
-                    </div>
-                    <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold text-success">Rp. 10.000.000</h3>
-                    </div>
+                    @forEach($laba as $profits)
+                            <div class="justify-content-end">
+                            <h3 class="text-end fs-6 fw-bold text-success">Rp. {{ number_format($profits->nominal, 0, ',', '.') }}</h3>
+                        </div>
+                    @endforeach
                 </div>
             </div>
             <hr>
@@ -64,7 +62,7 @@
                 </div>
                 <div class="col">
                     <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold">Rp. 25.000.000</h3>
+                        <h3 class="text-end fs-6 fw-bold">Rp. {{ number_format($total_laba, 0, ',', '.') }}</h3>
                     </div>
                 </div>
             </div>
@@ -72,20 +70,18 @@
             <h6 class="fw-bold">Pengeluaran</h6>
             <div class="row">
                 <div class="col">
-                    <div class="justify-content-start">
-                        <h3 class="text-start fs-6 fw-normal mt-2">Biaya Sewa</h3>
-                    </div>
-                    <div class="justify-content-start">
-                        <h3 class="text-start fs-6 fw-normal mt-3">Pembayaran Vendor</h3>
-                    </div>
+                    @forEach($rugi as $loss)
+                        <div class="justify-content-start">
+                            <h3 class="text-start fs-6 fw-normal mt-2">{{ $loss->description }}</h3>
+                        </div>
+                    @endforeach
                 </div>
                 <div class="col">
-                    <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold text-danger">- Rp. 10.000.000</h3>
-                    </div>
-                    <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold text-danger">- Rp. 10.000.000</h3>
-                    </div>
+                    @forEach($rugi as $loss)
+                            <div class="justify-content-end">
+                            <h3 class="text-end fs-6 fw-bold text-danger">- Rp. {{ number_format($loss->nominal, 0, ',', '.') }}</h3>
+                        </div>
+                    @endforeach
                 </div>
             </div>
             <hr>
@@ -97,7 +93,7 @@
                 </div>
                 <div class="col">
                     <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold">Rp. 20.000.000</h3>
+                        <h3 class="text-end fs-6 fw-bold">Rp. {{ number_format($total_rugi, 0, ',', '.') }}</h3>
                     </div>
                 </div>
             </div>
@@ -108,9 +104,19 @@
                     </div>
                 </div>
                 <div class="col">
-                    <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold text-success">Rp. 5.000.000</h3>
-                    </div>
+                    @if($status == 'Untung')
+                        <div class="justify-content-end">
+                            <h3 class="text-end fs-6 fw-bold text-success">Rp. {{ number_format($balance, 0, ',', '.') }}</h3>
+                        </div>
+                    @elseif($status == 'Rugi')
+                        <div class="justify-content-end">
+                            <h3 class="text-end fs-6 fw-bold text-danger">- Rp. {{ number_format($balance, 0, ',', '.') }}</h3>
+                        </div>
+                    @else
+                        <div class="justify-content-end">
+                            <h3 class="text-end fs-6 fw-bold text-success">Rp. 0</h3>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

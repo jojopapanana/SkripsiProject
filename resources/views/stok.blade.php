@@ -1,4 +1,4 @@
-<x-layout title="Transaksi">
+<x-layout title="Stok">
     <div class="d-flex justify-content-center" style="width: 70vw">
         <h1 class="fw-bold">STOK BARANG</h1>
     </div>
@@ -36,23 +36,21 @@
   </div>
     <div class="card mt-4">
         <div class="card-body">
-            <h5 class="fw-bold">Penjualan Terbanyak</h4>
+            <h5 class="fw-bold">Stok Terbanyak</h4>
             <div class="row">
                 <div class="col">
-                    <div class="justify-content-start">
-                        <h3 class="text-start fs-6 fw-normal mt-2">Handphone</h3>
-                    </div>
-                    <div class="justify-content-start">
-                        <h3 class="text-start fs-6 fw-normal mt-3">Charger</h3>
-                    </div>
+                    @foreach($top_products as $product)
+                        <div class="justify-content-start">
+                            <h3 class="text-start fs-6 fw-normal mt-2">{{ $product->productName }}</h3>
+                        </div>
+                    @endforeach
                 </div>
                 <div class="col">
+                    @foreach($top_products as $product)
                     <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-normal">20</h3>
+                        <h3 class="text-end fs-6 fw-normal mt-2">{{ $product->productStock }}</h3>
                     </div>
-                    <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-normal">10</h3>
-                    </div>
+                    @endforeach
                 </div>
             </div>
             <hr>
@@ -64,7 +62,7 @@
                 </div>
                 <div class="col">
                     <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold">30</h3>
+                        <h3 class="text-end fs-6 fw-bold">{{ $total_products_sold }}</h3>
                     </div>
                 </div>
             </div>
@@ -72,7 +70,7 @@
         </div>
     </div>
 
-    <div class="table-container mt-4" style="overflow: hidden; border-radius: 10px">
+    <!-- <div class="table-container mt-4" style="overflow: hidden; border-radius: 10px">
       <table class="table" style="border: none">
         <thead>
           <tr>
@@ -83,6 +81,7 @@
             <th scope="col"></th>
           </tr>
         </thead>
+
   
         <tbody class="mt-3">
             <tr>
@@ -104,5 +103,5 @@
             </tr>
         </tbody>
       </table>
-    </div>
+    </div> -->
 </x-layout>

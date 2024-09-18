@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\StokModel;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class StokController extends Controller
@@ -12,7 +14,18 @@ class StokController extends Controller
      */
     public function index()
     {
-        return view('stok');
+        $top_products = DB::table('products')
+                        ->select('productName', 'productStock')
+                        ->orderBy('productStock', 'desc')
+                        ->limit(5)
+                        ->get();
+
+        $total_products_sold = DB::table('transaction_details')
+                        ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
+                        ->join('products', 'transaction_details.productID', '=', 'products.id')
+                        ->sum('transaction_details.productQuantity');
+                        
+        return view('stok', ['top_products' => $top_products, 'total_products_sold' => $total_products_sold]);
     }
 
     /**
