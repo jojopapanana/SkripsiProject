@@ -10,7 +10,7 @@ class Product extends Model
     use HasFactory;
 
     protected $table = 'products';
-    protected $primaryKey = '$id';
+    protected $primaryKey = 'id';
     protected $timestamp = true;
     protected $guarded = [];
 }

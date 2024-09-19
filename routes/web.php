@@ -21,3 +21,5 @@ Route::get('stok', [StokController::class, 'index'])->name('stok');
 Route::get('labarugi', [LabaRugiController::class, 'index'])->name('labarugi');
 Route::get('aruskas', [ArusKasController::class, 'index'])->name('aruskas');
 
+Route::delete('/stok/{id}/delete', [StokController::class, 'delete'])->name('stok.delete');
+
