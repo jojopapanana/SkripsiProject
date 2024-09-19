@@ -84,32 +84,32 @@
             </div>
         </div>
         @foreach($stokData as $stok)
-    <div class="card mt-3">
-        <div class="card-body py-2">
-            <table class="w-100">
-                <tbody>
-                    <tr>
-                        <td class="text-start" style="width: 20%;">{{ $stok->stok_id }}</td>
-                        <td class="text-start" style="width: 30%;">{{ $stok->nama }}</td>
-                        <td class="text-start" style="width: 25%;">Rp. {{ number_format($stok->nominal, 0, ',', '.') }}</td>
-                        <td class="text-start" style="width: 15%;">{{ $stok->sisa }}</td>
-                        <td class="text-start" style="width: 10%;">
-                            <div class="d-flex gap-4">
-                                <form action="{{ route('stok.delete', $stok->stok_id) }}" method="POST" onsubmit="return confirm('Apakah Anda ingin menghapus stok ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn p-0" style="color: red; border: none">
-                                        <i class="bi bi-trash3-fill"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-@endforeach
+            <div class="card mt-3">
+                <div class="card-body py-2">
+                    <table class="w-100">
+                        <tbody>
+                            <tr>
+                                <td class="text-start" style="width: 20%;">{{ $stok->stok_id }}</td>
+                                <td class="text-start" style="width: 30%;">{{ $stok->nama }}</td>
+                                <td class="text-start" style="width: 25%;">Rp. {{ number_format($stok->nominal, 0, ',', '.') }}</td>
+                                <td class="text-start" style="width: 15%;">{{ $stok->sisa }}</td>
+                                <td class="text-start" style="width: 10%;">
+                                    <div class="d-flex gap-4">
+                                        <form action="{{ route('stok.delete', $stok->stok_id) }}" method="POST" onsubmit="return confirm('Apakah Anda ingin menghapus stok ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn p-0" style="color: red; border: none">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endforeach
         <br>
     </div>
 </x-layout>
