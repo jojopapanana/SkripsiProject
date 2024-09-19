@@ -26,9 +26,7 @@ class StokController extends Controller
                         ->join('products', 'transaction_details.productID', '=', 'products.id')
                         ->sum('transaction_details.productQuantity');
                         
-                        $stokData = DB::table('products')
-                        ->leftJoin('transaction_details', 'products.id', '=', 'transaction_details.productID')
-                        ->leftJoin('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
+        $stokData = DB::table('products')
                         ->select(
                             'products.id as stok_id',
                             'products.productName as nama',
