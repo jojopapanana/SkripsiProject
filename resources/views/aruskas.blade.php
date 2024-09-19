@@ -80,6 +80,21 @@
             <p class="fw-bold">Total Arus Kas Investasi</p>
             <p class="fw-bold">Rp. {{ number_format($total_arus_kas_investasi, 0, ',', '.') }}</p>
         </div>
+
+        <div class="d-flex justify-content-between">
+            <p class="fw-bold">Kenaikan/Penurunan Kas</p>
+            <p class="fw-bold">Rp. {{ number_format($kenaikan_arus_kas, 0, ',', '.') }}</p>
+        </div>
+        
+        <div class="d-flex justify-content-between">
+            <p class="fw-bold">Saldo Kas Awal</p>
+            <p class="fw-bold">Rp. {{ number_format($saldo_awal_kas, 0, ',', '.') }}</p>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <p class="fw-bold">Saldo Kas Akhir</p>
+            <p class="fw-bold">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</p>
+        </div>
     </div>
 
     <script>

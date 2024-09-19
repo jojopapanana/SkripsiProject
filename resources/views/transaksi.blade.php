@@ -4,37 +4,37 @@
     </div>
     
     <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
-        <div class="dropdown">
-            <button class="dropdown-toggle fs-5 p-2 fw-bold" id="dropdown-bulan-transaksi" data-bs-toggle="dropdown" aria-expanded="true" style="border: 2px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
-              BULAN
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdown-bulan-transaksi">
-              <li><a class="dropdown-item" href="#">JANUARI</a></li>
-              <li><a class="dropdown-item" href="#">FEBRUARI</a></li>
-              <li><a class="dropdown-item" href="#">MARET</a></li>
-              <li><a class="dropdown-item" href="#">APRIL</a></li>
-              <li><a class="dropdown-item" href="#">MEI</a></li>
-              <li><a class="dropdown-item" href="#">JUNI</a></li>
-              <li><a class="dropdown-item" href="#">JULI</a></li>
-              <li><a class="dropdown-item" href="#">AGUSTUS</a></li>
-              <li><a class="dropdown-item" href="#">SEPTEMBER</a></li>
-              <li><a class="dropdown-item" href="#">OKTOBER</a></li>
-              <li><a class="dropdown-item" href="#">NOVEMBER</a></li>
-              <li><a class="dropdown-item" href="#">DESEMBER</a></li>
-            </ul>
-        </div>
-    
-        <div class="dropdown" id="dropdown-tahun-transaksi">
-            <button class="dropdown-toggle p-2 fs-5 fw-bold" type="button" data-bs-toggle="dropdown" aria-expanded="true" style="border: 2px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
-              2024
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">2022</a></li>
-              <li><a class="dropdown-item" href="#">2023</a></li>
-              <li><a class="dropdown-item" href="#">2024</a></li>
-            </ul>
-        </div>
-    </div>
+      <div class="dropdown">
+          <button class="btn dropdown-toggle fw-bold" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ strtoupper(date('F')) }}
+          </button>
+          <ul class="dropdown-menu" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
+              <li><a class="dropdown-item" href="#" data-value="1">JANUARI</a></li>
+              <li><a class="dropdown-item" href="#" data-value="2">FEBRUARI</a></li>
+              <li><a class="dropdown-item" href="#" data-value="3">MARET</a></li>
+              <li><a class="dropdown-item" href="#" data-value="4">APRIL</a></li>
+              <li><a class="dropdown-item" href="#" data-value="5">MEI</a></li>
+              <li><a class="dropdown-item" href="#" data-value="6">JUNI</a></li>
+              <li><a class="dropdown-item" href="#" data-value="7">JULI</a></li>
+              <li><a class="dropdown-item" href="#" data-value="8">AGUSTUS</a></li>
+              <li><a class="dropdown-item" href="#" data-value="9">SEPTEMBER</a></li>
+              <li><a class="dropdown-item" href="#" data-value="10">OKTOBER</a></li>
+              <li><a class="dropdown-item" href="#" data-value="11">NOVEMBER</a></li>
+              <li><a class="dropdown-item" href="#" data-value="12">DESEMBER</a></li>
+          </ul>
+      </div>
+  
+      <div class="dropdown">
+          <button class="btn dropdown-toggle fw-bold" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+              TAHUN
+          </button>
+          <ul class="dropdown-menu" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
+              <li><a class="dropdown-item" href="#" data-value="2022">2022</a></li>
+              <li><a class="dropdown-item" href="#" data-value="2023">2023</a></li>
+              <li><a class="dropdown-item" href="#" data-value="2024">2024</a></li>
+          </ul>
+      </div>
+  </div>
 
     <div class="table-container mt-4" style="overflow: hidden; border-radius: 10px">
       <table class="table" style="border: none">
@@ -78,6 +78,22 @@
           @endforeach
         </tbody>
       </table>
+
+      {{-- <a href="{{ route('transaksi_export') }}" class="btn btn-primary">Export Data</a> --}}
+      
+      <div class="d-flex justify-content-end">
+        <div class="dropdown">
+          <button class="btn dropdown-toggle fw-semibold" type="button" id="exportDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+              Ekspor
+          </button>
+          <ul class="dropdown-menu" id="export-dropdown-menu" aria-labelledby="exportDropdownButton">
+              <li><a class="dropdown-item" href="{{ route('transaksi_export_excel', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">xlsx</a></li>
+              <li><a class="dropdown-item" href="{{ route('transaksi_export_csv') }}">csv</a></li>
+              <li><a class="dropdown-item" href="{{ route('transaksi_export_pdf') }}">pdf</a></li>
+          </ul>
+        </div>
+      </div>
+      
     </div>
     
   <!-- Modal -->
@@ -92,11 +108,11 @@
           <form>
             <div class="mb-3">
               <label for="kodeTransaksi" class="form-label">Kode Transaksi</label>
-              <input type="text" class="form-control" id="kodeTransaksi" placeholder="TR001" disabled>
+              <input type="text" class="form-control" id="kodeTransaksi" disabled>
             </div>
             <div class="mb-3">
               <label for="tanggalTransaksi" class="form-label">Tanggal Transaksi</label>
-              <input type="date" class="form-control disabled" id="tanggalTransaksi" placeholder=08/08/2024 disabled>
+              <input type="date" class="form-control disabled" id="tanggalTransaksi" disabled>
             </div>
             <div class="mb-3">
               <label for="nominalTransaksi" class="form-label">Nominal</label>
@@ -154,14 +170,51 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const dropdownItems = document.querySelectorAll('.dropdown-item');
-        const dropdownToggle = document.querySelector('#dropdown-bulan-transaksi');
+        const monthDropdownButton = document.getElementById('monthDropdownButton');
+        const monthDropdownItems = document.querySelectorAll('#month-dropdown-menu .dropdown-item');
+        const yearDropdownButton = document.getElementById('yearDropdownButton');
+        const yearDropdownItems = document.querySelectorAll('#year-dropdown-menu .dropdown-item');
 
-        dropdownItems.forEach(item => {
-            item.addEventListener('click', function() {
-                dropdownToggle.textContent = this.textContent;
+        monthDropdownItems.forEach(function(item) {
+            item.addEventListener('click', function(event) {
+                event.preventDefault();
+                const selectedMonthText = this.textContent;
+                const selectedMonthValue = this.getAttribute('data-value');
+                
+                monthDropdownButton.textContent = selectedMonthText;
+                
+                window.location.href = `{{ route('transaksi') }}?month=${selectedMonthValue}`;
             });
         });
+
+        yearDropdownItems.forEach(function(item) {
+            item.addEventListener('click', function(event) {
+                event.preventDefault();
+                const selectedYearText = this.textContent;
+                const selectedYearValue = this.getAttribute('data-value');
+                
+                yearDropdownButton.textContent = selectedYearText;
+                
+                // window.location.href = `{{ route('aruskas') }}?month=${selectedMonthValue}`;
+            });
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const month = urlParams.get('month');
+        if (month) {
+            const selectedItem = [...monthDropdownItems].find(item => item.getAttribute('data-value') === month);
+            if (selectedItem) {
+                monthDropdownButton.textContent = selectedItem.textContent;
+            }
+        }
+
+        const year = urlParams.get('year');
+        if (year) {
+            const selectedItem = [...yearDropdownItems].find(item => item.getAttribute('data-value') === year);
+            if (selectedItem) {
+                yearDropdownButton.textContent = selectedItem.textContent;
+            }
+        }
     });
 </script>
 
