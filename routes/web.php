@@ -22,4 +22,5 @@ Route::get('labarugi', [LabaRugiController::class, 'index'])->name('labarugi');
 Route::get('aruskas', [ArusKasController::class, 'index'])->name('aruskas');
 
 Route::delete('/stok/{id}/delete', [StokController::class, 'delete'])->name('stok.delete');
+Route::post('/stok/update/{id}', [StokController::class, 'update'])->name('stok.update');
 
