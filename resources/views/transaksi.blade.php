@@ -26,7 +26,7 @@
   
       <div class="dropdown">
           <button class="btn dropdown-toggle fw-bold" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-              TAHUN
+            {{ now()->year }}
           </button>
           <ul class="dropdown-menu" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
               <li><a class="dropdown-item" href="#" data-value="2022">2022</a></li>
@@ -36,7 +36,7 @@
       </div>
   </div>
 
-    <div class="table-container mt-4" style="overflow: hidden; border-radius: 10px">
+    <div class="table-container mt-4" style="border-radius: 10px">
       <table class="table" style="border: none">
         <thead>
           <tr>
@@ -80,7 +80,7 @@
       </table>
 
       {{-- <a href="{{ route('transaksi_export') }}" class="btn btn-primary">Export Data</a> --}}
-      
+      @if ($transactions->count() > 0)
       <div class="d-flex justify-content-end">
         <div class="dropdown">
           <button class="btn dropdown-toggle fw-semibold" type="button" id="exportDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -88,12 +88,12 @@
           </button>
           <ul class="dropdown-menu" id="export-dropdown-menu" aria-labelledby="exportDropdownButton">
               <li><a class="dropdown-item" href="{{ route('transaksi_export_excel', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">xlsx</a></li>
-              <li><a class="dropdown-item" href="{{ route('transaksi_export_csv') }}">csv</a></li>
-              <li><a class="dropdown-item" href="{{ route('transaksi_export_pdf') }}">pdf</a></li>
+              <li><a class="dropdown-item" href="{{ route('transaksi_export_csv', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">csv</a></li>
+              <li><a class="dropdown-item" href="{{ route('transaksi_export_pdf', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">pdf</a></li>
           </ul>
         </div>
       </div>
-      
+      @endif
     </div>
     
   <!-- Modal -->
