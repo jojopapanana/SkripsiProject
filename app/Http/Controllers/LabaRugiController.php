@@ -10,42 +10,49 @@ class LabaRugiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-            $laba = DB::table('transaksis')
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        $labaTemp = DB::table('transaksis')
             ->select('description', 'nominal')
             ->where('type', 'pemasukan')
-            ->whereNotNull('nominal')
-            ->get();
+            ->whereNotNull('nominal');
+        
+        $rugiTemp = DB::table('transaksis')
+            ->select('description', 'nominal')
+            ->where('type', 'pengeluaran')
+            ->whereNotNull('nominal');
 
-            $total_laba = DB::table('transaksis')
-                ->where('type', 'pemasukan')
-                ->whereNotNull('nominal')
-                ->sum('nominal');
+        if ($month && $year) {
+            $labaTemp->whereYear('transaksis.created_at', $year)
+                      ->whereMonth('transaksis.created_at', $month);
 
-            $rugi = DB::table('transaksis')
-                ->select('description', 'nominal')
-                ->where('type', 'pengeluaran')
-                ->whereNotNull('nominal')
-                ->get();
-
-            $total_rugi = DB::table('transaksis')
-                ->where('type', 'pengeluaran')
-                ->whereNotNull('nominal')
-                ->sum('nominal');
-
-            $balance = $total_laba - $total_rugi;
-            $status = $balance > 0 ? 'Untung' : ($balance < 0 ? 'Rugi' : 'Seimbang');
-
-            return view('labarugi', [
-                'laba' => $laba,
-                'total_laba' => $total_laba,
-                'rugi' => $rugi,
-                'total_rugi' => $total_rugi,
-                'balance' => $balance,
-                'status' => $status
-            ]);
+            $rugiTemp->whereYear('transaksis.created_at', $year)
+                      ->whereMonth('transaksis.created_at', $month);
         }
+
+        $laba = $labaTemp->get();
+        $total_laba = $labaTemp->sum('nominal');
+
+        $rugi = $rugiTemp->get();
+        $total_rugi = $rugiTemp->sum('nominal');
+
+        $balance = $total_laba - $total_rugi;
+        $status = $balance > 0 ? 'Untung' : ($balance < 0 ? 'Rugi' : 'Seimbang');
+
+        return view('labarugi', [
+            'laba' => $laba,
+            'total_laba' => $total_laba,
+            'rugi' => $rugi,
+            'total_rugi' => $total_rugi,
+            'balance' => $balance,
+            'status' => $status,
+            'month' => $month,
+            'year' => $year,
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.

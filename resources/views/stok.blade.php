@@ -3,37 +3,33 @@
         <h1 class="fw-bold">STOK BARANG</h1>
     </div>
     <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
-      <div class="dropdown">
-          <button class="dropdown-toggle px-5 py-2 fs-5 fw-bold" id="dropdown-bulan-transaksi" data-bs-toggle="dropdown" aria-expanded="true" style="border: 1.5px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
-              BULAN
-          </button>
-          <ul class="dropdown-menu" style="width: 100%;">
-              <li><a class="dropdown-item" href="#">Januari</a></li>
-              <li><a class="dropdown-item" href="#">Februari</a></li>
-              <li><a class="dropdown-item" href="#">Maret</a></li>
-              <li><a class="dropdown-item" href="#">April</a></li>
-              <li><a class="dropdown-item" href="#">Mei</a></li>
-              <li><a class="dropdown-item" href="#">Juni</a></li>
-              <li><a class="dropdown-item" href="#">Juli</a></li>
-              <li><a class="dropdown-item" href="#">Agustus</a></li>
-              <li><a class="dropdown-item" href="#">September</a></li>
-              <li><a class="dropdown-item" href="#">Oktober</a></li>
-              <li><a class="dropdown-item" href="#">November</a></li>
-              <li><a class="dropdown-item" href="#">Desember</a></li>
-          </ul>
-      </div>
+        <div class="dropdown">
+            <select id="month" class="form-select px-5 py-2 fs-5 fw-bold" style="border: 1.5px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
+                <option value="">BULAN</option>
+                <option value="1" {{ request('month') == 1 ? 'selected' : '' }}>Januari</option>
+                <option value="2" {{ request('month') == 2 ? 'selected' : '' }}>Februari</option>
+                <option value="3" {{ request('month') == 3 ? 'selected' : '' }}>Maret</option>
+                <option value="4" {{ request('month') == 4 ? 'selected' : '' }}>April</option>
+                <option value="5" {{ request('month') == 5 ? 'selected' : '' }}>Mei</option>
+                <option value="6" {{ request('month') == 6 ? 'selected' : '' }}>Juni</option>
+                <option value="7" {{ request('month') == 7 ? 'selected' : '' }}>Juli</option>
+                <option value="8" {{ request('month') == 8 ? 'selected' : '' }}>Agustus</option>
+                <option value="9" {{ request('month') == 9 ? 'selected' : '' }}>September</option>
+                <option value="10" {{ request('month') == 10 ? 'selected' : '' }}>Oktober</option>
+                <option value="11" {{ request('month') == 11 ? 'selected' : '' }}>November</option>
+                <option value="12" {{ request('month') == 12 ? 'selected' : '' }}>Desember</option>
+            </select>
+        </div>
 
-      <div class="dropdown" id="dropdown-tahun-transaksi">
-          <button class="dropdown-toggle px-5 py-2 fs-5 fw-bold" type="button" data-bs-toggle="dropdown" aria-expanded="true" style="border: 1.5px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
-              TAHUN
-          </button>
-          <ul class="dropdown-menu" style="width: 100%;">
-              <li><a class="dropdown-item" href="#">2024</a></li>
-              <li><a class="dropdown-item" href="#">2025</a></li>
-              <li><a class="dropdown-item" href="#">2026</a></li>
-          </ul>
-      </div>
-  </div>
+        <div class="dropdown">
+            <select id="year" class="form-select px-5 py-2 fs-5 fw-bold" style="border: 1.5px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
+                <option value="">TAHUN</option>
+                <option value="2024" {{ request('year') == 2024 ? 'selected' : '' }}>2024</option>
+                <option value="2025" {{ request('year') == 2025 ? 'selected' : '' }}>2025</option>
+                <option value="2026" {{ request('year') == 2026 ? 'selected' : '' }}>2026</option>
+            </select>
+        </div>
+    </div>
     <div class="card mt-4">
         <div class="card-body">
             <h5 class="fw-bold">Stok Terbanyak</h4>
@@ -95,12 +91,16 @@
                                 <td class="text-start" style="width: 15%;">{{ $stok->sisa }}</td>
                                 <td class="text-start" style="width: 10%;">
                                     <div class="d-flex gap-4">
-                                        <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal">
+                                        <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal{{ $stok->stok_id }}">
                                             <i class="bi bi-pencil-fill"></i>
                                         </button>
-                                        <button type="button" class="btn p-0" style="color: red; border: none" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                            <i class="bi bi-trash3-fill"></i>
-                                        </button>
+                                        <form action="{{ route('stok.delete', $stok->stok_id) }}" method="POST" onsubmit="return confirm('Apakah Anda ingin menghapus stok ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn p-0" style="color: red; border: none">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -108,7 +108,60 @@
                     </table>
                 </div>
             </div>
+            <div class="modal fade" id="editModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Edit Stok</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{{ route('stok.update', $stok->stok_id) }}" method="POST">
+                            @csrf
+                            @method('POST')
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="kodeTransaksi" class="form-label">Kode Transaksi</label>
+                                    <input type="text" class="form-control" id="kodeTransaksi" placeholder="{{$stok->stok_id}}" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nama" class="form-label">Nama Produk</label>
+                                    <input type="text" class="form-control" id="nama" name="nama" value="{{ $stok->nama }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nominal" class="form-label">Nominal</label>
+                                    <input type="text" class="form-control" id="nominal" name="nominal" value="{{ $stok->nominal }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="sisa" class="form-label">Sisa Stok</label>
+                                    <input type="number" class="form-control" id="sisa" name="sisa" value="{{ $stok->sisa }}" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn fw-semibold" style="border: 2px solid rgba(30, 3, 66, 1)" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn fw-semibold" style="background-color: rgba(30, 3, 66, 1); color: white">Simpan Perubahan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         @endforeach
         <br>
+        <script>
+            document.getElementById('month').addEventListener('change', function() {
+                var month = this.value;
+                var year = document.getElementById('year').value;
+                if (month && year) {
+                    window.location.href = `?month=${month}&year=${year}`;
+                }
+            });
+
+            document.getElementById('year').addEventListener('change', function() {
+                var year = this.value;
+                var month = document.getElementById('month').value;
+                if (month && year) {
+                    window.location.href = `?month=${month}&year=${year}`;
+                }
+            });
+        </script>
     </div>
 </x-layout>

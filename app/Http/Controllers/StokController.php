@@ -6,38 +6,50 @@ use App\Http\Controllers\Controller;
 use App\Models\StokModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class StokController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        $stokDataTemp = DB::table('products')
+            ->select(
+                'products.id as stok_id',
+                'products.productName as nama',
+                'products.productPrice as nominal',
+                'products.productStock as sisa',
+                DB::raw("DATE_FORMAT(products.created_at, '%Y-%m') as created_month")
+            );
+
+        if ($month && $year) {
+            $stokDataTemp->whereYear('products.created_at', $year)
+                ->whereMonth('products.created_at', $month);
+        }
+
+        $stokData = $stokDataTemp->get();
+
         $top_products = DB::table('products')
-                        ->select('productName', 'productStock')
-                        ->orderBy('productStock', 'desc')
-                        ->limit(5)
-                        ->get();
+            ->select('productName', 'productStock')
+            ->orderBy('productStock', 'desc')
+            ->limit(5)
+            ->get();
 
         $total_products_sold = DB::table('transaction_details')
-                        ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
-                        ->join('products', 'transaction_details.productID', '=', 'products.id')
-                        ->sum('transaction_details.productQuantity');
-                        
-        $stokData = DB::table('products')
-                        ->leftJoin('transaction_details', 'products.id', '=', 'transaction_details.productID')
-                        ->leftJoin('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
-                        ->select(
-                            'products.id as stok_id',
-                            'products.productName as nama',
-                            'transaksis.nominal as nominal',
-                            'products.productStock as sisa'
-                        )
-                        ->groupBy('products.id', 'products.productName', 'transaksis.nominal', 'products.productStock')
-                        ->get();
+            ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
+            ->join('products', 'transaction_details.productID', '=', 'products.id')
+            ->sum('transaction_details.productQuantity');
 
-        return view('stok', ['top_products' => $top_products, 'total_products_sold' => $total_products_sold, 'stokData' => $stokData]);
+        return view('stok', [
+            'top_products' => $top_products,
+            'total_products_sold' => $total_products_sold,
+            'stokData' => $stokData,
+        ]);
     }
 
     /**
@@ -75,16 +87,40 @@ class StokController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'nominal' => 'required|numeric',
+            'sisa' => 'required|integer',
+        ]);
+
+        $product = Product::find($id);
+
+        if ($product) {
+            $product->productName = $request->input('nama');
+            $product->productPrice = $request->input('nominal');
+            $product->productStock = $request->input('sisa');
+            $product->save();
+
+            return redirect()->back()->with('success', 'Stok berhasil diperbarui.');
+        }
+
+        return redirect()->back()->with('error', 'Produk tidak ditemukan.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete(string $id)
     {
-        //
+        $product = Product::find($id);
+
+        if ($product) {
+            $product->delete();
+            return redirect()->back()->with('success', 'SUCCESS : Berhasil Dihapus');
+        }
+
+        return redirect()->back()->with('error', 'ERROR : Stok Tidak Ditemukan');
     }
 }

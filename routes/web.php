@@ -26,3 +26,6 @@ Route::get('aruskas', [ArusKasController::class, 'index'])->name('aruskas');
 Route::get('/aruskas/export/{month}/{year}', [ArusKasController::class, 'export'])->name('aruskas_export');
 
 
+Route::delete('/stok/{id}/delete', [StokController::class, 'delete'])->name('stok.delete');
+Route::post('/stok/update/{id}', [StokController::class, 'update'])->name('stok.update');
+

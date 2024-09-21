@@ -3,37 +3,33 @@
         <h1 class="fw-bold">LAPORAN LABA RUGI</h1>
     </div>
     <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
-      <div class="dropdown">
-          <button class="dropdown-toggle px-5 py-2 fs-5 fw-bold" id="dropdown-bulan-transaksi" data-bs-toggle="dropdown" aria-expanded="true" style="border: 1.5px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
-              BULAN
-          </button>
-          <ul class="dropdown-menu" style="width: 100%;">
-              <li><a class="dropdown-item" href="#">Januari</a></li>
-              <li><a class="dropdown-item" href="#">Februari</a></li>
-              <li><a class="dropdown-item" href="#">Maret</a></li>
-              <li><a class="dropdown-item" href="#">April</a></li>
-              <li><a class="dropdown-item" href="#">Mei</a></li>
-              <li><a class="dropdown-item" href="#">Juni</a></li>
-              <li><a class="dropdown-item" href="#">Juli</a></li>
-              <li><a class="dropdown-item" href="#">Agustus</a></li>
-              <li><a class="dropdown-item" href="#">September</a></li>
-              <li><a class="dropdown-item" href="#">Oktober</a></li>
-              <li><a class="dropdown-item" href="#">November</a></li>
-              <li><a class="dropdown-item" href="#">Desember</a></li>
-          </ul>
-      </div>
+        <div class="dropdown">
+            <select id="month" class="form-select px-5 py-2 fs-5 fw-bold" style="border: 1.5px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
+                <option value="">BULAN</option>
+                <option value="1" {{ $month == 1 ? 'selected' : '' }}>Januari</option>
+                <option value="2" {{ $month == 2 ? 'selected' : '' }}>Februari</option>
+                <option value="3" {{ $month == 3 ? 'selected' : '' }}>Maret</option>
+                <option value="4" {{ $month == 4 ? 'selected' : '' }}>April</option>
+                <option value="5" {{ $month == 5 ? 'selected' : '' }}>Mei</option>
+                <option value="6" {{ $month == 6 ? 'selected' : '' }}>Juni</option>
+                <option value="7" {{ $month == 7 ? 'selected' : '' }}>Juli</option>
+                <option value="8" {{ $month == 8 ? 'selected' : '' }}>Agustus</option>
+                <option value="9" {{ $month == 9 ? 'selected' : '' }}>September</option>
+                <option value="10" {{ $month == 10 ? 'selected' : '' }}>Oktober</option>
+                <option value="11" {{ $month == 11 ? 'selected' : '' }}>November</option>
+                <option value="12" {{ $month == 12 ? 'selected' : '' }}>Desember</option>
+            </select>
+        </div>
+        <div class="dropdown">
+            <select id="year" class="form-select px-5 py-2 fs-5 fw-bold" style="border: 1.5px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
+                <option value="">TAHUN</option>
+                <option value="2024" {{ $year == 2024 ? 'selected' : '' }}>2024</option>
+                <option value="2025" {{ $year == 2025 ? 'selected' : '' }}>2025</option>
+                <option value="2026" {{ $year == 2026 ? 'selected' : '' }}>2026</option>
+            </select>
+        </div>
+    </div>
 
-      <div class="dropdown" id="dropdown-tahun-transaksi">
-          <button class="dropdown-toggle px-5 py-2 fs-5 fw-bold" type="button" data-bs-toggle="dropdown" aria-expanded="true" style="border: 1.5px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
-              TAHUN
-          </button>
-          <ul class="dropdown-menu" style="width: 100%;">
-              <li><a class="dropdown-item" href="#">2024</a></li>
-              <li><a class="dropdown-item" href="#">2025</a></li>
-              <li><a class="dropdown-item" href="#">2026</a></li>
-          </ul>
-      </div>
-  </div>
     <div class="card mt-4">
         <div class="card-body">
             <h6 class="fw-bold">Pemasukan</h6>
@@ -120,5 +116,22 @@
                 </div>
             </div>
         </div>
+        <script>
+            document.getElementById('month').addEventListener('change', function() {
+                var month = this.value;
+                var year = document.getElementById('year').value;
+                if (month && year) {
+                    window.location.href = `?month=${month}&year=${year}`;
+                }
+            });
+
+            document.getElementById('year').addEventListener('change', function() {
+                var year = this.value;
+                var month = document.getElementById('month').value;
+                if (month && year) {
+                    window.location.href = `?month=${month}&year=${year}`;
+                }
+            });
+        </script>
     </div>
 </x-layout>
