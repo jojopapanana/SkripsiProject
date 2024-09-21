@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
         <div class="dropdown">
             <button class="btn dropdown-toggle fw-bold" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-                BULAN
+                {{ strtoupper(date('F')) }}
             </button>
             <ul class="dropdown-menu" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
                 <li><a class="dropdown-item" href="#" data-value="1">JANUARI</a></li>
@@ -26,7 +26,7 @@
     
         <div class="dropdown">
             <button class="btn dropdown-toggle fw-bold" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-                TAHUN
+                {{ now()->year }}
             </button>
             <ul class="dropdown-menu" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
                 <li><a class="dropdown-item" href="#" data-value="2022">2022</a></li>
@@ -96,6 +96,12 @@
             <p class="fw-bold">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</p>
         </div>
     </div>
+
+      <div class="d-flex justify-content-end mt-3 mb-5">
+          <button class="btn fw-semibold" type="button" id="exportButton">
+              <a href="{{ route('aruskas_export', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}" class="text-decoration-none" style="color: white">Ekspor</a>
+          </button>
+      </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

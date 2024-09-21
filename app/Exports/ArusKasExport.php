@@ -11,6 +11,16 @@ class ArusKasExport implements WithHeadings, FromCollection
     /**
     * @return \Illuminate\Support\Collection
     */
+
+    protected $month;
+    protected $year;
+
+    public function __construct($month, $year)
+    {
+        $this->month = $month;
+        $this->year = $year;
+    }
+    
     public function collection()
     {
         $query_data = DB::table('transaksis')->select('id', 'created_at as Tanggal Transaksi', 'nominal', 'type', 'category', 'method', 'description')->get();
