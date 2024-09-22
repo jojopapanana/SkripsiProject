@@ -174,16 +174,79 @@ class TransaksiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
-        //
+        // dd($request->nominalTransaksi);
+
+        // $request->validate([
+        //     'nominalTransaksi' => 'nullable|integer',
+        //     'jenisTransaksi' => 'required|string',
+        //     'kategoriTransaksi' => 'required|string',
+        //     'metodeTransaksi' => 'required|string',
+        //     'deskripsiTransaksi' => 'required|string'
+        // ]);
+
+        // dd($id);
+
+        $transaction = Transaksi::find($id);
+
+        
+
+        $transaction->update([
+            'nominal' => $request->nominalTransaksi,
+            'type' => $request->jenisTransaksi,
+            'category' => $request->kategoriTransaksi,
+            'method' => $request->metodeTransaksi,
+            'description' => $request->deskripsiTransaksi
+        ]);
+
+        $selectedMonth = $request->get('month', date('n'));
+        $transactions = DB::table('transaksis')->select('*')
+                                                    ->where(DB::raw('month(transaksis.created_at)'), '=', $selectedMonth)
+                                                    ->orderBy('id')
+                                                    ->get();
+        $income_totals = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+                                        ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                        ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalNominal'))
+                                        ->whereNull('transaksis.nominal')
+                                        ->groupBy('transaksis.id');
+
+        $expense_total = DB::table('transaksis')->select('transaksis.id as id', 'transaksis.nominal as totalNominal')
+                                                ->whereNotNull('transaksis.nominal')
+                                                ->union($income_totals)
+                                                ->orderBy('id')
+                                                ->get();
+
+        $totals = $expense_total;
+        return redirect()->route('transaksi', ['transactions' => $transactions, 'totals' => $totals]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id, Request $request)
     {
-        //
+        $transaksi = Transaksi::find(id: $id);
+        $transaksi->delete();
+
+        $selectedMonth = $request->get('month', date('n'));
+        $transactions = DB::table('transaksis')->select('*')
+                                                    ->where(DB::raw('month(transaksis.created_at)'), '=', $selectedMonth)
+                                                    ->orderBy('id')
+                                                    ->get();
+        $income_totals = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+                                        ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                        ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalNominal'))
+                                        ->whereNull('transaksis.nominal')
+                                        ->groupBy('transaksis.id');
+
+        $expense_total = DB::table('transaksis')->select('transaksis.id as id', 'transaksis.nominal as totalNominal')
+                                                ->whereNotNull('transaksis.nominal')
+                                                ->union($income_totals)
+                                                ->orderBy('id')
+                                                ->get();
+
+        $totals = $expense_total;
+        return redirect()->route('transaksi', ['transactions' => $transactions, 'totals' => $totals]);
     }
 }

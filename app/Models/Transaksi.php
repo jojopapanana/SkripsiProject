@@ -9,7 +9,7 @@ class Transaksi extends Model
 {
     use HasFactory;
     protected $table = 'transaksis';
-    protected $primaryKey = '$id';
+    protected $primaryKey = 'id';
     protected $timestamp = true;
     protected $guarded = [];
 }
