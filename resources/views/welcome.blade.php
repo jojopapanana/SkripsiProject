@@ -47,7 +47,7 @@
                     <p class="modal-title" id="exampleModalLabel">Tambah Transaksi</p>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
+                    <form id="formInput" action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
                         @csrf
                         <input type="hidden" name="modalType" value="pemasukan">
                         <div class="form-group position-relative mb-2">
@@ -109,7 +109,7 @@
                     <p class="modal-title" id="exampleModalLabel">Tambah Transaksi</p>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
+                    <form id="formInputPengeluaran" action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
                         @csrf
                         <input type="hidden" name="modalType" value="pengeluaran">
                         <div class="form-group position-relative mb-2">
@@ -124,6 +124,7 @@
                             <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
                             <select class="form-control border-style" id="deskripsi" name="deskripsi">
                                 <option value="Tambah Stok">Tambah Stok</option>
+                                <option value="Tambah Stok Baru">Tambah Stok Baru</option>
                                 <option value="Lainnya">Lainnya</option>
                             </select>
                         </div>
@@ -209,18 +210,20 @@
         // Select all forms on the page, including both modals
         document.querySelectorAll('form').forEach(function(form) {
             form.addEventListener('submit', function(event) {
-                let nominalFields = form.querySelectorAll('#nominal, #nominalPengeluaran');  // Select nominal and nominalPengeluaran within the current form
+                let nominalFields = form.querySelectorAll('#nominal, #nominalPengeluaran, #hargaJualSatuan');  // Select nominal and nominalPengeluaran within the current form
 
                 nominalFields.forEach(function(field) {
                     if (field) {
-                        field.value = field.value.replace(/\D/g, '');  // Replace all non-numeric characters
-                        console.log(field.value);
+                        let originalValue = field.value
+                        field.value = originalValue.replace(/\D/g, '');  // Replace all non-numeric characters
+                        setTimeout(function() {
+                            field.value = originalValue;  // Restore the original value to display
+                        }, 0);
                     }
                 });
             });
         });
     </script>
-
 
     <!-- Set current date -->
     <script>
@@ -239,21 +242,68 @@
     <!-- Update Nominal for Pemasukan -->
     <script>
         $(document).ready(function(){
+            var globalInputValue = 1;
+
+            $('#jumlahBarang').on('keydown', preventDeletion);
+            $('#jumlahBarang').on('input', limitInput);
+
             function updateNominal() {
                 var jenisBarang = document.getElementById('jenisBarang');
                 var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
                 var pricePerItem = parseInt(selectedOption.getAttribute('data-price')) || 0;
 
-                var jumlahBarang = parseInt(document.getElementById('jumlahBarang').value) || 0;
+                var jumlahBarang = parseInt(document.getElementById('jumlahBarang').value) || 1;
                 var nominal = pricePerItem * jumlahBarang;
+
+                var productStock = parseInt(selectedOption.getAttribute('data-stock')) || 1;
 
                 document.getElementById('nominal').value = 'Rp. ' + nominal.toLocaleString('id-ID') + ',-';
 
-                // Ensure the value doesn't exceed available stock
                 if (jumlahBarang > productStock) {
-                    alert('Stok tidak mencukupi! Stok tersedia: ' + productStock);
-                    document.getElementById('jumlahBarang').value = productStock;
-                    updateNominal(); // Update the nominal after adjusting the quantity
+                    document.getElementById('jumlahBarang').value = productStock
+                    globalInputValue = productStock
+                }
+            }
+
+            function limitInput(event) {
+                var input = event.target;
+                var currVal = input.value;
+
+                if (isNaN(currVal) || currVal.trim() === '') {
+                    alert('Masukkan hanya angka!');
+                    input.value = globalInputValue;
+                    return;
+                }
+
+                var value = parseInt(input.value) || 0;
+                var jenisBarang = document.getElementById('jenisBarang');
+                var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
+                var productStock = parseInt(selectedOption.getAttribute('data-stock')) || 1;
+
+                // Ensure the value is not less than 1
+                if (value < 1) {
+                    alert('Jumlah tidak dapat kurang dari 1');
+                    input.value = globalInputValue;
+                    return;
+                }
+
+                // Limit the input value to not exceed productStock
+                if (value > productStock) {
+                    alert('Jumlah tidak boleh melebihi stok yang tersedia: ' + productStock);
+                    input.value = globalInputValue;
+                    return;
+                }
+
+                globalInputValue = input.value
+            }
+
+            function preventDeletion(event) {
+                var jenisBarang = document.getElementById('jenisBarang');
+
+                if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
+                    alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                    event.preventDefault();
+                    return;
                 }
             }
 
@@ -274,8 +324,10 @@
 
                 if (parseInt(jumlahBarang.val()) < productStock) {
                     jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
+                    globalInputValue = parseInt(jumlahBarang.val())
                 } else {
                     alert('Stok tidak mencukupi! Stok tersedia: ' + productStock);
+                    return;
                 }
                 updateNominal();
             });
@@ -291,35 +343,96 @@
 
                 if (parseInt(jumlahBarang.val()) > 1) {
                     jumlahBarang.val(parseInt(jumlahBarang.val()) - 1);
+                    globalInputValue = parseInt(jumlahBarang.val())
                     updateNominal();
                 }
             });
         });
     </script>
 
+    <script>
+        // Prevent form submission if jenisBarang is None
+        $('#formInput, #formInputPengeluaran').on('submit', function(e) {
+            var form = $(this);
+
+            if (form.is('#formInputPengeluaran')) {
+                if (form.find('#jenisBarangPengeluaran').length && form.find('#jenisBarangPengeluaran').val() === 'None') {
+                    e.preventDefault();
+                    alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                    return;
+                }
+                if (form.find('#stokBaru').length) {
+                    const products = @json($products->pluck('productName'));
+                    const lowerCaseProducts = products.map(name => name.toLowerCase());
+                    const stokBaruLowerCase = form.find('#stokBaru').val().toLowerCase();
+
+                    if (lowerCaseProducts.includes(stokBaruLowerCase)) {
+                        e.preventDefault();
+                        alert('Stok dengan nama ini sudah tersedia! Silahkan masukkan nama lain.');
+                        return;
+                    }
+                }
+                if (form.find('#nominalPengeluaran').val() === '') {
+                    e.preventDefault();
+                    alert('Silahkan isi nominal terlebih dahulu!');
+                    return;
+                }
+            } else {
+                if (form.find('#jenisBarang').val() === 'None') {
+                    e.preventDefault();
+                    alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                    return;
+                }
+            }
+        });
+    </script>
+
     <!-- Increment/Decrement for Pengeluaran -->
     <script>
         $(document).ready(function(){
+            // Initial bind for Pengeluaran modal
+            rebindPengeluaranEvents();
+
             // Function to handle events for Pengeluaran modal dynamically
             function rebindPengeluaranEvents() {
-                $('#incrementPengeluaran').on('click', function() {
-                    var jumlahBarang = $('#jumlahBarangPengeluaran');
-                    var jenisBarang = document.getElementById('jenisBarangPengeluaran');
+                var deskripsiValue = $('#deskripsi').val();
+                var jumlahBarang = $('#jumlahBarangPengeluaran');
 
-                    if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
-                        alert('Silahkan pilih Jenis Barang terlebih dahulu!');
-                        return;
+                $('#incrementPengeluaran').on('click', function() {
+                    if (deskripsiValue === 'Tambah Stok Baru') {
+                        var jenisBarang = document.getElementById('stokBaru')
+
+                        if (jenisBarang.value === '') {
+                            alert('Silahkan masukkan nama stok barang terlebih dahulu!')
+                            return;
+                        }
+                    } else {
+                        var jenisBarang = document.getElementById('jenisBarangPengeluaran');
+
+                        if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
+                            alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                            return;
+                        }
                     }
+
                     jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
                 });
 
                 $('#decrementPengeluaran').on('click', function() {
-                    var jumlahBarang = $('#jumlahBarangPengeluaran');
-                    var jenisBarang = document.getElementById('jenisBarangPengeluaran');
+                    if (deskripsiValue === 'Tambah Stok Baru') {
+                        var jenisBarang = document.getElementById('stokBaru')
 
-                    if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
-                        alert('Silahkan pilih Jenis Barang terlebih dahulu!');
-                        return;
+                        if (jenisBarang.value === '') {
+                            alert('Silahkan masukkan nama stok barang terlebih dahulu!')
+                            return;
+                        }
+                    } else {
+                        var jenisBarang = document.getElementById('jenisBarangPengeluaran');
+
+                        if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
+                            alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                            return;
+                        }
                     }
 
                     if (parseInt(jumlahBarang.val()) > 1) {
@@ -331,6 +444,43 @@
                 $('#nominalPengeluaran').on('keydown', preventBackspace);
                 $('#nominalPengeluaran').on('input', enforceNumericInput);
                 $('#nominalPengeluaran').on('blur', addCurrencySuffix);
+
+                // if (deskripsiValue === 'Tambah Stok Baru') {
+                    console.log(deskripsiValue)
+
+                    $('#stokBaru').on('keydown', preventDeletionPengeluaran);
+                    $('#hargaJualSatuan').on('keydown', preventBackspace);
+                    $('#hargaJualSatuan').on('input', enforceNumericInput);
+                    $('#hargaJualSatuan').on('blur', addCurrencySuffix);
+                // } else {
+                    $('#jumlahBarangPengeluaran').on('keydown', preventDeletionPengeluaran);
+                // }
+            }
+
+            function preventDeletionPengeluaran(event) {
+                // If you're dealing with the 'stokBaru' text input
+                var deskripsiValue = $('#deskripsi').val();
+                console.log(deskripsiValue)
+                if (deskripsiValue === 'Tambah Stok Baru') {
+                    var stokBaruValue = document.getElementById('stokBaru');
+
+                    if (stokBaruValue.value === '') {
+                        alert('Silahkan masukkan nama stok barang terlebih dahulu!');
+                        event.preventDefault();
+                        return;
+                    }
+                }
+                // Else, if dealing with the 'jumlahBarangPengeluaran' input
+                else {
+                    var jenisBarang = document.getElementById('jenisBarangPengeluaran');
+                    var selectedValue = jenisBarang.options[jenisBarang.selectedIndex].value;
+
+                    if (selectedValue === 'None') {
+                        alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                        event.preventDefault();
+                        return;
+                    }
+                }
             }
 
             function enforceNumericInput(event) {
@@ -340,6 +490,11 @@
                 // Remove any non-digit characters except the prefix
                 var numberValue = value.slice(4).replace(/\D/g, '');
 
+                // Restrict the input to prevent entering numbers starting with 0 (except 0 itself)
+                if (numberValue.startsWith('0')) {
+                    numberValue = ''; // If first character is 0, restrict the rest of the input
+                }
+
                 // Format the number with dots as thousand separators
                 var formattedValue = numberValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
@@ -348,14 +503,14 @@
             }
 
             function preventBackspace(event) {
-                var input = document.getElementById('nominalPengeluaran');
+                var input = event.target;
                 if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
                     event.preventDefault();
                 }
             }
 
             function addCurrencySuffix() {
-                var input = document.getElementById('nominalPengeluaran');
+                var input = event.target;
                 var value = input.value;
 
                 // Ensure the value ends with ",-"
@@ -364,8 +519,23 @@
                 }
             }
 
-            // Initial bind for Pengeluaran modal
-            rebindPengeluaranEvents();
+            function checkStockNameExist() {
+                const products = @json($products->pluck('productName')); // Pass the product names as a JavaScript array
+
+                document.getElementById('stokBaru').addEventListener('input', function() {
+                    let productName = this.value.toLowerCase();
+                    let message = document.getElementById('product-check-message');
+                    const lowerCaseProducts = products.map(name => name.toLowerCase());
+
+                    // Check if the product name already exists in the products array
+                    if (lowerCaseProducts.includes(productName)) {
+                        message.textContent = "Stok dengan nama ini sudah tersedia!";
+                        return;
+                    } else {
+                        message.textContent = "";
+                    }
+                });
+            }
 
             // Handle 'Deskripsi' change event to switch between dynamic fields
             $('#deskripsi').on('change', function() {
@@ -374,7 +544,7 @@
                         <input type="hidden" name="modalType1" value="tambahLainnya">
                         <div class="form-group position-relative mb-2">
                             <label for="deskripsiTransaksi" class="col-form-label" id="inputModalLabel">Deskripsi Transaksi</label>
-                            <textarea class="form-control border-style" id="deskripsiTransaksi" name="deskripsiTransaksi" placeholder="Masukkan deskripsi transaksi" rows="3"></textarea>
+                            <textarea class="form-control border-style" id="deskripsiTransaksi" name="deskripsiTransaksi" placeholder="Masukkan deskripsi transaksi" rows="3" required></textarea>
                         </div>
                         <div class="form-group-select position-relative mb-2">
                             <label for="kategori" class="col-form-label" id="inputModalLabel">Kategori</label>
@@ -398,7 +568,7 @@
                             <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
                         </div>
                     `);
-                } else {
+                } else if ($(this).val() === 'Tambah Stok') {
                     $('#dynamicFields').html(`
                         <input type="hidden" name="modalType1" value="tambahStok">
                         <div id="dynamicFields">
@@ -439,6 +609,48 @@
                             </div>
                         </div>
                     `);
+                } else {
+                    $('#dynamicFields').html(`
+                        <input type="hidden" name="modalType1" value="tambahStokBaru">
+                        <div id="dynamicFields">
+                            <div class="form-group position-relative mb-2" id="stokBaruField">
+                                <label for="stokBaru" class="col-form-label" id="inputModalLabel">Nama Stok Baru</label>
+                                <input type="text" class="form-control border-style" id="stokBaru" name="stokBaru" placeholder="Masukkan nama stok baru" required>
+                                <div class="mt-1" id="product-check-message" style="color: red;"></div>
+                            </div>
+                            <div class="form-group position-relative mb-2" id="jumlahBarangField">
+                                <label for="jumlahBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jumlah Barang</label>
+                                <div class="input-group input-group-outline border-style">
+                                    <button class="btn" type="button" id="decrementPengeluaran">
+                                        <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
+                                    </button>
+                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <button class="btn" type="button" id="incrementPengeluaran">
+                                        <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group position-relative mb-2" id="nominalField">
+                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Nominal</label>
+                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
+                            </div>
+                            <div class="form-group position-relative mb-2" id="nominalField2">
+                                <label for="hargaJualSatuan" class="col-form-label" id="inputModalLabel">Harga Jual Satuan</label>
+                                <input type="text" class="form-control border-style" id="hargaJualSatuan" name="hargaJualSatuan" value="Rp. ">
+                            </div>
+                            <div class="form-group-select position-relative mb-4">
+                                <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
+                                <select class="form-control border-style" id="metode" name="metode">
+                                    <option value="Tunai">Tunai</option>
+                                    <option value="Non-Tunai">Non-Tunai</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
+                            </div>
+                        </div>
+                    `);
+                    checkStockNameExist();
                 }
 
                 // Rebind events for the newly created elements

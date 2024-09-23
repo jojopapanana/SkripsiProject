@@ -67,7 +67,7 @@ class TransaksiController extends Controller
     {
         // Handle Pemasukan
         if ($request->input('modalType') === 'pemasukan') {
-            $validatedData = $request->validate([ //ini buat nanti
+            $validatedData = $request->validate([
                 'tanggal' => 'required|date',
                 'jenisTransaksi' => 'required|string',
                 'nominal' => 'required|numeric',
@@ -91,6 +91,7 @@ class TransaksiController extends Controller
             ]);
 
             // Insert into 'transaction_details' using the retrieved transaction ID
+            // nanti perlu tambahin kalo one to many
             DB::table('transaction_details')->insert([
                 [
                     'transactionID' => $transactionID,
@@ -100,7 +101,7 @@ class TransaksiController extends Controller
             ]);
 
         // Handle Pengeluaran
-        } elseif ($request->input('modalType') === 'pengeluaran') {
+        } else if ($request->input('modalType') === 'pengeluaran') {
             if ($request->input('modalType1') === 'tambahStok') {
                 // dd('Just printing something');
                 $validatedData = $request->validate([
@@ -128,7 +129,7 @@ class TransaksiController extends Controller
                         'description' => $validatedData['deskripsi']
                     ]
                 ]);
-            } else {
+            } else if ($request->input('modalType1') === 'tambahLainnya') {
                 $validatedData = $request->validate([
                     'tanggal' => 'required|date',
                     'jenisTransaksi' => 'required|string',
@@ -147,6 +148,32 @@ class TransaksiController extends Controller
                         'method' => $validatedData['metode'],
                         'description' => $validatedData['deskripsiTransaksi']
                     ]
+                ]);
+            } else if ($request->input('modalType1') === 'tambahStokBaru') {
+                $validatedData = $request->validate([
+                    'tanggal' => 'required|date',
+                    'jenisTransaksi' => 'required|string',
+                    'deskripsi' => 'required|string',
+                    'stokBaru' => 'required|string',
+                    'metode' => 'required|string',
+                    'hargaJualSatuan' => 'required|numeric',
+                    'jumlahBarangPengeluaran' => 'required|integer',
+                    'nominalPengeluaran' => 'required|numeric'
+                ]);
+
+                DB::table('products')->insert([
+                    'productName' => $validatedData['stokBaru'],
+                    'productStock' => $validatedData['jumlahBarangPengeluaran'],
+                    'productPrice' => $validatedData['hargaJualSatuan']
+                ]);
+
+                DB::table('transaksis')->insert([
+                    'created_at' => $validatedData['tanggal'],
+                    'nominal' => $validatedData['nominalPengeluaran'],
+                    'type' => $validatedData['jenisTransaksi'],
+                    'category' => 'Operasional',
+                    'method' => $validatedData['metode'],
+                    'description' => $validatedData['deskripsi']
                 ]);
             }
         }
@@ -190,7 +217,7 @@ class TransaksiController extends Controller
 
         $transaction = Transaksi::find($id);
 
-        
+
 
         $transaction->update([
             'nominal' => $request->nominalTransaksi,
