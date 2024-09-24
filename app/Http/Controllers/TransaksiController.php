@@ -60,6 +60,118 @@ class TransaksiController extends Controller
         //
     }
 
+    private function tambahPemasukan(Request $request) {
+        $validatedData = $request->validate([
+            'tanggal' => 'required|date',
+            'jenisTransaksi' => 'required|string',
+            'nominal' => 'required|numeric',
+            'metode' => 'required|string',
+            'jenisBarang' => 'required|string',
+            'jumlahBarang' => 'required|integer',
+        ]);
+
+        // Update product stock
+        DB::table('products')
+            ->where('id', $validatedData['jenisBarang'])
+            ->decrement('productStock', $validatedData['jumlahBarang']);
+
+        // Insert into 'transaksis' and get the transaction ID
+        $transactionID = DB::table('transaksis')->insertGetId([
+            'created_at' => $validatedData['tanggal'],
+            'type' => $validatedData['jenisTransaksi'],
+            'category' => 'Operasional',
+            'method' => $validatedData['metode'],
+            'description' => 'Hasil penjualan'
+        ]);
+
+        // Insert into 'transaction_details' using the retrieved transaction ID
+        // nanti perlu tambahin kalo one to many
+        DB::table('transaction_details')->insert([
+            [
+                'transactionID' => $transactionID,
+                'productID' => $validatedData['jenisBarang'],
+                'productQuantity' => $validatedData['jumlahBarang']
+            ]
+        ]);
+    }
+
+    private function tambahStokPengeluaran(Request $request) {
+        $validatedData = $request->validate([
+            'tanggal' => 'required|date',
+            'jenisTransaksi' => 'required|string',
+            'deskripsi' => 'required|string',
+            'jenisBarangPengeluaran' => 'required|string',
+            'metode' => 'required|string',
+            'jumlahBarangPengeluaran' => 'required|integer',
+            'nominalPengeluaran' => 'required|numeric'
+        ]);
+
+        DB::table('products')
+            ->where('id', $validatedData['jenisBarangPengeluaran'])
+            ->increment('productStock', $validatedData['jumlahBarangPengeluaran']);
+
+        DB::table('transaksis')->insert([
+            [
+                'created_at' => $validatedData['tanggal'],
+                'nominal' => $validatedData['nominalPengeluaran'],
+                'type' => $validatedData['jenisTransaksi'],
+                'category' => 'Operasional',
+                'method' => $validatedData['metode'],
+                'description' => $validatedData['deskripsi']
+            ]
+        ]);
+    }
+
+    private function tambahLainnyaPengeluaran(Request $request) {
+        $validatedData = $request->validate([
+            'tanggal' => 'required|date',
+            'jenisTransaksi' => 'required|string',
+            'deskripsiTransaksi' => 'required|string',
+            'metode' => 'required|string',
+            'kategori' => 'required|string',
+            'nominalPengeluaran' => 'required|numeric'
+        ]);
+
+        DB::table('transaksis')->insert([
+            [
+                'created_at' => $validatedData['tanggal'],
+                'nominal' => $validatedData['nominalPengeluaran'],
+                'type' => $validatedData['jenisTransaksi'],
+                'category' => $validatedData['kategori'],
+                'method' => $validatedData['metode'],
+                'description' => $validatedData['deskripsiTransaksi']
+            ]
+        ]);
+    }
+
+    private function tambahStokBaruPengeluaran(Request $request) {
+        $validatedData = $request->validate([
+            'tanggal' => 'required|date',
+            'jenisTransaksi' => 'required|string',
+            'deskripsi' => 'required|string',
+            'stokBaru' => 'required|string',
+            'metode' => 'required|string',
+            'hargaJualSatuan' => 'required|numeric',
+            'jumlahBarangPengeluaran' => 'required|integer',
+            'nominalPengeluaran' => 'required|numeric'
+        ]);
+
+        DB::table('products')->insert([
+            'productName' => $validatedData['stokBaru'],
+            'productStock' => $validatedData['jumlahBarangPengeluaran'],
+            'productPrice' => $validatedData['hargaJualSatuan']
+        ]);
+
+        DB::table('transaksis')->insert([
+            'created_at' => $validatedData['tanggal'],
+            'nominal' => $validatedData['nominalPengeluaran'],
+            'type' => $validatedData['jenisTransaksi'],
+            'category' => 'Operasional',
+            'method' => $validatedData['metode'],
+            'description' => $validatedData['deskripsi']
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -67,114 +179,16 @@ class TransaksiController extends Controller
     {
         // Handle Pemasukan
         if ($request->input('modalType') === 'pemasukan') {
-            $validatedData = $request->validate([
-                'tanggal' => 'required|date',
-                'jenisTransaksi' => 'required|string',
-                'nominal' => 'required|numeric',
-                'metode' => 'required|string',
-                'jenisBarang' => 'required|string',
-                'jumlahBarang' => 'required|integer',
-            ]);
-
-            // Update product stock
-            DB::table('products')
-                ->where('id', $validatedData['jenisBarang'])
-                ->decrement('productStock', $validatedData['jumlahBarang']);
-
-            // Insert into 'transaksis' and get the transaction ID
-            $transactionID = DB::table('transaksis')->insertGetId([
-                'created_at' => $validatedData['tanggal'],
-                'type' => $validatedData['jenisTransaksi'],
-                'category' => 'Operasional',
-                'method' => $validatedData['metode'],
-                'description' => 'Hasil penjualan'
-            ]);
-
-            // Insert into 'transaction_details' using the retrieved transaction ID
-            // nanti perlu tambahin kalo one to many
-            DB::table('transaction_details')->insert([
-                [
-                    'transactionID' => $transactionID,
-                    'productID' => $validatedData['jenisBarang'],
-                    'productQuantity' => $validatedData['jumlahBarang']
-                ]
-            ]);
+            $this->tambahPemasukan($request);
 
         // Handle Pengeluaran
         } else if ($request->input('modalType') === 'pengeluaran') {
             if ($request->input('modalType1') === 'tambahStok') {
-                // dd('Just printing something');
-                $validatedData = $request->validate([
-                    'tanggal' => 'required|date',
-                    'jenisTransaksi' => 'required|string',
-                    'deskripsi' => 'required|string',
-                    'jenisBarangPengeluaran' => 'required|string',
-                    'metode' => 'required|string',
-                    'jumlahBarangPengeluaran' => 'required|integer',
-                    'nominalPengeluaran' => 'required|numeric'
-                ]);
-
-                // Update product stock
-                DB::table('products')
-                    ->where('id', $validatedData['jenisBarangPengeluaran'])
-                    ->increment('productStock', $validatedData['jumlahBarangPengeluaran']);
-
-                DB::table('transaksis')->insert([
-                    [
-                        'created_at' => $validatedData['tanggal'],
-                        'nominal' => $validatedData['nominalPengeluaran'],
-                        'type' => $validatedData['jenisTransaksi'],
-                        'category' => 'Operasional',
-                        'method' => $validatedData['metode'],
-                        'description' => $validatedData['deskripsi']
-                    ]
-                ]);
+                $this->tambahStokPengeluaran($request);
             } else if ($request->input('modalType1') === 'tambahLainnya') {
-                $validatedData = $request->validate([
-                    'tanggal' => 'required|date',
-                    'jenisTransaksi' => 'required|string',
-                    'deskripsiTransaksi' => 'required|string',
-                    'metode' => 'required|string',
-                    'kategori' => 'required|string',
-                    'nominalPengeluaran' => 'required|numeric'
-                ]);
-
-                DB::table('transaksis')->insert([
-                    [
-                        'created_at' => $validatedData['tanggal'],
-                        'nominal' => $validatedData['nominalPengeluaran'],
-                        'type' => $validatedData['jenisTransaksi'],
-                        'category' => $validatedData['kategori'],
-                        'method' => $validatedData['metode'],
-                        'description' => $validatedData['deskripsiTransaksi']
-                    ]
-                ]);
+                $this->tambahLainnyaPengeluaran($request);
             } else if ($request->input('modalType1') === 'tambahStokBaru') {
-                $validatedData = $request->validate([
-                    'tanggal' => 'required|date',
-                    'jenisTransaksi' => 'required|string',
-                    'deskripsi' => 'required|string',
-                    'stokBaru' => 'required|string',
-                    'metode' => 'required|string',
-                    'hargaJualSatuan' => 'required|numeric',
-                    'jumlahBarangPengeluaran' => 'required|integer',
-                    'nominalPengeluaran' => 'required|numeric'
-                ]);
-
-                DB::table('products')->insert([
-                    'productName' => $validatedData['stokBaru'],
-                    'productStock' => $validatedData['jumlahBarangPengeluaran'],
-                    'productPrice' => $validatedData['hargaJualSatuan']
-                ]);
-
-                DB::table('transaksis')->insert([
-                    'created_at' => $validatedData['tanggal'],
-                    'nominal' => $validatedData['nominalPengeluaran'],
-                    'type' => $validatedData['jenisTransaksi'],
-                    'category' => 'Operasional',
-                    'method' => $validatedData['metode'],
-                    'description' => $validatedData['deskripsi']
-                ]);
+                $this->tambahStokBaruPengeluaran($request);
             }
         }
 

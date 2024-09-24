@@ -390,6 +390,8 @@
     <!-- Increment/Decrement for Pengeluaran -->
     <script>
         $(document).ready(function(){
+            var globalInputValue = 1;
+
             // Initial bind for Pengeluaran modal
             rebindPengeluaranEvents();
 
@@ -416,6 +418,7 @@
                     }
 
                     jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
+                    globalInputValue = parseInt(jumlahBarang.val())
                 });
 
                 $('#decrementPengeluaran').on('click', function() {
@@ -437,6 +440,7 @@
 
                     if (parseInt(jumlahBarang.val()) > 1) {
                         jumlahBarang.val(parseInt(jumlahBarang.val()) - 1);
+                        globalInputValue = parseInt(jumlahBarang.val())
                     }
                 });
 
@@ -445,22 +449,40 @@
                 $('#nominalPengeluaran').on('input', enforceNumericInput);
                 $('#nominalPengeluaran').on('blur', addCurrencySuffix);
 
-                // if (deskripsiValue === 'Tambah Stok Baru') {
-                    console.log(deskripsiValue)
+                if (deskripsiValue != 'Lainnya') {
+                    $('#jumlahBarangPengeluaran').on('keydown', preventDeletionPengeluaran);
+                    $('#jumlahBarangPengeluaran').on('input', inputPengeluaranCustom);
+                }
 
-                    $('#stokBaru').on('keydown', preventDeletionPengeluaran);
+                if (deskripsiValue === 'Tambah Stok Baru') {
                     $('#hargaJualSatuan').on('keydown', preventBackspace);
                     $('#hargaJualSatuan').on('input', enforceNumericInput);
                     $('#hargaJualSatuan').on('blur', addCurrencySuffix);
-                // } else {
-                    $('#jumlahBarangPengeluaran').on('keydown', preventDeletionPengeluaran);
-                // }
+                }
+            }
+
+            function inputPengeluaranCustom(event) {
+                var input = event.target;
+                var currVal = input.value;
+                var value = parseInt(input.value) || 0;
+
+                if (isNaN(currVal) || currVal.trim() === '') {
+                    alert('Masukkan hanya angka!');
+                    input.value = globalInputValue;
+                    return;
+                }
+
+                if (value < 1) {
+                    alert('Jumlah tidak dapat kurang dari 1');
+                    input.value = globalInputValue;
+                    return;
+                }
+
+                globalInputValue = input.value
             }
 
             function preventDeletionPengeluaran(event) {
-                // If you're dealing with the 'stokBaru' text input
                 var deskripsiValue = $('#deskripsi').val();
-                console.log(deskripsiValue)
                 if (deskripsiValue === 'Tambah Stok Baru') {
                     var stokBaruValue = document.getElementById('stokBaru');
 
@@ -469,9 +491,7 @@
                         event.preventDefault();
                         return;
                     }
-                }
-                // Else, if dealing with the 'jumlahBarangPengeluaran' input
-                else {
+                } else {
                     var jenisBarang = document.getElementById('jenisBarangPengeluaran');
                     var selectedValue = jenisBarang.options[jenisBarang.selectedIndex].value;
 
@@ -550,7 +570,7 @@
                             <label for="kategori" class="col-form-label" id="inputModalLabel">Kategori</label>
                             <select class="form-control border-style" id="kategori" name="kategori">
                                 <option value="Operasional">Operasional</option>
-                                <option value="Finansial">Finansial</option>
+                                <option value="Investasi">Investasi</option>
                             </select>
                         </div>
                         <div class="form-group position-relative mb-2">
