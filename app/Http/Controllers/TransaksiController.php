@@ -66,14 +66,11 @@ class TransaksiController extends Controller
             'jenisTransaksi' => 'required|string',
             'nominal' => 'required|numeric',
             'metode' => 'required|string',
-            'jenisBarang' => 'required|string',
-            'jumlahBarang' => 'required|integer',
+            'jenisBarang' => 'required|array',
+            'jenisBarang.*' => 'required|integer|exists:products,id',
+            'jumlahBarang' => 'required|array',
+            'jumlahBarang.*' => 'required|integer|min:1',
         ]);
-
-        // Update product stock
-        DB::table('products')
-            ->where('id', $validatedData['jenisBarang'])
-            ->decrement('productStock', $validatedData['jumlahBarang']);
 
         // Insert into 'transaksis' and get the transaction ID
         $transactionID = DB::table('transaksis')->insertGetId([
@@ -84,15 +81,20 @@ class TransaksiController extends Controller
             'description' => 'Hasil penjualan'
         ]);
 
-        // Insert into 'transaction_details' using the retrieved transaction ID
-        // nanti perlu tambahin kalo one to many
-        DB::table('transaction_details')->insert([
-            [
+        // Loop over each product and update stock and transaction details
+        foreach ($validatedData['jenisBarang'] as $index => $productID) {
+            // Update product stock
+            DB::table('products')
+                ->where('id', $productID)
+                ->decrement('productStock', $validatedData['jumlahBarang'][$index]);
+
+            // Insert into 'transaction_details'
+            DB::table('transaction_details')->insert([
                 'transactionID' => $transactionID,
-                'productID' => $validatedData['jenisBarang'],
-                'productQuantity' => $validatedData['jumlahBarang']
-            ]
-        ]);
+                'productID' => $productID,
+                'productQuantity' => $validatedData['jumlahBarang'][$index]
+            ]);
+        }
     }
 
     private function tambahStokPengeluaran(Request $request) {

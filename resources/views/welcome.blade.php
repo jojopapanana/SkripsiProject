@@ -78,7 +78,7 @@
                                   <tr>
                                     <th scope="row">1</th>
                                     <td>
-                                        <select class="form-control border-style-jenisBarang" id="jenisBarang" name="jenisBarang">
+                                        <select class="form-control border-style-jenisBarang" id="jenisBarang" name="jenisBarang[]">
                                             <option value="None">None</option>
                                             @foreach($products as $product)
                                                 @if($product->productStock > 0)
@@ -92,7 +92,7 @@
                                             <button class="btn" type="button" id="decrement">
                                                 <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
                                             </button>
-                                            <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang" id="jumlahBarang" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                            <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang[]" id="jumlahBarang" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                             <button class="btn" type="button" id="increment">
                                                 <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
                                             </button>
@@ -276,7 +276,7 @@
 
                 $('#barangTable tbody tr').each(function() {
                     var row = $(this);
-                    var jenisBarang = $(this).find('select[name="jenisBarang"]');
+                    var jenisBarang = $(this).find('select[name="jenisBarang[]"]');
                     var selectedOption = jenisBarang.find('option:selected');
                     var pricePerItem = parseInt(selectedOption.data('price')) || 0;
                     var productStock = parseInt(selectedOption.data('stock')) || 1;
@@ -284,7 +284,7 @@
 
                     if (jumlahBarang > productStock) {
                         jumlahBarang = productStock;
-                        row.find('input[name="jumlahBarang"]').val(productStock);
+                        row.find('input[name="jumlahBarang[]"]').val(productStock);
                     }
 
                     var nominal = pricePerItem * jumlahBarang;
@@ -312,7 +312,7 @@
                 }
 
                 var value = parseInt(input.value) || 0;
-                var jenisBarang = row.find('select[name="jenisBarang"]');
+                var jenisBarang = row.find('select[name="jenisBarang[]"]');
                 var selectedOption = jenisBarang.find('option:selected');
                 var productStock = parseInt(selectedOption.data('stock')) || 1;
 
@@ -339,7 +339,7 @@
             function preventDeletion(event) {
                 var input = event.target;
                 var row = $(input).closest('tr');
-                var jenisBarang = row.find('select[name="jenisBarang"]');
+                var jenisBarang = row.find('select[name="jenisBarang[]"]');
                 var selectedOption = jenisBarang.val();
 
                 // Check if the selected option is 'None' and prevent backspace or delete
@@ -353,8 +353,8 @@
             $('#barangTable').on('click', '#increment, #decrement', function() {
                 var button = $(this);
                 var row = button.closest('tr');
-                var jumlahBarang = row.find('input[name="jumlahBarang"]');
-                var jenisBarang = row.find('select[name="jenisBarang"]');
+                var jumlahBarang = row.find('input[name="jumlahBarang[]"]');
+                var jenisBarang = row.find('select[name="jenisBarang[]"]');
                 var selectedOption = jenisBarang.find('option:selected');
                 var productStock = parseInt(selectedOption.data('stock')) || 0;
 
@@ -384,7 +384,7 @@
             });
 
             // Update nominal when the quantity or product changes
-            $('#barangTable').on('input change', 'select[name="jenisBarang"], input[name="jumlahBarang"]', function() {
+            $('#barangTable').on('input change', 'select[name="jenisBarang[]"], input[name="jumlahBarang[]"]', function() {
                 updateTotalNominal();
             });
 
@@ -418,7 +418,7 @@
                     <tr data-input-value="1"> <!-- Set the initial input value for this row -->
                         <th scope="row">${rowCount}</th>
                         <td>
-                            <select class="form-control border-style-jenisBarang" name="jenisBarang">
+                            <select class="form-control border-style-jenisBarang" name="jenisBarang[]">
                                 <option value="None">None</option>
                                 @foreach($products as $product)
                                     @if($product->productStock > 0)
@@ -432,7 +432,7 @@
                                 <button class="btn" type="button" id="decrement">
                                     <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
                                 </button>
-                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang[]" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                 <button class="btn" type="button" id="increment">
                                     <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
                                 </button>
@@ -450,23 +450,23 @@
             });
 
             // Store the previous selected value and jumlahBarang in data attributes when the select gains focus
-            $('#barangTable').on('focus', 'select[name="jenisBarang"]', function() {
+            $('#barangTable').on('focus', 'select[name="jenisBarang[]"]', function() {
                 var currentRow = $(this).closest('tr');
                 currentRow.data('previous', {
                     jenisBarang: $(this).val(),
-                    jumlahBarang: currentRow.find('input[name="jumlahBarang"]').val() // Store current jumlahBarang as well
+                    jumlahBarang: currentRow.find('input[name="jumlahBarang[]"]').val() // Store current jumlahBarang as well
                 });
             });
 
             // Handle the selection change
-            $('#barangTable').on('change', 'select[name="jenisBarang"]', function() {
+            $('#barangTable').on('change', 'select[name="jenisBarang[]"]', function() {
                 var selectedValue = $(this).val();
                 var selectedItems = [];
                 var currentRow = $(this).closest('tr'); // Get the current row
 
                 // Loop through all rows to gather selected items
                 $('#barangTable tbody tr').each(function() {
-                    var currentValue = $(this).find('select[name="jenisBarang"]').val();
+                    var currentValue = $(this).find('select[name="jenisBarang[]"]').val();
 
                     // Check if the current row is the same as the row where the event occurred
                     if (!$(this).is(currentRow) && currentValue !== 'None') {
@@ -481,22 +481,22 @@
                     // Revert to the previous value stored in the row
                     var previousData = currentRow.data('previous'); // Retrieve both jenisBarang and jumlahBarang
                     $(this).val(previousData.jenisBarang ? previousData.jenisBarang : 'None'); // Set to previous jenisBarang
-                    currentRow.find('input[name="jumlahBarang"]').val(previousData.jumlahBarang); // Set to previous jumlahBarang
+                    currentRow.find('input[name="jumlahBarang[]"]').val(previousData.jumlahBarang); // Set to previous jumlahBarang
                 }
 
                 // Update the previous value for both jenisBarang and jumlahBarang
                 currentRow.data('previous', {
                     jenisBarang: selectedValue,
-                    jumlahBarang: currentRow.find('input[name="jumlahBarang"]').val() // Update to current jumlahBarang
+                    jumlahBarang: currentRow.find('input[name="jumlahBarang[]"]').val() // Update to current jumlahBarang
                 });
 
                 updateTotalNominal();
             });
 
             // Prevent deletion when the input value is already 1
-            $('#barangTable').on('keydown', 'input[name="jumlahBarang"]', preventDeletion);
+            $('#barangTable').on('keydown', 'input[name="jumlahBarang[]"]', preventDeletion);
             // Apply limit input functionality to prevent exceeding stock or invalid numbers
-            $('#barangTable').on('input', 'input[name="jumlahBarang"]', limitInput);
+            $('#barangTable').on('input', 'input[name="jumlahBarang[]"]', limitInput);
         });
     </script>
 
@@ -532,7 +532,7 @@
 
                 // Loop through each row in the barangTable
                 $('#barangTable tbody tr').each(function() {
-                    var jenisBarangValue = $(this).find('select[name="jenisBarang"]').val();
+                    var jenisBarangValue = $(this).find('select[name="jenisBarang[]"]').val();
                     if (jenisBarangValue === 'None') {
                         hasNone = true; // Set flag if 'None' is found
                         return false; // Break out of the loop
