@@ -274,7 +274,7 @@
     </script>
 
     <!-- Add New Item for pemasukan -->
-    {{-- <script>
+    <script>
         let rowCount = 1; // Start row count from 1
 
         document.getElementById('addDaftarBarang').addEventListener('click', function() {
@@ -315,37 +315,35 @@
             setTimeout(function() {
                 newRow.classList.add('visible');
             }, 10); // Small delay to trigger transition
-
-            // Call updateNominal to refresh the total
-            updateNominal();
         });
-    </script> --}}
+    </script>
 
     <!-- Update Nominal for Pemasukan -->
     <script>
-        $(document).ready(function() {
+        $(document).ready(function(){
             var globalInputValue = 1;
 
-            // Update all rows' nominal calculation
-            function updateTotalNominal() {
-                var totalNominal = 0;
+            $('#jumlahBarang').on('keydown', preventDeletion);
+            $('#jumlahBarang').on('input', limitInput);
 
-                $('#barangTable tbody tr').each(function() {
-                    var jenisBarang = $(this).find('select[name="jenisBarang"]');
-                    var selectedOption = jenisBarang.find('option:selected');
-                    var pricePerItem = parseInt(selectedOption.data('price')) || 0;
+            function updateNominal() {
+                var jenisBarang = document.getElementById('jenisBarang');
+                var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
+                var pricePerItem = parseInt(selectedOption.getAttribute('data-price')) || 0;
 
-                    var jumlahBarang = parseInt($(this).find('input[name="jumlahBarang"]').val()) || 1;
-                    var nominal = pricePerItem * jumlahBarang;
+                var jumlahBarang = parseInt(document.getElementById('jumlahBarang').value) || 1;
+                var nominal = pricePerItem * jumlahBarang;
 
-                    totalNominal += nominal; // accumulate total
-                });
+                var productStock = parseInt(selectedOption.getAttribute('data-stock')) || 1;
 
-                // Update the total nominal field
-                $('#nominal').val('Rp. ' + totalNominal.toLocaleString('id-ID') + ',-');
+                document.getElementById('nominal').value = 'Rp. ' + nominal.toLocaleString('id-ID') + ',-';
+
+                if (jumlahBarang > productStock) {
+                    document.getElementById('jumlahBarang').value = productStock
+                    globalInputValue = productStock
+                }
             }
 
-            // Limit the input value and ensure it doesn't exceed stock
             function limitInput(event) {
                 var input = event.target;
                 var currVal = input.value;
@@ -357,9 +355,9 @@
                 }
 
                 var value = parseInt(input.value) || 0;
-                var jenisBarang = $(input).closest('tr').find('select[name="jenisBarang"]');
-                var selectedOption = jenisBarang.find('option:selected');
-                var productStock = parseInt(selectedOption.data('stock')) || 1;
+                var jenisBarang = document.getElementById('jenisBarang');
+                var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
+                var productStock = parseInt(selectedOption.getAttribute('data-stock')) || 1;
 
                 // Ensure the value is not less than 1
                 if (value < 1) {
@@ -375,77 +373,58 @@
                     return;
                 }
 
-                globalInputValue = input.value;
-                updateTotalNominal(); // Update total nominal after adjusting quantity
+                globalInputValue = input.value
             }
 
-            // Handle the increment and decrement buttons for each row
-            $('#barangTable').on('click', '#increment, #decrement', function() {
-                var button = $(this);
-                var row = button.closest('tr');
-                var jumlahBarang = row.find('input[name="jumlahBarang"]');
-                var jenisBarang = row.find('select[name="jenisBarang"]');
-                var selectedOption = jenisBarang.find('option:selected');
-                var productStock = parseInt(selectedOption.data('stock')) || 0;
+            function preventDeletion(event) {
+                var jenisBarang = document.getElementById('jenisBarang');
 
-                if (jenisBarang.val() === 'None') {
+                if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
+                    alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                    event.preventDefault();
+                    return;
+                }
+            }
+
+            $('#jenisBarang, #jumlahBarang').on('change input', function() {
+                updateNominal();
+            });
+
+            $('#increment').on('click', function() {
+                var jumlahBarang = $('#jumlahBarang');
+                var jenisBarang = document.getElementById('jenisBarang');
+                var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
+                var productStock = parseInt(selectedOption.getAttribute('data-stock')) || 0;
+
+                if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
                     alert('Silahkan pilih Jenis Barang terlebih dahulu!');
                     return;
                 }
 
-                if (button.attr('id') === 'increment') {
-                    if (parseInt(jumlahBarang.val()) < productStock) {
-                        jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
-                    } else {
-                        alert('Stok tidak mencukupi! Stok tersedia: ' + productStock);
-                    }
-                } else if (button.attr('id') === 'decrement') {
-                    if (parseInt(jumlahBarang.val()) > 1) {
-                        jumlahBarang.val(parseInt(jumlahBarang.val()) - 1);
-                    }
+                if (parseInt(jumlahBarang.val()) < productStock) {
+                    jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
+                    globalInputValue = parseInt(jumlahBarang.val())
+                } else {
+                    alert('Stok tidak mencukupi! Stok tersedia: ' + productStock);
+                    return;
+                }
+                updateNominal();
+            });
+
+            $('#decrement').on('click', function() {
+                var jumlahBarang = $('#jumlahBarang');
+                var jenisBarang = document.getElementById('jenisBarang');
+
+                if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
+                    alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                    return;
                 }
 
-                globalInputValue = parseInt(jumlahBarang.val());
-                updateTotalNominal();
-            });
-
-            // Update nominal when the quantity or product changes
-            $('#barangTable').on('input change', 'select[name="jenisBarang"], input[name="jumlahBarang"]', function() {
-                updateTotalNominal();
-            });
-
-            // Add a new row dynamically
-            $('#addDaftarBarang').on('click', function() {
-                var rowCount = $('#barangTable tbody tr').length + 1;
-
-                var newRow = `
-                    <tr>
-                        <th scope="row">${rowCount}</th>
-                        <td>
-                            <select class="form-control border-style-jenisBarang" name="jenisBarang">
-                                <option value="None">None</option>
-                                @foreach($products as $product)
-                                    @if($product->productStock > 0)
-                                        <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </td>
-                        <td>
-                            <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
-                                <button class="btn" type="button" id="decrement">
-                                    <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
-                                </button>
-                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                                <button class="btn" type="button" id="increment">
-                                    <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-
-                $('#barangTable tbody').append(newRow);
+                if (parseInt(jumlahBarang.val()) > 1) {
+                    jumlahBarang.val(parseInt(jumlahBarang.val()) - 1);
+                    globalInputValue = parseInt(jumlahBarang.val())
+                    updateNominal();
+                }
             });
         });
     </script>
