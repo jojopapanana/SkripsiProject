@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Transaksi;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -14,12 +17,47 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        // $data = User::selectRaw("date_format(created_at, '%Y-%m-%d') as date, count(*) as aggregate")
-        //     ->whereDate('created_at', '>=', now()->subDays(30))
-        //     ->groupBy('date')
-        //     ->get();
-        $products = Product::all(); // Fetch all products
-        return view('welcome', compact('products'));
+        $pendapatan_kotor = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+                                            ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                            ->select('transaksis.created_at as date', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as pendapatan'))
+                                            ->where('transaksis.type', '=', 'Pemasukan')
+                                            ->groupBy('date')
+                                            ->get()
+                                            ->keyBy('date');
+
+        $pengeluaran = DB::table('transaksis')
+                                            ->select('transaksis.created_at as date', DB::raw('SUM(transaksis.nominal) as pengeluaran'))
+                                            ->where('transaksis.type', '=', 'Pengeluaran')
+                                            ->groupBy('date')
+                                            ->get()
+                                            ->keyBy('date');
+
+        $finalCollection = collect();
+
+        $allDates = $pendapatan_kotor->keys()->merge($pengeluaran->keys())->unique();
+                                            
+        foreach ($allDates as $date) {
+            $pendapatan = $pendapatan_kotor->has($date) ? $pendapatan_kotor->get($date)->pendapatan : 0;
+            $nominalPengeluaran = $pengeluaran->has($date) ? $pengeluaran->get($date)->pengeluaran : 0;
+                                            
+            $total = $pendapatan - $nominalPengeluaran;
+                                            
+            $finalCollection->push((object)[
+                'date' => $date,
+                'total' => $total,
+            ]);
+        }
+
+        $data = $finalCollection->map(function($item) {
+            return (object) $item;
+        });
+
+        // dd($data);
+
+        $products = Product::all();
+        return view('welcome', compact('products'), [
+            'data' => $data
+        ]);
     }
 
     /**
