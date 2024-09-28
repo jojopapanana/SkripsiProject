@@ -40,6 +40,22 @@ main{
     float: bottom;
 }
 
+#addDaftarBarang {
+    font-weight: 600;
+    border: none;
+    border-radius: 0.6rem;
+    background-color: #1E0342;
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+    outline: none;
+    box-shadow: none;
+}
+
+#addDaftarBarang:hover {
+    background-color: #E0E0E0;
+    color: #1E0342;
+}
+
 #exampleModalLabel {
     // font-family: 'Poppins';
     font-size: 1.875rem;
@@ -69,6 +85,37 @@ main{
     font-size: 1.25rem;
 }
 
+.border-style-jenisBarang {
+    border:  0.063rem solid #000000;
+    border-radius: 0.6rem;
+    height: 2.35rem;
+    width: 95%;
+}
+
+.border-style-jenisBarangJumlah {
+    border:  0.063rem solid #000000;
+    border-radius: 0.6rem;
+    height: 2.35rem;
+    width: 100%;
+}
+
+.input-group-outline-pemasukan {
+    display: flex;
+    align-items: center; /* This aligns the content vertically in the center */
+    justify-content: center;
+    height: 2.35rem; /* Set a consistent height for the input group */
+    width: 8.5rem;
+}
+
+.input-group-outline-pemasukan .btn {
+    border: none;
+    box-shadow: none;
+    height: 100%; /* Ensure the button height matches the input group height */
+    display: flex;
+    align-items: center; /* Center the icon inside the button */
+    justify-content: center;
+}
+
 .input-group-outline {
     display: flex;
     align-items: center; /* This aligns the content vertically in the center */
@@ -87,6 +134,13 @@ main{
 }
 
 .input-group-outline .form-control {
+    border: none;
+    box-shadow: none;
+    text-align: center;
+    height: 100%; /* Ensure the input height matches the input group height */
+}
+
+.input-group-outline-pemasukan .form-control {
     border: none;
     box-shadow: none;
     text-align: center;
@@ -284,6 +338,18 @@ main{
 
 .input-group-prepend {
     justify-content: center;
+}
+
+/* Smooth transition for new row */
+.new-row {
+    opacity: 0;
+    height: 0;
+    transition: opacity 0.5s ease, height 0.5s ease;
+}
+
+.new-row.visible {
+    opacity: 1;
+    height: auto; /* Auto height transition */
 }
 
 //the overlay of the container
