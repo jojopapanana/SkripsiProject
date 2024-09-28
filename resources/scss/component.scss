@@ -352,6 +352,37 @@ main{
     height: auto; /* Auto height transition */
 }
 
+.overlay-button {
+    position: absolute;
+    top: 50%; /* Center vertically */
+    right: 10px; /* Adjust this value to position the button horizontally */
+    transform: translateY(-50%); /* Adjust the position to truly center vertically */
+    z-index: 1; /* Ensure the button appears on top of other elements */
+}
+
+.delete-button {
+    background-color: transparent; /* Make the button background transparent */
+    border: none; /* Remove the border */
+    padding: 0; /* Remove padding */
+    cursor: pointer; /* Change cursor to pointer for better UX */
+    color: red; /* Set the color of the icon to red */
+    font-size: 1.2rem;
+}
+
+.delete-button:hover {
+    color: darkred; /* Change color on hover for better feedback */
+}
+
+.delete-button:focus {
+    outline: none; /* Remove focus outline */
+    box-shadow: none;
+}
+
+.table td {
+    position: relative; /* Ensure the table cell is the positioning context for absolute positioning */
+}
+
+
 //the overlay of the container
 .overlay-container{
     position: absolute;
