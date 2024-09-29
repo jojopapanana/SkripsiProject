@@ -58,28 +58,54 @@
                             <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis Transaksi</label>
                             <input type="text" class="form-control border-style" id="jenisTransaksi" name="jenisTransaksi" value="Pemasukan" readonly>
                         </div>
-                        <div class="form-group-select position-relative mb-2">
-                            <label for="jenisBarang" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
-                            <select class="form-control border-style" id="jenisBarang" name="jenisBarang">
-                                <option value="None">None</option>
-                                @foreach($products as $product)
-                                    @if($product->productStock > 0)
-                                        <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group position-relative mb-2">
-                            <label for="jumlahBarang" class="col-form-label" id="inputModalLabel">Jumlah Barang</label>
-                            <div class="input-group input-group-outline border-style">
-                                <button class="btn" type="button" id="decrement">
-                                    <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
-                                </button>
-                                <input type="text" class="form-control border-style text-center" name="jumlahBarang" id="jumlahBarang" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                                <button class="btn" type="button" id="increment">
-                                    <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
+                        <div class="form-group-select position-relative mb-2 mt-4">
+                            <div class=" d-flex justify-content-between align-items-center">
+                                <label for="daftarBarang" class="col-form-label" id="inputModalLabel">Daftar Barang</label>
+                                <button class="btn p-0 d-flex align-items-center" type="button" id="addDaftarBarang">
+                                    <span class="ms-2 mt-1 mb-1 iconify" data-icon="ph:plus-fill" data-width="20" data-height="20"></span>
+                                    <span class="ms-1 me-2">Tambah Barang</span>
                                 </button>
                             </div>
+                            <table class="table mt-2" id="barangTable">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Jenis Barang</th>
+                                    <th scope="col">Jumlah</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <th scope="row">1</th>
+                                    <td>
+                                        <select class="form-control border-style-jenisBarang" id="jenisBarang" name="jenisBarang[]">
+                                            <option value="None">None</option>
+                                            @foreach($products as $product)
+                                                @if($product->productStock > 0)
+                                                    <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
+                                            <button class="btn" type="button" id="decrement">
+                                                <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
+                                            </button>
+                                            <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang[]" id="jumlahBarang" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                            <button class="btn" type="button" id="increment">
+                                                <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
+                                            </button>
+                                        </div>
+                                        <div class="overlay-button">
+                                            <button type="button" class="btn delete-button">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="nominal" class="col-form-label" id="inputModalLabel">Nominal</label>
@@ -241,112 +267,236 @@
 
     <!-- Update Nominal for Pemasukan -->
     <script>
-        $(document).ready(function(){
-            var globalInputValue = 1;
+        $(document).ready(function() {
+            var selectedItems = []; // Array to keep track of selected jenisBarang
 
-            $('#jumlahBarang').on('keydown', preventDeletion);
-            $('#jumlahBarang').on('input', limitInput);
+            // Update all rows' nominal calculation
+            function updateTotalNominal(revertSkipRow = null) {
+                var totalNominal = 0;
 
-            function updateNominal() {
-                var jenisBarang = document.getElementById('jenisBarang');
-                var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
-                var pricePerItem = parseInt(selectedOption.getAttribute('data-price')) || 0;
+                $('#barangTable tbody tr').each(function() {
+                    var row = $(this);
+                    var jenisBarang = $(this).find('select[name="jenisBarang[]"]');
+                    var selectedOption = jenisBarang.find('option:selected');
+                    var pricePerItem = parseInt(selectedOption.data('price')) || 0;
+                    var productStock = parseInt(selectedOption.data('stock')) || 1;
+                    var jumlahBarang = parseInt($(this).attr('data-input-value')) || 1;
 
-                var jumlahBarang = parseInt(document.getElementById('jumlahBarang').value) || 1;
-                var nominal = pricePerItem * jumlahBarang;
+                    if (jumlahBarang > productStock) {
+                        jumlahBarang = productStock;
+                        row.find('input[name="jumlahBarang[]"]').val(productStock);
+                    }
 
-                var productStock = parseInt(selectedOption.getAttribute('data-stock')) || 1;
+                    var nominal = pricePerItem * jumlahBarang;
 
-                document.getElementById('nominal').value = 'Rp. ' + nominal.toLocaleString('id-ID') + ',-';
+                    totalNominal += nominal; // accumulate total
+                });
 
-                if (jumlahBarang > productStock) {
-                    document.getElementById('jumlahBarang').value = productStock
-                    globalInputValue = productStock
-                }
+                // Update the total nominal field
+                $('#nominal').val('Rp. ' + totalNominal.toLocaleString('id-ID') + ',-');
             }
 
+            // Limit the input value and ensure it doesn't exceed stock
             function limitInput(event) {
                 var input = event.target;
+                var row = $(input).closest('tr');
                 var currVal = input.value;
+
+                // Retrieve the previous value from the data-attribute before making changes
+                var prevValue = row.attr('data-input-value') || 1;
 
                 if (isNaN(currVal) || currVal.trim() === '') {
                     alert('Masukkan hanya angka!');
-                    input.value = globalInputValue;
+                    input.value = prevValue; // Use row's stored data-input-value
                     return;
                 }
 
                 var value = parseInt(input.value) || 0;
-                var jenisBarang = document.getElementById('jenisBarang');
-                var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
-                var productStock = parseInt(selectedOption.getAttribute('data-stock')) || 1;
+                var jenisBarang = row.find('select[name="jenisBarang[]"]');
+                var selectedOption = jenisBarang.find('option:selected');
+                var productStock = parseInt(selectedOption.data('stock')) || 1;
 
                 // Ensure the value is not less than 1
                 if (value < 1) {
                     alert('Jumlah tidak dapat kurang dari 1');
-                    input.value = globalInputValue;
+                    input.value = prevValue; // Use row's stored data-input-value
                     return;
                 }
 
                 // Limit the input value to not exceed productStock
                 if (value > productStock) {
                     alert('Jumlah tidak boleh melebihi stok yang tersedia: ' + productStock);
-                    input.value = globalInputValue;
+                    input.value = prevValue; // Use row's stored data-input-value
                     return;
                 }
 
-                globalInputValue = input.value
+                // Store the new input value in the row's data-attribute
+                row.attr('data-input-value', value);
+                updateTotalNominal(); // Update total nominal after adjusting quantity
             }
 
+            // Prevent deletion or invalid input in jumlahBarang
             function preventDeletion(event) {
-                var jenisBarang = document.getElementById('jenisBarang');
+                var input = event.target;
+                var row = $(input).closest('tr');
+                var jenisBarang = row.find('select[name="jenisBarang[]"]');
+                var selectedOption = jenisBarang.val();
 
-                if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
+                // Check if the selected option is 'None' and prevent backspace or delete
+                if (selectedOption === 'None') {
                     alert('Silahkan pilih Jenis Barang terlebih dahulu!');
                     event.preventDefault();
-                    return;
                 }
             }
 
-            $('#jenisBarang, #jumlahBarang').on('change input', function() {
-                updateNominal();
-            });
+            // Handle the increment and decrement buttons for each row
+            $('#barangTable').on('click', '#increment, #decrement', function() {
+                var button = $(this);
+                var row = button.closest('tr');
+                var jumlahBarang = row.find('input[name="jumlahBarang[]"]');
+                var jenisBarang = row.find('select[name="jenisBarang[]"]');
+                var selectedOption = jenisBarang.find('option:selected');
+                var productStock = parseInt(selectedOption.data('stock')) || 0;
 
-            $('#increment').on('click', function() {
-                var jumlahBarang = $('#jumlahBarang');
-                var jenisBarang = document.getElementById('jenisBarang');
-                var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
-                var productStock = parseInt(selectedOption.getAttribute('data-stock')) || 0;
-
-                if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
+                if (jenisBarang.val() === 'None') {
                     alert('Silahkan pilih Jenis Barang terlebih dahulu!');
                     return;
                 }
 
-                if (parseInt(jumlahBarang.val()) < productStock) {
-                    jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
-                    globalInputValue = parseInt(jumlahBarang.val())
-                } else {
-                    alert('Stok tidak mencukupi! Stok tersedia: ' + productStock);
-                    return;
+                var currentVal = parseInt(jumlahBarang.val()) || 1;
+
+                if (button.attr('id') === 'increment') {
+                    if (currentVal < productStock) {
+                        currentVal++;
+                        jumlahBarang.val(currentVal); // Update input value
+                    } else {
+                        alert('Stok tidak mencukupi! Stok tersedia: ' + productStock);
+                    }
+                } else if (button.attr('id') === 'decrement') {
+                    if (currentVal > 1) {
+                        currentVal--;
+                        jumlahBarang.val(currentVal); // Update input value
+                    }
                 }
-                updateNominal();
+
+                row.attr('data-input-value', currentVal); // Store the updated value in the row
+                updateTotalNominal(); // Update total nominal
             });
 
-            $('#decrement').on('click', function() {
-                var jumlahBarang = $('#jumlahBarang');
-                var jenisBarang = document.getElementById('jenisBarang');
-
-                if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
-                    alert('Silahkan pilih Jenis Barang terlebih dahulu!');
-                    return;
-                }
-
-                if (parseInt(jumlahBarang.val()) > 1) {
-                    jumlahBarang.val(parseInt(jumlahBarang.val()) - 1);
-                    globalInputValue = parseInt(jumlahBarang.val())
-                    updateNominal();
-                }
+            // Update nominal when the quantity or product changes
+            $('#barangTable').on('input change', 'select[name="jenisBarang[]"], input[name="jumlahBarang[]"]', function() {
+                updateTotalNominal();
             });
+
+            // Delete row functionality
+            $('#barangTable').on('click', '.delete-button', function() {
+                var rowCount = $('#barangTable tbody tr').length; // Get the total number of rows
+
+                // If there is only one row, show an alert and prevent deletion
+                if (rowCount === 1) {
+                    alert('Baris terakhir Daftar Barang tidak dapat dihapus!');
+                    return; // Stop further execution to prevent deletion
+                }
+
+                var row = $(this).closest('tr');
+                row.remove(); // Remove the row
+
+                // Recalculate total nominal after a row is removed
+                updateTotalNominal();
+
+                // Update row numbers after a row is removed
+                $('#barangTable tbody tr').each(function(index) {
+                    $(this).find('th').text(index + 1); // Reassign the row number, starting from 1
+                });
+            });
+
+            // Add a new row dynamically
+            $('#addDaftarBarang').on('click', function() {
+                var rowCount = $('#barangTable tbody tr').length + 1;
+
+                var newRow = `
+                    <tr data-input-value="1"> <!-- Set the initial input value for this row -->
+                        <th scope="row">${rowCount}</th>
+                        <td>
+                            <select class="form-control border-style-jenisBarang" name="jenisBarang[]">
+                                <option value="None">None</option>
+                                @foreach($products as $product)
+                                    @if($product->productStock > 0)
+                                        <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
+                                <button class="btn" type="button" id="decrement">
+                                    <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
+                                </button>
+                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang[]" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <button class="btn" type="button" id="increment">
+                                    <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
+                                </button>
+                            </div>
+                            <div class="overlay-button">
+                                <button type="button" class="btn delete-button">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                $('#barangTable tbody').append(newRow);
+            });
+
+            // Store the previous selected value and jumlahBarang in data attributes when the select gains focus
+            $('#barangTable').on('focus', 'select[name="jenisBarang[]"]', function() {
+                var currentRow = $(this).closest('tr');
+                currentRow.data('previous', {
+                    jenisBarang: $(this).val(),
+                    jumlahBarang: currentRow.find('input[name="jumlahBarang[]"]').val() // Store current jumlahBarang as well
+                });
+            });
+
+            // Handle the selection change
+            $('#barangTable').on('change', 'select[name="jenisBarang[]"]', function() {
+                var selectedValue = $(this).val();
+                var selectedItems = [];
+                var currentRow = $(this).closest('tr'); // Get the current row
+
+                // Loop through all rows to gather selected items
+                $('#barangTable tbody tr').each(function() {
+                    var currentValue = $(this).find('select[name="jenisBarang[]"]').val();
+
+                    // Check if the current row is the same as the row where the event occurred
+                    if (!$(this).is(currentRow) && currentValue !== 'None') {
+                        selectedItems.push(currentValue); // Add the value if it's not 'None' and not the current row
+                    }
+                });
+
+                // Check if the selected value already exists in the array
+                if (selectedValue !== 'None' && selectedItems.includes(selectedValue)) {
+                    alert('Jenis Barang ini sudah ada! Silahkan pilih jenis barang yang berbeda.');
+
+                    // Revert to the previous value stored in the row
+                    var previousData = currentRow.data('previous'); // Retrieve both jenisBarang and jumlahBarang
+                    $(this).val(previousData.jenisBarang ? previousData.jenisBarang : 'None'); // Set to previous jenisBarang
+                    currentRow.find('input[name="jumlahBarang[]"]').val(previousData.jumlahBarang); // Set to previous jumlahBarang
+                }
+
+                // Update the previous value for both jenisBarang and jumlahBarang
+                currentRow.data('previous', {
+                    jenisBarang: selectedValue,
+                    jumlahBarang: currentRow.find('input[name="jumlahBarang[]"]').val() // Update to current jumlahBarang
+                });
+
+                updateTotalNominal();
+            });
+
+            // Prevent deletion when the input value is already 1
+            $('#barangTable').on('keydown', 'input[name="jumlahBarang[]"]', preventDeletion);
+            // Apply limit input functionality to prevent exceeding stock or invalid numbers
+            $('#barangTable').on('input', 'input[name="jumlahBarang[]"]', limitInput);
         });
     </script>
 
@@ -378,9 +528,21 @@
                     return;
                 }
             } else {
-                if (form.find('#jenisBarang').val() === 'None') {
+                var hasNone = false; // Flag to check if any row has 'None'
+
+                // Loop through each row in the barangTable
+                $('#barangTable tbody tr').each(function() {
+                    var jenisBarangValue = $(this).find('select[name="jenisBarang[]"]').val();
+                    if (jenisBarangValue === 'None') {
+                        hasNone = true; // Set flag if 'None' is found
+                        return false; // Break out of the loop
+                    }
+                });
+
+                // If any row has 'None', prevent form submission and alert
+                if (hasNone) {
                     e.preventDefault();
-                    alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                    alert('Silahkan lengkapi Daftar Barang terlebih dahulu!');
                     return;
                 }
             }
