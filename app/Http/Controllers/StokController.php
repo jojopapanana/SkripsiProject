@@ -2,14 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StokExport;
 use App\Http\Controllers\Controller;
 use App\Models\StokModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StokController extends Controller
 {
+    public function export_excel($month, $year){
+        return Excel::download(new StokExport($month, $year), 'stok.xlsx');
+    }
+
+    public function export_csv($month, $year){
+        return Excel::download(new StokExport($month, $year), 'stok.csv');
+    }
+
+    public function export_pdf($month, $year){
+        return Excel::download(new StokExport($month, $year), 'stok.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+    }
     /**
      * Display a listing of the resource.
      */

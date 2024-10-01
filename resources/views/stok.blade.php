@@ -146,6 +146,21 @@
             </div>
         @endforeach
         <br>
+        @if ($stokData->count() > 0)
+        <div class="d-flex justify-content-end">
+            <div class="dropdown">
+            <button class="btn dropdown-toggle fw-semibold" type="button" id="exportDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Ekspor
+            </button>
+            <ul class="dropdown-menu" id="export-dropdown-menu" aria-labelledby="exportDropdownButton">
+                <li><a class="dropdown-item" href="{{ route('stok_export_excel', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">XLSX</a></li>
+                <li><a class="dropdown-item" href="{{ route('stok_export_csv', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">CSV</a></li>
+                <li><a class="dropdown-item" href="{{ route('stok_export_pdf', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">PDF</a></li>
+            </ul>
+            </div>
+        </div>
+        @endif
+
         <script>
             document.getElementById('month').addEventListener('change', function() {
                 var month = this.value;

@@ -28,6 +28,9 @@ Route::get('aruskas', [ArusKasController::class, 'index'])->name('aruskas');
 Route::get('/aruskas/export/{month}/{year}', [ArusKasController::class, 'export'])->name('aruskas_export');
 
 
+Route::get('/stok/export/excel/{month}/{year}', [StokController::class, 'export_excel'])->name('stok_export_excel');
+Route::get('/stok_export_csv/{month}/{year}', [StokController::class, 'export_csv'])->name('stok_export_csv');
+Route::get('/stok_export_pdf/{month}/{year}', [StokController::class, 'export_pdf'])->name('stok_export_pdf');
 Route::delete('/stok/{id}/delete', [StokController::class, 'delete'])->name('stok.delete');
 Route::post('/stok/update/{id}', [StokController::class, 'update'])->name('stok.update');
 
