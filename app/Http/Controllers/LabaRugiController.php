@@ -12,25 +12,27 @@ class LabaRugiController extends Controller
      */
     public function index(Request $request)
     {
-        $month = $request->input('month');
-        $year = $request->input('year');
+        // $month = $request->input('month');
+        // $year = $request->input('year');
+        $month = $request->get('month', date('n'));
+        // $year = $request->get('year', date('n'));
 
         $labaTemp = DB::table('transaksis')
             ->select('description', 'nominal')
-            ->where('type', 'pemasukan')
+            ->where('type', 'Pemasukan')
             ->whereNotNull('nominal');
         
         $rugiTemp = DB::table('transaksis')
             ->select('description', 'nominal')
-            ->where('type', 'pengeluaran')
+            ->where('type', 'Pengeluaran')
             ->whereNotNull('nominal');
 
-        if ($month && $year) {
-            $labaTemp->whereYear('transaksis.created_at', $year)
-                      ->whereMonth('transaksis.created_at', $month);
+        if ($month) {
+            $labaTemp
+                    ->whereMonth('transaksis.created_at', $month);
 
-            $rugiTemp->whereYear('transaksis.created_at', $year)
-                      ->whereMonth('transaksis.created_at', $month);
+            $rugiTemp
+                    ->whereMonth('transaksis.created_at', $month);
         }
 
         $laba = $labaTemp->get();
@@ -50,7 +52,7 @@ class LabaRugiController extends Controller
             'balance' => $balance,
             'status' => $status,
             'month' => $month,
-            'year' => $year,
+            // 'year' => $year,
         ]);
     }
 

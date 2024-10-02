@@ -26,11 +26,11 @@
     </div>
 
     <div class="dashboard-trenkeuntungan">
-        <h3 class="fw-bold">Tren Keuntungan-mu!</h3>
-        {{-- <canvas id="myChart" style="width: 70vw; height: 40vh"></canvas> --}}
+        <h3 class="fw-bold">Tren Pendapatan-mu Bulan Ini!</h3>
+        <canvas id="myChart" style="width: 70vw; height: 40vh"></canvas>
     </div>
 
-    <div class="d-flex">
+    <div class="d-flex justify-content-between mt-5 mb-5">
         <button type="button" class="btn btn-primary custom-modal-btn mr-2" data-toggle="modal" data-target="#modalityPemasukan">
             + Tambah Pemasukan
         </button>
@@ -195,18 +195,20 @@
                         </div>
                     </form>
                 </div>
-    {{-- <script type="module">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module">
     const data = {
-        labels: @json($data->map(fn ($data) => $data->date)),
+        labels: @json($data->map(fn ($data) => date('Y-m-d', strtotime($data->date)))),
         datasets: [{
-            label: 'Registered users in the last 30 days',
+            label: 'Pendapatan dalam bulan ini',
             backgroundColor: 'red',
             borderColor: 'rgb(255, 99, 132)',
-            data: @json($data->map(fn ($data) => $data->aggregate)),
+            data: @json($data->map(fn ($data) => $data->total)),
         }]
     };
 
-    console.log(data);
+    // console.log(data);
 
     const config = {
         type: 'bar',
@@ -216,7 +218,7 @@
         document.getElementById('myChart'),
         config
     );
-    </script> --}}
+    </script>
 
     <!-- jQuery, Popper.js, and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

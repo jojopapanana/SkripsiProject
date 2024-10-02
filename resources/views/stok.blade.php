@@ -2,34 +2,39 @@
     <div class="d-flex justify-content-center" style="width: 70vw">
         <h1 class="fw-bold">STOK BARANG</h1>
     </div>
-    <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
+    {{-- <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
         <div class="dropdown">
-            <select id="month" class="form-select px-5 py-2 fs-5 fw-bold" style="border: 1.5px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
-                <option value="">BULAN</option>
-                <option value="1" {{ request('month') == 1 ? 'selected' : '' }}>Januari</option>
-                <option value="2" {{ request('month') == 2 ? 'selected' : '' }}>Februari</option>
-                <option value="3" {{ request('month') == 3 ? 'selected' : '' }}>Maret</option>
-                <option value="4" {{ request('month') == 4 ? 'selected' : '' }}>April</option>
-                <option value="5" {{ request('month') == 5 ? 'selected' : '' }}>Mei</option>
-                <option value="6" {{ request('month') == 6 ? 'selected' : '' }}>Juni</option>
-                <option value="7" {{ request('month') == 7 ? 'selected' : '' }}>Juli</option>
-                <option value="8" {{ request('month') == 8 ? 'selected' : '' }}>Agustus</option>
-                <option value="9" {{ request('month') == 9 ? 'selected' : '' }}>September</option>
-                <option value="10" {{ request('month') == 10 ? 'selected' : '' }}>Oktober</option>
-                <option value="11" {{ request('month') == 11 ? 'selected' : '' }}>November</option>
-                <option value="12" {{ request('month') == 12 ? 'selected' : '' }}>Desember</option>
-            </select>
+            <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ strtoupper(date('F')) }}
+            </button>
+            <ul class="dropdown-menu" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
+                <li><a class="dropdown-item" href="#" data-value="1">JANUARI</a></li>
+                <li><a class="dropdown-item" href="#" data-value="2">FEBRUARI</a></li>
+                <li><a class="dropdown-item" href="#" data-value="3">MARET</a></li>
+                <li><a class="dropdown-item" href="#" data-value="4">APRIL</a></li>
+                <li><a class="dropdown-item" href="#" data-value="5">MEI</a></li>
+                <li><a class="dropdown-item" href="#" data-value="6">JUNI</a></li>
+                <li><a class="dropdown-item" href="#" data-value="7">JULI</a></li>
+                <li><a class="dropdown-item" href="#" data-value="8">AGUSTUS</a></li>
+                <li><a class="dropdown-item" href="#" data-value="9">SEPTEMBER</a></li>
+                <li><a class="dropdown-item" href="#" data-value="10">OKTOBER</a></li>
+                <li><a class="dropdown-item" href="#" data-value="11">NOVEMBER</a></li>
+                <li><a class="dropdown-item" href="#" data-value="12">DESEMBER</a></li>
+            </ul>
         </div>
+    
+        <div class="dropdown">
+            <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ now()->year }}
+            </button>
+            <ul class="dropdown-menu" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
+                <li><a class="dropdown-item" href="#" data-value="2022">2022</a></li>
+                <li><a class="dropdown-item" href="#" data-value="2023">2023</a></li>
+                <li><a class="dropdown-item" href="#" data-value="2024">2024</a></li>
+            </ul>
+        </div>
+    </div> --}}
 
-        <div class="dropdown">
-            <select id="year" class="form-select px-5 py-2 fs-5 fw-bold" style="border: 1.5px solid rgba(30, 3, 66, 1); border-radius: 10px; background-color: white;">
-                <option value="">TAHUN</option>
-                <option value="2024" {{ request('year') == 2024 ? 'selected' : '' }}>2024</option>
-                <option value="2025" {{ request('year') == 2025 ? 'selected' : '' }}>2025</option>
-                <option value="2026" {{ request('year') == 2026 ? 'selected' : '' }}>2026</option>
-            </select>
-        </div>
-    </div>
     <div class="card mt-4">
         <div class="card-body">
             <h5 class="fw-bold">Stok Terbanyak</h4>
@@ -146,20 +151,51 @@
             </div>
         @endforeach
         <br>
-        <script>
-            document.getElementById('month').addEventListener('change', function() {
-                var month = this.value;
-                var year = document.getElementById('year').value;
-                if (month && year) {
-                    window.location.href = `?month=${month}&year=${year}`;
-                }
-            });
 
-            document.getElementById('year').addEventListener('change', function() {
-                var year = this.value;
-                var month = document.getElementById('month').value;
-                if (month && year) {
-                    window.location.href = `?month=${month}&year=${year}`;
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const monthDropdownButton = document.getElementById('monthDropdownButton');
+                const monthDropdownItems = document.querySelectorAll('#month-dropdown-menu .dropdown-item');
+                const yearDropdownButton = document.getElementById('yearDropdownButton');
+                const yearDropdownItems = document.querySelectorAll('#year-dropdown-menu .dropdown-item');
+
+                monthDropdownItems.forEach(function(item) {
+                    item.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        const selectedMonthText = this.textContent;
+                        const selectedMonthValue = this.getAttribute('data-value');
+                        
+                        monthDropdownButton.textContent = selectedMonthText;
+                        
+                        window.location.href = `{{ route('stok') }}?month=${selectedMonthValue}`;
+                    });
+                });
+
+                yearDropdownItems.forEach(function(item) {
+                    item.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        const selectedYearText = this.textContent;
+                        const selectedYearValue = this.getAttribute('data-value');
+                        
+                        yearDropdownButton.textContent = selectedYearText;
+                    });
+                });
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const month = urlParams.get('month');
+                if (month) {
+                    const selectedItem = [...monthDropdownItems].find(item => item.getAttribute('data-value') === month);
+                    if (selectedItem) {
+                        monthDropdownButton.textContent = selectedItem.textContent;
+                    }
+                }
+
+                const year = urlParams.get('year');
+                if (year) {
+                    const selectedItem = [...yearDropdownItems].find(item => item.getAttribute('data-value') === year);
+                    if (selectedItem) {
+                        yearDropdownButton.textContent = selectedItem.textContent;
+                    }
                 }
             });
         </script>
