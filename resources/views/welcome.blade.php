@@ -26,11 +26,11 @@
     </div>
 
     <div class="dashboard-trenkeuntungan">
-        <h3 class="fw-bold">Tren Pendapatan-mu!</h3>
+        <h3 class="fw-bold">Tren Pendapatan-mu Bulan Ini!</h3>
         <canvas id="myChart" style="width: 70vw; height: 40vh"></canvas>
     </div>
 
-    <div class="d-flex">
+    <div class="d-flex justify-content-between mt-5 mb-5">
         <button type="button" class="btn btn-primary custom-modal-btn mr-2" data-toggle="modal" data-target="#modalityPemasukan">
             + Tambah Pemasukan
         </button>

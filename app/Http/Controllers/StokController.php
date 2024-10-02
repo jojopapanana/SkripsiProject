@@ -15,8 +15,8 @@ class StokController extends Controller
      */
     public function index(Request $request)
     {
-        $month = $request->input('month');
-        $year = $request->input('year');
+        // $month = $request->input('month');
+        // $year = $request->input('year');
 
         $stokDataTemp = DB::table('products')
             ->select(
@@ -24,13 +24,13 @@ class StokController extends Controller
                 'products.productName as nama',
                 'products.productPrice as nominal',
                 'products.productStock as sisa',
-                DB::raw("DATE_FORMAT(products.created_at, '%Y-%m') as created_month")
+                // DB::raw("DATE_FORMAT(products.created_at, '%Y-%m') as created_month")
             );
 
-        if ($month && $year) {
-            $stokDataTemp->whereYear('products.created_at', $year)
-                ->whereMonth('products.created_at', $month);
-        }
+        // if ($month && $year) {
+        //     $stokDataTemp->whereYear('products.created_at', $year)
+        //         ->whereMonth('products.created_at', $month);
+        // }
 
         $stokData = $stokDataTemp->get();
 

@@ -5,7 +5,7 @@
     
     <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
         <div class="dropdown">
-            <button class="btn dropdown-toggle fw-bold" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ strtoupper(date('F')) }}
             </button>
             <ul class="dropdown-menu" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
@@ -25,8 +25,8 @@
         </div>
     
         <div class="dropdown">
-            <button class="btn dropdown-toggle fw-bold" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ now()->year }}
+            <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ now()->year }}
             </button>
             <ul class="dropdown-menu" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
                 <li><a class="dropdown-item" href="#" data-value="2022">2022</a></li>

@@ -17,17 +17,18 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $selectedMonth = Carbon::now()->format('m');
         $pendapatan_kotor = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                             ->join('products', 'transaction_details.productID', '=', 'products.id')
                                             ->select('transaksis.created_at as date', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as pendapatan'))
-                                            ->where('transaksis.type', '=', 'Pemasukan')
+                                            ->where([['transaksis.type', '=', 'Pemasukan'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth]])
                                             ->groupBy('date')
                                             ->get()
                                             ->keyBy('date');
 
         $pengeluaran = DB::table('transaksis')
                                             ->select('transaksis.created_at as date', DB::raw('SUM(transaksis.nominal) as pengeluaran'))
-                                            ->where('transaksis.type', '=', 'Pengeluaran')
+                                            ->where([['transaksis.type', '=', 'Pengeluaran'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth]])
                                             ->groupBy('date')
                                             ->get()
                                             ->keyBy('date');
@@ -51,8 +52,6 @@ class DashboardController extends Controller
         $data = $finalCollection->map(function($item) {
             return (object) $item;
         });
-
-        // dd($data);
 
         $products = Product::all();
         return view('welcome', compact('products'), [
