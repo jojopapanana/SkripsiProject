@@ -1,5 +1,5 @@
 <x-layout title="Dashboard">
-    <h1 class="fw-bold">DASHBOARD</h1>
+    <h1 class="fw-bold">HALAMAN UTAMA</h1>
 
     <div class="d-flex gap-4">
         <div class="dashboard-card">
