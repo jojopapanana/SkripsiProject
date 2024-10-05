@@ -52,11 +52,11 @@
                         <input type="hidden" name="modalType" value="pemasukan">
                         <div class="form-group position-relative mb-2">
                             <label for="tanggal" class="col-form-label" id="inputModalLabel">Tanggal</label>
-                            <input type="text" class="form-control border-style tanggal" name="tanggal" id="tanggal" value="" readonly>
+                            <input type="text" class="form-control disabled border-style tanggal" name="tanggal" id="tanggal" value="" disabled>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis Transaksi</label>
-                            <input type="text" class="form-control border-style" id="jenisTransaksi" name="jenisTransaksi" value="Pemasukan" readonly>
+                            <input type="text" class="form-control disabled border-style" id="jenisTransaksi" name="jenisTransaksi" value="Pemasukan" disabled>
                         </div>
                         <div class="form-group-select position-relative mb-2 mt-4">
                             <div class=" d-flex justify-content-between align-items-center">
@@ -109,7 +109,7 @@
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="nominal" class="col-form-label" id="inputModalLabel">Nominal</label>
-                            <input type="text" class="form-control border-style" id="nominal" name="nominal" value="Rp. 0,-" readonly>
+                            <input type="text" class="form-control disabled border-style" id="nominal" name="nominal" value="Rp. 0,-" disabled>
                         </div>
                         <div class="form-group-select position-relative mb-4">
                             <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
@@ -140,11 +140,11 @@
                         <input type="hidden" name="modalType" value="pengeluaran">
                         <div class="form-group position-relative mb-2">
                             <label for="tanggal" class="col-form-label" id="inputModalLabel">Tanggal</label>
-                            <input type="text" class="form-control border-style tanggal" id="tanggal" name="tanggal" value="" readonly>
+                            <input type="text" class="form-control disabled border-style tanggal" id="tanggal" name="tanggal" value="" disabled>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis Transaksi</label>
-                            <input type="text" class="form-control border-style" id="jenisTransaksi" name="jenisTransaksi" value="Pengeluaran" readonly>
+                            <input type="text" class="form-control disabled border-style" id="jenisTransaksi" name="jenisTransaksi" value="Pengeluaran" disabled>
                         </div>
                         <div class="form-group-select position-relative mb-2">
                             <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
@@ -195,7 +195,7 @@
                         </div>
                     </form>
                 </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module">
     const data = {

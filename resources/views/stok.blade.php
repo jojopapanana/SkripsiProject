@@ -22,7 +22,7 @@
                 <li><a class="dropdown-item" href="#" data-value="12">DESEMBER</a></li>
             </ul>
         </div>
-    
+
         <div class="dropdown">
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
               {{ now()->year }}
@@ -113,37 +113,36 @@
                     </table>
                 </div>
             </div>
-            <div class="modal fade" id="editModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit Stok</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal fade" id="editModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered custom-modal-width">
+                    <div class="modal-content pl-3 pr-3">
+                        <div class="modal-header justify-content-center">
+                            <p class="modal-title" id="exampleModalLabel">Ubah Stok</p>
                         </div>
                         <form action="{{ route('stok.update', $stok->stok_id) }}" method="POST">
                             @csrf
                             @method('POST')
                             <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="kodeTransaksi" class="form-label">Kode Transaksi</label>
-                                    <input type="text" class="form-control" id="kodeTransaksi" placeholder="{{$stok->stok_id}}" disabled>
+                                <div class="form-group position-relative mb-2">
+                                    <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
+                                    <input type="text" class="form-control border-style" id="kodeTransaksi" placeholder="{{$stok->stok_id}}" disabled>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="nama" class="form-label">Nama Produk</label>
-                                    <input type="text" class="form-control" id="nama" name="nama" value="{{ $stok->nama }}" required>
+                                <div class="form-group position-relative mb-2">
+                                    <label for="nama" class="col-form-label" id="inputModalLabel">Nama Produk</label>
+                                    <input type="text" class="form-control border-style" id="nama" name="nama" value="{{ $stok->nama }}" required>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="nominal" class="form-label">Nominal</label>
-                                    <input type="text" class="form-control" id="nominal" name="nominal" value="{{ $stok->nominal }}" required>
+                                <div class="form-group position-relative mb-2">
+                                    <label for="nominal" class="col-form-label" id="inputModalLabel">Nominal</label>
+                                    <input type="text" class="form-control border-style" id="nominal" name="nominal" value="{{ $stok->nominal }}" required>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="sisa" class="form-label">Sisa Stok</label>
-                                    <input type="number" class="form-control" id="sisa" name="sisa" value="{{ $stok->sisa }}" required>
+                                <div class="form-group position-relative mb-4">
+                                    <label for="sisa" class="col-form-label" id="inputModalLabel">Sisa Stok</label>
+                                    <input type="number" class="form-control border-style" id="sisa" name="sisa" value="{{ $stok->sisa }}" required>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn fw-semibold" style="border: 2px solid rgba(30, 3, 66, 1)" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn fw-semibold" style="background-color: rgba(30, 3, 66, 1); color: white">Simpan Perubahan</button>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
+                                    <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -164,9 +163,9 @@
                         event.preventDefault();
                         const selectedMonthText = this.textContent;
                         const selectedMonthValue = this.getAttribute('data-value');
-                        
+
                         monthDropdownButton.textContent = selectedMonthText;
-                        
+
                         window.location.href = `{{ route('stok') }}?month=${selectedMonthValue}`;
                     });
                 });
@@ -176,7 +175,7 @@
                         event.preventDefault();
                         const selectedYearText = this.textContent;
                         const selectedYearValue = this.getAttribute('data-value');
-                        
+
                         yearDropdownButton.textContent = selectedYearText;
                     });
                 });
