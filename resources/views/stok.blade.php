@@ -35,40 +35,6 @@
         </div>
     </div> --}}
 
-    <div class="card mt-4">
-        <div class="card-body">
-            <h5 class="fw-bold">Stok Terbanyak</h4>
-            <div class="row">
-                <div class="col">
-                    @foreach($top_products as $product)
-                        <div class="justify-content-start">
-                            <h3 class="text-start fs-6 fw-normal mt-2">{{ $product->productName }}</h3>
-                        </div>
-                    @endforeach
-                </div>
-                <div class="col">
-                    @foreach($top_products as $product)
-                    <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-normal mt-2">{{ $product->productStock }}</h3>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col">
-                    <div class="justify-content-start">
-                        <h5 class="text-start fs-6 fw-bold">Total Terjual</h4>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold">{{ $total_products_sold }}</h3>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </div>
         <div class="card mt-3">
             <div class="card-body py-2">
                 <table class="w-100">

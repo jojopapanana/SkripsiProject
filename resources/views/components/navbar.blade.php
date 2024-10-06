@@ -17,7 +17,7 @@
       <td><a href="{{ route('stok') }}">Stok Barang</a></td>
     </tr>
     <tr>
-      <td><a href="">Analisis Tren</a></td>
+      <td><a href="{{ route('analisisTrend') }}">Analisis Tren</a></td>
     </tr>
     <tr>
       <td valign="bottom">
