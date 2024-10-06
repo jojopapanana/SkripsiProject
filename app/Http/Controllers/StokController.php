@@ -103,10 +103,10 @@ class StokController extends Controller
             $product->productStock = $request->input('sisa');
             $product->save();
 
-            return redirect()->back()->with('success', 'Stok berhasil diperbarui.');
+            return redirect()->back()->with('success', 'Stok barang berhasil diperbarui!');
         }
 
-        return redirect()->back()->with('error', 'Produk tidak ditemukan.');
+        return redirect()->back()->with('error', 'Stok barang tidak ditemukan!');
     }
 
     /**
@@ -118,9 +118,9 @@ class StokController extends Controller
 
         if ($product) {
             $product->delete();
-            return redirect()->back()->with('success', 'SUCCESS : Berhasil Dihapus');
+            return redirect()->back()->with('success', 'Stok barang berhasil di hapus!');
         }
 
-        return redirect()->back()->with('error', 'ERROR : Stok Tidak Ditemukan');
+        return redirect()->back()->with('error', 'Stok barang tidak ditemukan!');
     }
 }

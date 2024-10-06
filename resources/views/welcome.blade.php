@@ -1,4 +1,4 @@
-<x-layout title="Dashboard">
+<x-layout title="Halaman Utama">
     <h1 class="fw-bold">HALAMAN UTAMA</h1>
 
     <div class="d-flex gap-4">
@@ -199,6 +199,23 @@
         </div>
     </div>
 
+    <!-- Alert Modal Component -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <center>
+                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                    </center>
+                    <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
+                    <div class="d-flex justify-content-center gap-4 mt-4">
+                        <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-dismiss="modal">Oke</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module">
     const data = {
@@ -231,9 +248,19 @@
     <!-- Iconify icon -->
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
+    <!-- Function to change modal text and show the modal -->
+    <script>
+        var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+
+        function showAlert(text) {
+            document.getElementById('modalText').innerText = text;
+            alertModal.show();
+        }
+    </script>
+
     @if (session('success'))
         <script>
-            alert('{{ session('success') }}');
+            showAlert('{{ session('success') }}');
         </script>
     @endif
 
