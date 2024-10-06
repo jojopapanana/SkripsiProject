@@ -99,13 +99,9 @@
                                         <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal{{ $stok->stok_id }}">
                                             <i class="bi bi-pencil-fill"></i>
                                         </button>
-                                        <form action="{{ route('stok.delete', $stok->stok_id) }}" method="POST" onsubmit="return confirm('Apakah Anda ingin menghapus stok ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn p-0" style="color: red; border: none">
-                                                <i class="bi bi-trash3-fill"></i>
-                                            </button>
-                                        </form>
+                                        <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $stok->stok_id }}" class="btn p-0" style="color: red; border: none">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -148,8 +144,67 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="deleteModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <center>
+                                <i class="bi bi-exclamation-triangle-fill" style="font-size: 5rem; color: red"></i>
+                            </center>
+
+                            <h4 class="fw-bold text-center">Apakah Anda yakin ingin menghapus stok ini?</h4>
+
+                            <div class="d-flex justify-content-center gap-4 mt-4">
+                                <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-bs-dismiss="modal">Tidak</button>
+
+                                <form method="POST" action="{{ route('stok.delete', $stok->stok_id) }}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button class="btn fw-semibold" style="background-color: rgba(210, 0, 0, 1); width: 5vw; color: white">Ya</button>
+                                @csrf
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endforeach
         <br>
+
+        <!-- Alert Modal Component -->
+        <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <center>
+                            <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                        </center>
+                        <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
+                        <div class="d-flex justify-content-center gap-4 mt-4">
+                            <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-bs-dismiss="modal">Oke</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Function to change modal text and show the modal -->
+        <script>
+          var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+
+          function showAlert(text) {
+              document.getElementById('modalText').innerText = text;
+              alertModal.show();
+          }
+        </script>
+
+        @if (session('success'))
+          <script>
+              showAlert('{{ session('success') }}');
+          </script>
+        @endif
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -196,6 +251,13 @@
                         yearDropdownButton.textContent = selectedItem.textContent;
                     }
                 }
+            });
+
+            $(document).ready(function () {
+                $("#deleteModal").on("show.bs.modal", function (e) {
+                    var id = $(e.relatedTarget).data('target-id');
+                    $('#pass_id').val(id);
+                });
             });
         </script>
     </div>

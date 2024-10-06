@@ -261,7 +261,12 @@ class TransaksiController extends Controller
                                                 ->get();
 
         $totals = $expense_total;
-        return redirect()->route('transaksi', ['transactions' => $transactions, 'totals' => $totals]);
+
+        return redirect()->route('transaksi')->with([
+            'transactions' => $transactions,
+            'totals' => $totals,
+            'success' => 'Detail transaksi berhasil diperbarui!'
+        ]);
     }
 
     /**
@@ -290,6 +295,11 @@ class TransaksiController extends Controller
                                                 ->get();
 
         $totals = $expense_total;
-        return redirect()->route('transaksi', ['transactions' => $transactions, 'totals' => $totals]);
+
+        return redirect()->route('transaksi')->with([
+            'transactions' => $transactions,
+            'totals' => $totals,
+            'success' => 'Transaksi berhasil di hapus!'
+        ]);
     }
 }
