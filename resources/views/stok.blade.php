@@ -2,38 +2,6 @@
     <div class="d-flex justify-content-center" style="width: 70vw">
         <h1 class="fw-bold">STOK BARANG</h1>
     </div>
-    {{-- <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
-        <div class="dropdown">
-            <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ strtoupper(date('F')) }}
-            </button>
-            <ul class="dropdown-menu" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
-                <li><a class="dropdown-item" href="#" data-value="1">JANUARI</a></li>
-                <li><a class="dropdown-item" href="#" data-value="2">FEBRUARI</a></li>
-                <li><a class="dropdown-item" href="#" data-value="3">MARET</a></li>
-                <li><a class="dropdown-item" href="#" data-value="4">APRIL</a></li>
-                <li><a class="dropdown-item" href="#" data-value="5">MEI</a></li>
-                <li><a class="dropdown-item" href="#" data-value="6">JUNI</a></li>
-                <li><a class="dropdown-item" href="#" data-value="7">JULI</a></li>
-                <li><a class="dropdown-item" href="#" data-value="8">AGUSTUS</a></li>
-                <li><a class="dropdown-item" href="#" data-value="9">SEPTEMBER</a></li>
-                <li><a class="dropdown-item" href="#" data-value="10">OKTOBER</a></li>
-                <li><a class="dropdown-item" href="#" data-value="11">NOVEMBER</a></li>
-                <li><a class="dropdown-item" href="#" data-value="12">DESEMBER</a></li>
-            </ul>
-        </div>
-    
-        <div class="dropdown">
-            <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-              {{ now()->year }}
-            </button>
-            <ul class="dropdown-menu" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
-                <li><a class="dropdown-item" href="#" data-value="2022">2022</a></li>
-                <li><a class="dropdown-item" href="#" data-value="2023">2023</a></li>
-                <li><a class="dropdown-item" href="#" data-value="2024">2024</a></li>
-            </ul>
-        </div>
-    </div> --}}
 
     <div class="card mt-4">
         <div class="card-body">

@@ -99,7 +99,7 @@
 
       <div class="d-flex justify-content-end mt-3 mb-5">
           <button class="btn fw-semibold" type="button" id="exportButton">
-              <a href="{{ route('aruskas_export', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}" class="text-decoration-none" style="color: white">Ekspor</a>
+            Ekspor
           </button>
       </div>
 
@@ -110,15 +110,21 @@
             const yearDropdownButton = document.getElementById('yearDropdownButton');
             const yearDropdownItems = document.querySelectorAll('#year-dropdown-menu .dropdown-item');
 
+            let selectedMonthValue = new URLSearchParams(window.location.search).get('month') || (new Date().getMonth() + 1);
+            let selectedYearValue = new URLSearchParams(window.location.search).get('year') || new Date().getFullYear();
+
+            function updateUrl() {
+                window.location.href = `{{ route('aruskas') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+            }
+
             monthDropdownItems.forEach(function(item) {
                 item.addEventListener('click', function(event) {
                     event.preventDefault();
                     const selectedMonthText = this.textContent;
-                    const selectedMonthValue = this.getAttribute('data-value');
+                    selectedMonthValue = this.getAttribute('data-value');
                     
                     monthDropdownButton.textContent = selectedMonthText;
-                    
-                    window.location.href = `{{ route('aruskas') }}?month=${selectedMonthValue}`;
+                    updateUrl();
                 });
             });
 
@@ -126,13 +132,29 @@
                 item.addEventListener('click', function(event) {
                     event.preventDefault();
                     const selectedYearText = this.textContent;
-                    const selectedYearValue = this.getAttribute('data-value');
+                    selectedYearValue = this.getAttribute('data-value');
                     
                     yearDropdownButton.textContent = selectedYearText;
-                    
-                    // window.location.href = `{{ route('aruskas') }}?month=${selectedMonthValue}`;
+                    updateUrl();
                 });
             });
+
+            function exportUrl() {
+                console.log("Selected Month Value Before Export: ", selectedMonthValue);
+                console.log("Selected Year Value Before Export: ", selectedYearValue);
+
+                const exportRoute = `{{ route('aruskas_export', ['month' => ':month', 'year' => ':year']) }}`
+                    .replace(':month', selectedMonthValue)
+                    .replace(':year', selectedYearValue);
+
+                window.location.href = exportRoute;
+            }
+
+            const exportButton = document.getElementById('exportButton')
+            exportButton.addEventListener('click', function(event){
+                event.preventDefault();
+                exportUrl();
+            })
 
             const urlParams = new URLSearchParams(window.location.search);
             const month = urlParams.get('month');

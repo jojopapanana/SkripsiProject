@@ -99,7 +99,7 @@
                                             </div>
                                             <div class="mb-3">
                                               <label for="tanggalTransaksi" class="form-label">Tanggal Transaksi</label>
-                                              <input type="date" class="form-control disabled" name="tanggalTransaksi" value="{{ date('Y-m-d', strtotime($transaction->created_at)) }}" disabled>
+                                              <input type="text" class="form-control disabled" name="tanggalTransaksi" value="{{ date('Y-m-d', strtotime($transaction->created_at)) }}" disabled>
                                             </div>
                                             <div class="mb-3">
                                               <label for="nominalTransaksi" class="form-label">Nominal</label>
@@ -190,7 +190,7 @@
               Ekspor
           </button>
           <ul class="dropdown-menu" id="export-dropdown-menu" aria-labelledby="exportDropdownButton">
-              <li><a class="dropdown-item" href="{{ route('transaksi_export_excel', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">xlsx</a></li>
+              <li><a class="dropdown-item" id="export-link-excel" href="{{ route('transaksi_export_excel', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">xlsx</a></li>
               <li><a class="dropdown-item" href="{{ route('transaksi_export_csv', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">csv</a></li>
               <li><a class="dropdown-item" href="{{ route('transaksi_export_pdf', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">pdf</a></li>
           </ul>
@@ -201,52 +201,58 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const monthDropdownButton = document.getElementById('monthDropdownButton');
-        const monthDropdownItems = document.querySelectorAll('#month-dropdown-menu .dropdown-item');
-        const yearDropdownButton = document.getElementById('yearDropdownButton');
-        const yearDropdownItems = document.querySelectorAll('#year-dropdown-menu .dropdown-item');
+      const monthDropdownButton = document.getElementById('monthDropdownButton');
+      const monthDropdownItems = document.querySelectorAll('#month-dropdown-menu .dropdown-item');
+      const yearDropdownButton = document.getElementById('yearDropdownButton');
+      const yearDropdownItems = document.querySelectorAll('#year-dropdown-menu .dropdown-item');
 
-        monthDropdownItems.forEach(function(item) {
-            item.addEventListener('click', function(event) {
-                event.preventDefault();
-                const selectedMonthText = this.textContent;
-                const selectedMonthValue = this.getAttribute('data-value');
-                
-                monthDropdownButton.textContent = selectedMonthText;
-                
-                window.location.href = `{{ route('transaksi') }}?month=${selectedMonthValue}`;
-            });
-        });
+      let selectedMonthValue = new URLSearchParams(window.location.search).get('month') || (new Date().getMonth() + 1);
+      let selectedYearValue = new URLSearchParams(window.location.search).get('year') || new Date().getFullYear();
 
-        yearDropdownItems.forEach(function(item) {
-            item.addEventListener('click', function(event) {
-                event.preventDefault();
-                const selectedYearText = this.textContent;
-                const selectedYearValue = this.getAttribute('data-value');
-                
-                yearDropdownButton.textContent = selectedYearText;
-                
-                // window.location.href = `{{ route('aruskas') }}?month=${selectedMonthValue}`;
-            });
-        });
+      function updateUrl() {
+          window.location.href = `{{ route('transaksi') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+      }
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const month = urlParams.get('month');
-        if (month) {
-            const selectedItem = [...monthDropdownItems].find(item => item.getAttribute('data-value') === month);
-            if (selectedItem) {
-                monthDropdownButton.textContent = selectedItem.textContent;
-            }
-        }
+      monthDropdownItems.forEach(function(item) {
+          item.addEventListener('click', function(event) {
+              event.preventDefault();
+              const selectedMonthText = this.textContent;
+              selectedMonthValue = this.getAttribute('data-value');
+              
+              monthDropdownButton.textContent = selectedMonthText;
+              updateUrl();
+          });
+      });
 
-        const year = urlParams.get('year');
-        if (year) {
-            const selectedItem = [...yearDropdownItems].find(item => item.getAttribute('data-value') === year);
-            if (selectedItem) {
-                yearDropdownButton.textContent = selectedItem.textContent;
-            }
-        }
-    });
+      yearDropdownItems.forEach(function(item) {
+          item.addEventListener('click', function(event) {
+              event.preventDefault();
+              const selectedYearText = this.textContent;
+              selectedYearValue = this.getAttribute('data-value');
+              
+              yearDropdownButton.textContent = selectedYearText;
+              updateUrl();
+          });
+      });
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const month = urlParams.get('month');
+      if (month) {
+          const selectedItem = [...monthDropdownItems].find(item => item.getAttribute('data-value') === month);
+          if (selectedItem) {
+              monthDropdownButton.textContent = selectedItem.textContent;
+          }
+      }
+
+      const year = urlParams.get('year');
+      if (year) {
+          const selectedItem = [...yearDropdownItems].find(item => item.getAttribute('data-value') === year);
+          if (selectedItem) {
+              yearDropdownButton.textContent = selectedItem.textContent;
+          }
+      }
+  });
+
 
     $(document).ready(function () {
       $("#deleteModal").on("show.bs.modal", function (e) {
