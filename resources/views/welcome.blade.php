@@ -108,7 +108,7 @@
                             </table>
                         </div>
                         <div class="form-group position-relative mb-2">
-                            <label for="nominal" class="col-form-label" id="inputModalLabel">Nominal</label>
+                            <label for="nominal" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
                             <input type="text" class="form-control border-style" id="nominal" name="nominal" value="Rp. 0,-" readonly>
                         </div>
                         <div class="form-group-select position-relative mb-4">
@@ -179,7 +179,7 @@
                                 </div>
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField">
-                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Nominal</label>
+                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
                                 <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
                             </div>
                             <div class="form-group-select position-relative mb-4">
@@ -768,7 +768,7 @@
                             </select>
                         </div>
                         <div class="form-group position-relative mb-2">
-                            <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Nominal</label>
+                            <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
                             <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
                         </div>
                         <div class="form-group-select position-relative mb-4">
@@ -808,7 +808,7 @@
                                 </div>
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField">
-                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Nominal</label>
+                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
                                 <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
                             </div>
                             <div class="form-group-select position-relative mb-4">
@@ -845,11 +845,11 @@
                                 </div>
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField">
-                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Nominal</label>
+                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
                                 <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField2">
-                                <label for="hargaJualSatuan" class="col-form-label" id="inputModalLabel">Harga Jual Satuan</label>
+                                <label for="hargaJualSatuan" class="col-form-label" id="inputModalLabel">Harga Jual Barang Satuan</label>
                                 <input type="text" class="form-control border-style" id="hargaJualSatuan" name="hargaJualSatuan" value="Rp. ">
                             </div>
                             <div class="form-group-select position-relative mb-4">
