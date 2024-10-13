@@ -10,17 +10,15 @@ class LabaRugiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        // $month = $request->input('month');
-        // $year = $request->input('year');
-        $month = $request->get('month', date('n'));
-        // $year = $request->get('year', date('n'));
+    public function export(Request $request){
+        $month = $request->input('month');
+        $year = $request->input('year');
 
-        $labaTemp = DB::table('transaksis')
-            ->select('description', 'nominal')
-            ->where('type', 'Pemasukan')
-            ->whereNotNull('nominal');
+        $labaTemp = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+                                                ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                                ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalNominal'), 'transaksis.description')
+                                                ->whereNull('transaksis.nominal')
+                                                ->groupBy('transaksis.id', 'transaksis.description');
         
         $rugiTemp = DB::table('transaksis')
             ->select('description', 'nominal')
@@ -29,14 +27,66 @@ class LabaRugiController extends Controller
 
         if ($month) {
             $labaTemp
-                    ->whereMonth('transaksis.created_at', $month);
+                    ->whereMonth('transaksis.created_at', $month)
+                    ->whereYear('transaksis.created_at', $year);
 
             $rugiTemp
-                    ->whereMonth('transaksis.created_at', $month);
+                    ->whereMonth('transaksis.created_at', $month)
+                    ->whereYear('transaksis.created_at', $year);;
         }
 
         $laba = $labaTemp->get();
-        $total_laba = $labaTemp->sum('nominal');
+        $total_laba = $laba->sum('totalNominal');
+
+        $rugi = $rugiTemp->get();
+        $total_rugi = $rugiTemp->sum('nominal');
+
+        $balance = $total_laba - $total_rugi;
+        $status = $balance > 0 ? 'Untung' : ($balance < 0 ? 'Rugi' : 'Seimbang');
+
+        $data = [
+            'laba' => $laba,
+            'total_laba' => $total_laba,
+            'rugi' => $rugi,
+            'total_rugi' => $total_rugi,
+            'balance' => $balance,
+            'status' => $status
+        ];
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('labarugi', $data);
+
+        return $pdf->download('labarugi.pdf');
+    }
+
+    public function index(Request $request)
+    {
+        $month = $request->get('month', date('n'));
+        $year = $request->get('year', date('Y'));
+
+        $labaTemp = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+                                                ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                                ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalNominal'), 'transaksis.description')
+                                                ->whereNull('transaksis.nominal')
+                                                ->groupBy('transaksis.id', 'transaksis.description');
+        
+        $rugiTemp = DB::table('transaksis')
+            ->select('description', 'nominal')
+            ->where('type', 'Pengeluaran')
+            ->whereNotNull('nominal');
+
+        if ($month) {
+            $labaTemp
+                    ->whereMonth('transaksis.created_at', $month)
+                    ->whereYear('transaksis.created_at', $year);
+
+            $rugiTemp
+                    ->whereMonth('transaksis.created_at', $month)
+                    ->whereYear('transaksis.created_at', $year);;
+        }
+
+        $laba = $labaTemp->get();
+        $total_laba = $laba->sum('totalNominal');
 
         $rugi = $rugiTemp->get();
         $total_rugi = $rugiTemp->sum('nominal');
@@ -50,9 +100,7 @@ class LabaRugiController extends Controller
             'rugi' => $rugi,
             'total_rugi' => $total_rugi,
             'balance' => $balance,
-            'status' => $status,
-            'month' => $month,
-            // 'year' => $year,
+            'status' => $status
         ]);
     }
 

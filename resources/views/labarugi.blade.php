@@ -1,4 +1,4 @@
-<x-layout title="Transaksi">
+<x-layout title="Laba Rugi">
     <div class="d-flex justify-content-center" style="width: 70vw">
         <h1 class="fw-bold">LAPORAN LABA RUGI</h1>
     </div>
@@ -49,7 +49,7 @@
                 <div class="col">
                     @forEach($laba as $profits)
                             <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold text-success">Rp. {{ number_format($profits->nominal, 0, ',', '.') }}</h3>
+                            <h3 class="text-end fs-6 fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($profits->totalNominal, 0, ',', '.') }}</h3>
                         </div>
                     @endforeach
                 </div>
@@ -80,7 +80,7 @@
                 <div class="col">
                     @forEach($rugi as $loss)
                             <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold text-danger">- Rp. {{ number_format($loss->nominal, 0, ',', '.') }}</h3>
+                            <h3 class="text-end fs-6 fw-bold text-danger">(Rp. {{ number_format($loss->nominal, 0, ',', '.') }})</h3>
                         </div>
                     @endforeach
                 </div>
@@ -107,36 +107,53 @@
                 <div class="col">
                     @if($status == 'Untung')
                         <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold text-success">Rp. {{ number_format($balance, 0, ',', '.') }}</h3>
+                            <h3 class="text-end fs-6 fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($balance, 0, ',', '.') }}</h3>
                         </div>
                     @elseif($status == 'Rugi')
                         <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold text-danger">Rp. {{ number_format($balance, 0, ',', '.') }}</h3>
+                            <h3 class="text-end fs-6 fw-bold" style="rgba(255, 0, 0, 1)">Rp. {{ number_format($balance, 0, ',', '.') }}</h3>
                         </div>
                     @else
                         <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold text-success">Rp. 0</h3>
+                            <h3 class="text-end fs-6 fw-bold">Rp. 0</h3>
                         </div>
                     @endif
                 </div>
             </div>
         </div>
-        <script>
+    </div>
+
+    @if ($laba->count() != 0 || $rugi->count() != 0)
+        <div class="d-flex justify-content-end mt-3 mb-5">
+            <button class="btn fw-semibold" type="button" id="exportLabaRugiButton">
+            Ekspor
+            </button>
+        </div>
+    @endif
+        
+
+    <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const monthDropdownButton = document.getElementById('monthDropdownButton');
                 const monthDropdownItems = document.querySelectorAll('#month-dropdown-menu .dropdown-item');
                 const yearDropdownButton = document.getElementById('yearDropdownButton');
                 const yearDropdownItems = document.querySelectorAll('#year-dropdown-menu .dropdown-item');
 
+                let selectedMonthValue = new URLSearchParams(window.location.search).get('month') || (new Date().getMonth() + 1);
+                let selectedYearValue = new URLSearchParams(window.location.search).get('year') || new Date().getFullYear();
+
+                function updateUrl() {
+                    window.location.href = `{{ route('labarugi') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+                }
+
                 monthDropdownItems.forEach(function(item) {
                     item.addEventListener('click', function(event) {
                         event.preventDefault();
                         const selectedMonthText = this.textContent;
-                        const selectedMonthValue = this.getAttribute('data-value');
+                        selectedMonthValue = this.getAttribute('data-value');
                         
                         monthDropdownButton.textContent = selectedMonthText;
-                        
-                        window.location.href = `{{ route('labarugi') }}?month=${selectedMonthValue}`;
+                        updateUrl();
                     });
                 });
 
@@ -144,11 +161,10 @@
                     item.addEventListener('click', function(event) {
                         event.preventDefault();
                         const selectedYearText = this.textContent;
-                        const selectedYearValue = this.getAttribute('data-value');
+                        selectedYearValue = this.getAttribute('data-value');
                         
                         yearDropdownButton.textContent = selectedYearText;
-
-                        // window.location.href = `{{ route('labarugi') }}?year=${selectedYearValue}`;
+                        updateUrl();
                     });
                 });
 
@@ -168,7 +184,19 @@
                         yearDropdownButton.textContent = selectedItem.textContent;
                     }
                 }
+
+                function exportUrl() {
+                    const exportRoute = `{{ route('labarugi_export') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+
+                    window.location.href = exportRoute;
+                }
+
+                const exportButton = document.getElementById('exportLabaRugiButton');
+                exportButton.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    exportUrl();
+                });
             });
         </script>
-    </div>
+    
 </x-layout>

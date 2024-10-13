@@ -190,9 +190,9 @@
               Ekspor
           </button>
           <ul class="dropdown-menu" id="export-dropdown-menu" aria-labelledby="exportDropdownButton">
-              <li><a class="dropdown-item" id="export-link-excel" href="{{ route('transaksi_export_excel', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">xlsx</a></li>
-              <li><a class="dropdown-item" href="{{ route('transaksi_export_csv', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">csv</a></li>
-              <li><a class="dropdown-item" href="{{ route('transaksi_export_pdf', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}">pdf</a></li>
+              <li><a class="dropdown-item" id="export-link-excel">xlsx</a></li>
+              <li><a class="dropdown-item" id="export-link-csv">csv</a></li>
+              <li><a class="dropdown-item" id="export-link-pdf">pdf</a></li>
           </ul>
         </div>
       </div>
@@ -251,7 +251,43 @@
               yearDropdownButton.textContent = selectedItem.textContent;
           }
       }
-  });
+
+      function exportUrlExcel() {
+          const exportRoute = `{{ route('transaksi_export_excel') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+
+          window.location.href = exportRoute;
+      }
+
+      const exportButtonExcel = document.getElementById('export-link-excel');
+      exportButtonExcel.addEventListener('click', function(event) {
+          event.preventDefault();
+          exportUrlExcel();
+      });
+
+      function exportUrlCSV() {
+          const exportRoute = `{{ route('transaksi_export_csv') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+
+          window.location.href = exportRoute;
+      }
+
+      const exportButtonCSV = document.getElementById('export-link-csv');
+      exportButtonCSV.addEventListener('click', function(event) {
+          event.preventDefault();
+          exportUrlCSV();
+      });
+
+      function exportUrlPDF() {
+          const exportRoute = `{{ route('transaksi_export_pdf') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+
+          window.location.href = exportRoute;
+      }
+
+      const exportButtonPDF = document.getElementById('export-link-pdf');
+      exportButtonPDF.addEventListener('click', function(event) {
+          event.preventDefault();
+          exportUrlPDF();
+      });
+    });
 
 
     $(document).ready(function () {

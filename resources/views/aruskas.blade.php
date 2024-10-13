@@ -62,12 +62,6 @@
 
 
         <p class="fw-bold">Arus Kas Investasi</p>
-        <div class="d-flex justify-content-between">
-            <p>Penerimaan kas investasi</p>
-            @foreach ($pendapatan_investasi as $p)
-                <p class="fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }}</p>
-            @endforeach
-        </div>
 
         <div class="d-flex justify-content-between" style="border-bottom: 1px solid black; border-bottom-color: black">
             <p>Biaya investasi usaha</p>
@@ -78,7 +72,7 @@
 
         <div class="d-flex justify-content-between">
             <p class="fw-bold">Total Arus Kas Investasi</p>
-            <p class="fw-bold">Rp. {{ number_format($total_arus_kas_investasi, 0, ',', '.') }}</p>
+            <p class="fw-bold">Rp. {{ number_format($total_pengeluaran_investasi, 0, ',', '.') }}</p>
         </div>
 
         <div class="d-flex justify-content-between">
@@ -97,11 +91,13 @@
         </div>
     </div>
 
+    @if ($pendapatan_operasional->count() != 0 || $pengeluaran_operasional->count() != 0 || $pengeluaran_investasi->count() != 0)
       <div class="d-flex justify-content-end mt-3 mb-5">
           <button class="btn fw-semibold" type="button" id="exportButton">
             Ekspor
           </button>
       </div>
+    @endif
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -139,23 +135,6 @@
                 });
             });
 
-            function exportUrl() {
-                console.log("Selected Month Value Before Export: ", selectedMonthValue);
-                console.log("Selected Year Value Before Export: ", selectedYearValue);
-
-                const exportRoute = `{{ route('aruskas_export', ['month' => ':month', 'year' => ':year']) }}`
-                    .replace(':month', selectedMonthValue)
-                    .replace(':year', selectedYearValue);
-
-                window.location.href = exportRoute;
-            }
-
-            const exportButton = document.getElementById('exportButton')
-            exportButton.addEventListener('click', function(event){
-                event.preventDefault();
-                exportUrl();
-            })
-
             const urlParams = new URLSearchParams(window.location.search);
             const month = urlParams.get('month');
             if (month) {
@@ -172,6 +151,19 @@
                     yearDropdownButton.textContent = selectedItem.textContent;
                 }
             }
+
+            function exportUrl() {
+                const exportRoute = `{{ route('aruskas_export') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+
+                window.location.href = exportRoute;
+            }
+
+            const exportButton = document.getElementById('exportButton');
+            exportButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                exportUrl();
+            });
         });
+
     </script>
 </x-layout>

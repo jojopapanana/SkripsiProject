@@ -17,15 +17,16 @@ Route::post('/transaksi/store', [TransaksiController::class, 'store'])->name('tr
 // Route::post('/register', [SignUpController::class, 'register']);
 Route::get('/', [DashboardController::class, 'index'])->name('Dashboard');
 Route::get('transaksi', [TransaksiController::class, 'index'])->name('transaksi');
-Route::get('/transaksi/export/excel/{month}/{year}', [TransaksiController::class, 'export_excel'])->name('transaksi_export_excel');
-Route::get('/transaksi_export_csv/{month}/{year}', [TransaksiController::class, 'export_csv'])->name('transaksi_export_csv');
-Route::get('/transaksi_export_pdf/{month}/{year}', [TransaksiController::class, 'export_pdf'])->name('transaksi_export_pdf');
+Route::get('/transaksi/export/excel', [TransaksiController::class, 'export_excel'])->name('transaksi_export_excel');
+Route::get('/transaksi/export/csv', [TransaksiController::class, 'export_csv'])->name('transaksi_export_csv');
+Route::get('/transaksi/export/pdf', [TransaksiController::class, 'export_pdf'])->name('transaksi_export_pdf');
 Route::delete('/transaksi/delete/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.delete');
 Route::put('/transaksi/update/{id}', [TransaksiController::class, 'update'])->name('transaksi.update');
 Route::get('stok', [StokController::class, 'index'])->name('stok');
 Route::get('labarugi', [LabaRugiController::class, 'index'])->name('labarugi');
+Route::get('/labarugi/export', [LabaRugiController::class, 'export'])->name('labarugi_export');
 Route::get('aruskas', [ArusKasController::class, 'index'])->name('aruskas');
-Route::get('/aruskas/export/{month}/{year}', [ArusKasController::class, 'export'])->name('aruskas_export');
+Route::get('/aruskas/export', [ArusKasController::class, 'export'])->name('aruskas_export');
 
 
 Route::delete('/stok/{id}/delete', [StokController::class, 'delete'])->name('stok.delete');

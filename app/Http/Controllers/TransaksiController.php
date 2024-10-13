@@ -15,15 +15,21 @@ use Maatwebsite\Excel\Facades\Excel;
 class TransaksiController extends Controller
 {
 
-    public function export_excel($month, $year){
+    public function export_excel(Request $request){
+        $month = $request->input('month');
+        $year = $request->input('year');
         return Excel::download(new TransaksiExport($month, $year), 'transaksi.xlsx');
     }
 
-    public function export_csv($month, $year){
+    public function export_csv(Request $request){
+        $month = $request->input('month');
+        $year = $request->input('year');
         return Excel::download(new TransaksiExport($month, $year), 'transaksi.csv');
     }
 
-    public function export_pdf($month, $year){
+    public function export_pdf(Request $request){
+        $month = $request->input('month');
+        $year = $request->input('year');
         return Excel::download(new TransaksiExport($month, $year), 'transaksi.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
     }
     /**
