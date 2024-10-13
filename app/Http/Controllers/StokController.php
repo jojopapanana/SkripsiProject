@@ -24,30 +24,11 @@ class StokController extends Controller
                 'products.productName as nama',
                 'products.productPrice as nominal',
                 'products.productStock as sisa',
-                // DB::raw("DATE_FORMAT(products.created_at, '%Y-%m') as created_month")
             );
-
-        // if ($month && $year) {
-        //     $stokDataTemp->whereYear('products.created_at', $year)
-        //         ->whereMonth('products.created_at', $month);
-        // }
 
         $stokData = $stokDataTemp->get();
 
-        $top_products = DB::table('products')
-            ->select('productName', 'productStock')
-            ->orderBy('productStock', 'desc')
-            ->limit(5)
-            ->get();
-
-        $total_products_sold = DB::table('transaction_details')
-            ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
-            ->join('products', 'transaction_details.productID', '=', 'products.id')
-            ->sum('transaction_details.productQuantity');
-
         return view('stok', [
-            'top_products' => $top_products,
-            'total_products_sold' => $total_products_sold,
             'stokData' => $stokData,
         ]);
     }

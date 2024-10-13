@@ -15,8 +15,8 @@
         <tr class="{{ Route::is('stok') ? 'active-row' : '' }}">
             <td><a href="{{ route('stok') }}">Stok Barang</a></td>
         </tr>
-        <tr>
-            <td><a href="">Analisis Tren</a></td>
+        <tr class="{{ Route::is('analisisTrend') ? 'active-row' : '' }}">
+            <td><a href="{{ route('analisisTrend') }}">Analisis Tren</a></td>
         </tr>
         <tr>
             <td valign="bottom">
