@@ -15,15 +15,21 @@ use Maatwebsite\Excel\Facades\Excel;
 class TransaksiController extends Controller
 {
 
-    public function export_excel($month, $year){
+    public function export_excel(Request $request){
+        $month = $request->input('month');
+        $year = $request->input('year');
         return Excel::download(new TransaksiExport($month, $year), 'transaksi.xlsx');
     }
 
-    public function export_csv($month, $year){
+    public function export_csv(Request $request){
+        $month = $request->input('month');
+        $year = $request->input('year');
         return Excel::download(new TransaksiExport($month, $year), 'transaksi.csv');
     }
 
-    public function export_pdf($month, $year){
+    public function export_pdf(Request $request){
+        $month = $request->input('month');
+        $year = $request->input('year');
         return Excel::download(new TransaksiExport($month, $year), 'transaksi.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
     }
     /**
@@ -32,17 +38,20 @@ class TransaksiController extends Controller
     public function index(Request $request)
     {
         $selectedMonth = $request->get('month', date('n'));
+        $selectedYear = $request->get('year', date('Y'));
         $transactions = DB::table('transaksis')->select('*')
-                                                    ->where(DB::raw('month(transaksis.created_at)'), '=', $selectedMonth)
+                                                    ->where([[DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear]])
                                                     ->orderBy('id')
                                                     ->get();
         $income_totals = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                         ->join('products', 'transaction_details.productID', '=', 'products.id')
                                         ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalNominal'))
+                                        ->where([[DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear]])
                                         ->whereNull('transaksis.nominal')
                                         ->groupBy('transaksis.id');
 
         $expense_total = DB::table('transaksis')->select('transaksis.id as id', 'transaksis.nominal as totalNominal')
+                                                ->where([[DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear]])
                                                 ->whereNotNull('transaksis.nominal')
                                                 ->union($income_totals)
                                                 ->orderBy('id')

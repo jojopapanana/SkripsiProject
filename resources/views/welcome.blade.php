@@ -1,3 +1,4 @@
+
 <x-layout title="Halaman Utama">
     <h1 class="fw-bold">HALAMAN UTAMA</h1>
 
@@ -5,8 +6,8 @@
         <div class="dashboard-card">
             <div class="d-flex justify-content-between align-items-top">
                 <div>
-                    <h4 class="fw-bold">Keuntunganmu bulan ini</h4>
-                    <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1)">Rp. 100.000</h4>
+                    <h4 class="fw-bold">Pendapatan bersihmu per hari ini</h4>
+                    <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1)">Rp. {{ number_format($pendapatan_bersih_bulanan, 0, ',', '.') }}</h4>
                 </div>
 
                 <i class="bi bi-file-bar-graph-fill fs-1"></i>
@@ -16,8 +17,8 @@
         <div class="dashboard-card">
             <div class="d-flex justify-content-between align-items-top">
                 <div>
-                    <h4 class="fw-bold">Kasmu bulan ini</h4>
-                    <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1)">Rp. 2.000.000</h4>
+                    <h4 class="fw-bold">Kasmu per hari ini</h4>
+                    <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1)">Rp. {{ number_format($kas_bulanan, 0, ',', '.') }}</h4>
                 </div>
 
                 <i class="bi bi-cash fs-1"></i>
@@ -32,10 +33,10 @@
 
     <div class="d-flex justify-content-between mt-5 mb-5">
         <button type="button" class="btn btn-primary custom-modal-btn mr-2" data-toggle="modal" data-target="#modalityPemasukan">
-            + Tambah Pemasukan
+            Tambah Pemasukan
         </button>
         <button type="button" class="btn btn-primary custom-modal-btn" data-toggle="modal" data-target="#modalityPengeluaran">
-            - Tambah Pengeluaran
+            Tambah Pengeluaran
         </button>
     </div>
 
@@ -215,29 +216,29 @@
             </div>
         </div>
     </div>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module">
-    const data = {
-        labels: @json($data->map(fn ($data) => date('Y-m-d', strtotime($data->date)))),
-        datasets: [{
-            label: 'Pendapatan dalam bulan ini',
-            backgroundColor: 'red',
-            borderColor: 'rgb(255, 99, 132)',
-            data: @json($data->map(fn ($data) => $data->total)),
-        }]
-    };
+        const data = {
+            labels: @json($data->map(fn ($data) => date('Y-m-d', strtotime($data->date)))),
+            datasets: [{
+                label: 'Pendapatan dalam bulan ini',
+                backgroundColor: 'rgba(30, 3, 66, 1)',
+                borderColor: 'rgba(30, 3, 66, 1)',
+                data: @json($data->map(fn ($data) => $data->total)),
+            }]
+        };
 
-    // console.log(data);
+        // console.log(data);
 
-    const config = {
-        type: 'bar',
-        data: data
-    };
-    const myChart = new Chart(
-        document.getElementById('myChart'),
-        config
-    );
+        const config = {
+            type: 'bar',
+            data: data
+        };
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
     </script>
 
     <!-- jQuery, Popper.js, and Bootstrap JS -->

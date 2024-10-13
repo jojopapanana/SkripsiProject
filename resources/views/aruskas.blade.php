@@ -62,12 +62,6 @@
 
 
         <p class="fw-bold">Arus Kas Investasi</p>
-        <div class="d-flex justify-content-between">
-            <p>Penerimaan kas investasi</p>
-            @foreach ($pendapatan_investasi as $p)
-                <p class="fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }}</p>
-            @endforeach
-        </div>
 
         <div class="d-flex justify-content-between" style="border-bottom: 1px solid black; border-bottom-color: black">
             <p>Biaya investasi usaha</p>
@@ -78,7 +72,7 @@
 
         <div class="d-flex justify-content-between">
             <p class="fw-bold">Total Arus Kas Investasi</p>
-            <p class="fw-bold">Rp. {{ number_format($total_arus_kas_investasi, 0, ',', '.') }}</p>
+            <p class="fw-bold">Rp. {{ number_format($total_pengeluaran_investasi, 0, ',', '.') }}</p>
         </div>
 
         <div class="d-flex justify-content-between">
@@ -97,11 +91,13 @@
         </div>
     </div>
 
+    @if ($pendapatan_operasional->count() != 0 || $pengeluaran_operasional->count() != 0 || $pengeluaran_investasi->count() != 0)
       <div class="d-flex justify-content-end mt-3 mb-5">
           <button class="btn fw-semibold" type="button" id="exportButton">
-              <a href="{{ route('aruskas_export', ['month' => request('month', date('m')), 'year' => request('year', date('Y'))]) }}" class="text-decoration-none" style="color: white">Ekspor</a>
+            Ekspor
           </button>
       </div>
+    @endif
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -110,15 +106,21 @@
             const yearDropdownButton = document.getElementById('yearDropdownButton');
             const yearDropdownItems = document.querySelectorAll('#year-dropdown-menu .dropdown-item');
 
+            let selectedMonthValue = new URLSearchParams(window.location.search).get('month') || (new Date().getMonth() + 1);
+            let selectedYearValue = new URLSearchParams(window.location.search).get('year') || new Date().getFullYear();
+
+            function updateUrl() {
+                window.location.href = `{{ route('aruskas') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+            }
+
             monthDropdownItems.forEach(function(item) {
                 item.addEventListener('click', function(event) {
                     event.preventDefault();
                     const selectedMonthText = this.textContent;
-                    const selectedMonthValue = this.getAttribute('data-value');
+                    selectedMonthValue = this.getAttribute('data-value');
                     
                     monthDropdownButton.textContent = selectedMonthText;
-                    
-                    window.location.href = `{{ route('aruskas') }}?month=${selectedMonthValue}`;
+                    updateUrl();
                 });
             });
 
@@ -126,11 +128,10 @@
                 item.addEventListener('click', function(event) {
                     event.preventDefault();
                     const selectedYearText = this.textContent;
-                    const selectedYearValue = this.getAttribute('data-value');
+                    selectedYearValue = this.getAttribute('data-value');
                     
                     yearDropdownButton.textContent = selectedYearText;
-                    
-                    // window.location.href = `{{ route('aruskas') }}?month=${selectedMonthValue}`;
+                    updateUrl();
                 });
             });
 
@@ -150,6 +151,19 @@
                     yearDropdownButton.textContent = selectedItem.textContent;
                 }
             }
+
+            function exportUrl() {
+                const exportRoute = `{{ route('aruskas_export') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+
+                window.location.href = exportRoute;
+            }
+
+            const exportButton = document.getElementById('exportButton');
+            exportButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                exportUrl();
+            });
         });
+
     </script>
 </x-layout>

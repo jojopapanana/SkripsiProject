@@ -17,7 +17,7 @@ class TransactionSeeder extends Seeder
     {
         DB::table('transaksis')->insert([
             [
-                'created_at' => Carbon::now()->format('Y-m-d'),
+                'created_at' => Carbon::now(),
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
@@ -25,7 +25,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Hasil penjualan'
             ],
             [
-                'created_at' => Carbon::now()->format('Y-m-d'),
+                'created_at' => Carbon::now(),
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
@@ -33,7 +33,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Hasil penjualan'
             ],
             [
-                'created_at' => Carbon::now()->format('Y-m-d'),
+                'created_at' => Carbon::now(),
                 'nominal' => 100000,
                 'type' => 'Pengeluaran',
                 'category' => 'Operasional',
@@ -41,7 +41,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Uang makan'
             ],
             [
-                'created_at' => Carbon::now()->format('Y-m-d'),
+                'created_at' => Carbon::now(),
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
@@ -49,7 +49,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Hasil penjualan'
             ],
             [
-                'created_at' => Carbon::now()->format('Y-m-d'),
+                'created_at' => Carbon::now(),
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
@@ -57,7 +57,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Hasil penjualan'
             ],
             [
-                'created_at' => Carbon::now()->format('Y-m-d'),
+                'created_at' => Carbon::now(),
                 'nominal' => 200000,
                 'type' => 'Pengeluaran',
                 'category' => 'Investasi',
@@ -65,7 +65,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Pembayaran'
             ],
             [
-                'created_at' => Carbon::now()->format('Y-m-d'),
+                'created_at' => Carbon::now(),
                 'nominal' => 150000,
                 'type' => 'Pengeluaran',
                 'category' => 'Operasional',
@@ -73,7 +73,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Pembayaran gaji karyawan'
             ],
             [
-                'created_at' => Carbon::now()->format('Y-m-d'),
+                'created_at' => Carbon::now(),
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
@@ -81,7 +81,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Hasil penjualan'
             ],
             [
-                'created_at' => Carbon::now()->format('Y-m-d'),
+                'created_at' => Carbon::now(),
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
@@ -89,7 +89,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Hasil penjualan'
             ],
             [
-                'created_at' => Carbon::now()->format('Y-m-d'),
+                'created_at' => Carbon::now(),
                 'nominal' => 300000,
                 'type' => 'Pengeluaran',
                 'category' => 'Investasi',

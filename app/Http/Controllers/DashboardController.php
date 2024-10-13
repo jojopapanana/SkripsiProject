@@ -18,7 +18,7 @@ class DashboardController extends Controller
     public function index()
     {
         $selectedMonth = Carbon::now()->format('m');
-        $pendapatan_kotor = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+        $pendapatan_kotor_harian = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                             ->join('products', 'transaction_details.productID', '=', 'products.id')
                                             ->select('transaksis.created_at as date', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as pendapatan'))
                                             ->where([['transaksis.type', '=', 'Pemasukan'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth]])
@@ -26,7 +26,7 @@ class DashboardController extends Controller
                                             ->get()
                                             ->keyBy('date');
 
-        $pengeluaran = DB::table('transaksis')
+        $pengeluaran_harian = DB::table('transaksis')
                                             ->select('transaksis.created_at as date', DB::raw('SUM(transaksis.nominal) as pengeluaran'))
                                             ->where([['transaksis.type', '=', 'Pengeluaran'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth]])
                                             ->groupBy('date')
@@ -35,11 +35,11 @@ class DashboardController extends Controller
 
         $finalCollection = collect();
 
-        $allDates = $pendapatan_kotor->keys()->merge($pengeluaran->keys())->unique();
+        $allDates = $pendapatan_kotor_harian->keys()->merge($pengeluaran_harian->keys())->unique();
                                             
         foreach ($allDates as $date) {
-            $pendapatan = $pendapatan_kotor->has($date) ? $pendapatan_kotor->get($date)->pendapatan : 0;
-            $nominalPengeluaran = $pengeluaran->has($date) ? $pengeluaran->get($date)->pengeluaran : 0;
+            $pendapatan = $pendapatan_kotor_harian->has($date) ? $pendapatan_kotor_harian->get($date)->pendapatan : 0;
+            $nominalPengeluaran = $pengeluaran_harian->has($date) ? $pengeluaran_harian->get($date)->pengeluaran : 0;
                                             
             $total = $pendapatan - $nominalPengeluaran;
                                             
@@ -53,9 +53,80 @@ class DashboardController extends Controller
             return (object) $item;
         });
 
+
+        $pendapatan_kotor = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+                                            ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                            ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as pendapatan'))
+                                            ->where([['transaksis.type', '=', 'Pemasukan'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth]])
+                                            ->groupBy('transactionMonth')
+                                            ->get();
+
+        $pengeluaran = DB::table('transaksis')
+                                            ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as pengeluaran'))
+                                            ->where([['transaksis.type', '=', 'Pengeluaran'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth]])
+                                            ->groupBy('transactionMonth')
+                                            ->get();
+
+        $pendapatan_kotor_bulanan = $pendapatan_kotor->isNotEmpty() ? $pendapatan_kotor->first()->pendapatan : 0;
+        $pengeluaran_kotor_bulanan = $pengeluaran->isNotEmpty() ? $pengeluaran->first()->pengeluaran : 0;
+
+        $pendapatan_bersih_bulanan = $pendapatan_kotor_bulanan - $pengeluaran_kotor_bulanan;
+
+        $pendapatan_operasional = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+                                                        ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                                        ->where([
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
+                                                            ['transaksis.category', '=', 'Operasional'], 
+                                                            ['transaksis.type', '=', 'Pemasukan'], 
+                                                            ['transaksis.method', '=', 'Tunai']])
+                                                        ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalPerMonth'))
+                                                        ->groupBy('transactionMonth')
+                                                        ->get();
+
+        $pengeluaran_operasional = DB::table('transaksis')->where([
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
+                                                            ['transaksis.category', '=', 'Operasional'], 
+                                                            ['transaksis.type', '=', 'Pengeluaran'], 
+                                                            ['transaksis.method', '=', 'Tunai']])
+                                                        ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
+                                                        ->groupBy('transactionMonth')
+                                                        ->get();
+
+        $totalPendapatan = $pendapatan_operasional->isNotEmpty() ? $pendapatan_operasional->first()->totalPerMonth : 0;
+        $totalPengeluaran = $pengeluaran_operasional->isNotEmpty() ? $pengeluaran_operasional->first()->totalPerMonth : 0;
+
+        $total_arus_kas_operasional = $totalPendapatan - $totalPengeluaran;
+
+
+        $pendapatan_investasi = DB::table('transaksis')->where([
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
+                                                            ['transaksis.category', '=', 'Finansial'], 
+                                                            ['transaksis.type', '=', 'Pemasukan'], 
+                                                            ['transaksis.method', '=', 'Tunai']])
+                                                        ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
+                                                        ->groupBy('transactionMonth')
+                                                        ->get();
+
+        $pengeluaran_investasi = DB::table('transaksis')->where([
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
+                                                            ['transaksis.category', '=', 'Finansial'], 
+                                                            ['transaksis.type', '=', 'Pengeluaran'], 
+                                                            ['transaksis.method', '=', 'Tunai']])
+                                                        ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
+                                                        ->groupBy('transactionMonth')
+                                                        ->get();
+
+        $totalPendapatanInvestasi = $pendapatan_investasi->isNotEmpty() ? $pendapatan_investasi->first()->totalPerMonth : 0;
+        $totalPengeluaranInvestasi = $pengeluaran_investasi->isNotEmpty() ? $pengeluaran_investasi->first()->totalPerMonth : 0;
+
+        $total_arus_kas_investasi = $totalPendapatanInvestasi - $totalPengeluaranInvestasi;
+        $kas_bulanan = $total_arus_kas_operasional + $total_arus_kas_investasi;
+
         $products = Product::all();
         return view('welcome', compact('products'), [
-            'data' => $data
+            'data' => $data,
+            'pendapatan_bersih_bulanan' => $pendapatan_bersih_bulanan,
+            'kas_bulanan' => $kas_bulanan
         ]);
     }
 
