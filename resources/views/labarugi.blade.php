@@ -22,7 +22,7 @@
                 <li><a class="dropdown-item" href="#" data-value="12">DESEMBER</a></li>
             </ul>
         </div>
-    
+
         <div class="dropdown">
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
               {{ now()->year }}
@@ -198,5 +198,5 @@
                 });
             });
         </script>
-    
+    </div>
 </x-layout>

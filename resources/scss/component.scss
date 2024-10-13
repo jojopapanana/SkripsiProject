@@ -5,7 +5,7 @@
     background-color: rgba(30, 3, 66, 1);
     height: 100%;
     position: fixed;
-    padding-left: 2rem;
+    left: 0;
     font-weight: 500;
     font-size: 1.3rem;
 }
@@ -19,7 +19,12 @@ td a {
     display: block;
     color: white;
     text-decoration: none;
+    margin-left: 2rem;
     font-weight: 500;
+}
+
+td .profile-bottom {
+    margin-left: 2rem;
 }
 
 td a:hover {
@@ -153,26 +158,38 @@ main{
     font-weight: 600;
     background-color: #1E0342; /* Set the background color */
     color: #ffffff; /* Set the text color to white */
-    border: none; /* Remove any default border */
+    border: 2px solid #1E0342;
     font-size: 1.25rem; /* Adjust the font size */
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 0.6rem; /* Add border-radius for rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    // transition: background-color 0.3s ease; /* Smooth transition for background color */
     outline: none; /* Disable the default outline */
     box-shadow: none; /* Remove any default box shadow */
 }
 
+.btn-closed {
+    color: #1E0342;
+    background-color: #ffffff;
+}
+
 .custom-btn:hover {
-    background-color: #E0E0E0; /* Change background color when hovered or active */
-    color: #1E0342; /* Change text color to the original background color for contrast */
+    background-color: #1E0342; /* Change background color when hovered or active */
+    color: #ffffff; /* Change text color to the original background color for contrast */
     outline: none; /* Ensure no outline appears on hover or active */
     box-shadow: none; /* Ensure no box shadow appears on hover or active */
 }
 
+.btn-closed:hover {
+    background-color: #ffffff;
+    color: #1E0342;
+}
+
 .custom-btn:focus,
-.custom-btn:active {
+.custom-btn:active,
+.btn-closed:focus,
+.btn-closed:active {
     outline: none; /* Completely remove focus outline */
     box-shadow: none; /* Remove any focus-related box shadow */
 }
@@ -383,6 +400,18 @@ main{
 }
 
 
+// navbar active-row
+.active-row {
+    background-color: #ffffff;
+    opacity: 0.7;
+}
+
+.active-row a {
+    color: #1E0342;
+    font-weight: bold;
+}
+
+
 //the overlay of the container
 .overlay-container{
     position: absolute;
@@ -501,6 +530,7 @@ main{
     width: 71.7vw;
     padding: 16px;
     margin-top: 5vh;
+    border-radius: 20px;
 }
 
 #dashboard-button-full{
