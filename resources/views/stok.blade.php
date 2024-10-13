@@ -22,7 +22,7 @@
                 <li><a class="dropdown-item" href="#" data-value="12">DESEMBER</a></li>
             </ul>
         </div>
-    
+
         <div class="dropdown">
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
               {{ now()->year }}
@@ -65,13 +65,9 @@
                                         <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal{{ $stok->stok_id }}">
                                             <i class="bi bi-pencil-fill"></i>
                                         </button>
-                                        <form action="{{ route('stok.delete', $stok->stok_id) }}" method="POST" onsubmit="return confirm('Apakah Anda ingin menghapus stok ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn p-0" style="color: red; border: none">
-                                                <i class="bi bi-trash3-fill"></i>
-                                            </button>
-                                        </form>
+                                        <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $stok->stok_id }}" class="btn p-0" style="color: red; border: none">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -79,44 +75,102 @@
                     </table>
                 </div>
             </div>
-            <div class="modal fade" id="editModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit Stok</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal fade" id="editModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered custom-modal-width">
+                    <div class="modal-content pl-3 pr-3">
+                        <div class="modal-header justify-content-center">
+                            <p class="modal-title" id="exampleModalLabel">Ubah Stok</p>
                         </div>
                         <form action="{{ route('stok.update', $stok->stok_id) }}" method="POST">
                             @csrf
                             @method('POST')
                             <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="kodeTransaksi" class="form-label">Kode Transaksi</label>
-                                    <input type="text" class="form-control" id="kodeTransaksi" placeholder="{{$stok->stok_id}}" disabled>
+                                <div class="form-group position-relative mb-2">
+                                    <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
+                                    <input type="text" class="form-control border-style" id="kodeTransaksi" placeholder="{{$stok->stok_id}}" disabled>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="nama" class="form-label">Nama Produk</label>
-                                    <input type="text" class="form-control" id="nama" name="nama" value="{{ $stok->nama }}" required>
+                                <div class="form-group position-relative mb-2">
+                                    <label for="nama" class="col-form-label" id="inputModalLabel">Nama Produk</label>
+                                    <input type="text" class="form-control border-style" id="nama" name="nama" value="{{ $stok->nama }}" required>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="nominal" class="form-label">Nominal</label>
-                                    <input type="text" class="form-control" id="nominal" name="nominal" value="{{ $stok->nominal }}" required>
+                                <div class="form-group position-relative mb-2">
+                                    <label for="nominal" class="col-form-label" id="inputModalLabel">Nominal</label>
+                                    <input type="text" class="form-control border-style" id="nominal" name="nominal" value="{{ $stok->nominal }}" required>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="sisa" class="form-label">Sisa Stok</label>
-                                    <input type="number" class="form-control" id="sisa" name="sisa" value="{{ $stok->sisa }}" required>
+                                <div class="form-group position-relative mb-4">
+                                    <label for="sisa" class="col-form-label" id="inputModalLabel">Sisa Stok</label>
+                                    <input type="number" class="form-control border-style" id="sisa" name="sisa" value="{{ $stok->sisa }}" required>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn fw-semibold" style="border: 2px solid rgba(30, 3, 66, 1)" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn fw-semibold" style="background-color: rgba(30, 3, 66, 1); color: white">Simpan Perubahan</button>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
+                                    <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
+                                </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="deleteModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <center>
+                                <i class="bi bi-exclamation-triangle-fill" style="font-size: 5rem; color: red"></i>
+                            </center>
+
+                            <h4 class="fw-bold text-center">Apakah Anda yakin ingin menghapus stok ini?</h4>
+
+                            <div class="d-flex justify-content-center gap-4 mt-4">
+                                <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-bs-dismiss="modal">Tidak</button>
+
+                                <form method="POST" action="{{ route('stok.delete', $stok->stok_id) }}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button class="btn fw-semibold" style="background-color: rgba(210, 0, 0, 1); width: 5vw; color: white">Ya</button>
+                                @csrf
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endforeach
         <br>
+
+        <!-- Alert Modal Component -->
+        <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <center>
+                            <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                        </center>
+                        <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
+                        <div class="d-flex justify-content-center gap-4 mt-4">
+                            <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-bs-dismiss="modal">Oke</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Function to change modal text and show the modal -->
+        <script>
+          var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+
+          function showAlert(text) {
+              document.getElementById('modalText').innerText = text;
+              alertModal.show();
+          }
+        </script>
+
+        @if (session('success'))
+          <script>
+              showAlert('{{ session('success') }}');
+          </script>
+        @endif
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -130,9 +184,9 @@
                         event.preventDefault();
                         const selectedMonthText = this.textContent;
                         const selectedMonthValue = this.getAttribute('data-value');
-                        
+
                         monthDropdownButton.textContent = selectedMonthText;
-                        
+
                         window.location.href = `{{ route('stok') }}?month=${selectedMonthValue}`;
                     });
                 });
@@ -142,7 +196,7 @@
                         event.preventDefault();
                         const selectedYearText = this.textContent;
                         const selectedYearValue = this.getAttribute('data-value');
-                        
+
                         yearDropdownButton.textContent = selectedYearText;
                     });
                 });
@@ -163,6 +217,13 @@
                         yearDropdownButton.textContent = selectedItem.textContent;
                     }
                 }
+            });
+
+            $(document).ready(function () {
+                $("#deleteModal").on("show.bs.modal", function (e) {
+                    var id = $(e.relatedTarget).data('target-id');
+                    $('#pass_id').val(id);
+                });
             });
         </script>
     </div>

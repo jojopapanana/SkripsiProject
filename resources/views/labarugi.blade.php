@@ -1,4 +1,4 @@
-<x-layout title="Transaksi">
+<x-layout title="Laba Rugi">
     <div class="d-flex justify-content-center" style="width: 70vw">
         <h1 class="fw-bold">LAPORAN LABA RUGI</h1>
     </div>
@@ -22,7 +22,7 @@
                 <li><a class="dropdown-item" href="#" data-value="12">DESEMBER</a></li>
             </ul>
         </div>
-    
+
         <div class="dropdown">
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
               {{ now()->year }}
@@ -133,9 +133,9 @@
                         event.preventDefault();
                         const selectedMonthText = this.textContent;
                         const selectedMonthValue = this.getAttribute('data-value');
-                        
+
                         monthDropdownButton.textContent = selectedMonthText;
-                        
+
                         window.location.href = `{{ route('labarugi') }}?month=${selectedMonthValue}`;
                     });
                 });
@@ -145,7 +145,7 @@
                         event.preventDefault();
                         const selectedYearText = this.textContent;
                         const selectedYearValue = this.getAttribute('data-value');
-                        
+
                         yearDropdownButton.textContent = selectedYearText;
 
                         // window.location.href = `{{ route('labarugi') }}?year=${selectedYearValue}`;
