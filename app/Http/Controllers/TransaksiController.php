@@ -228,21 +228,7 @@ class TransaksiController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        // dd($request->nominalTransaksi);
-
-        // $request->validate([
-        //     'nominalTransaksi' => 'nullable|integer',
-        //     'jenisTransaksi' => 'required|string',
-        //     'kategoriTransaksi' => 'required|string',
-        //     'metodeTransaksi' => 'required|string',
-        //     'deskripsiTransaksi' => 'required|string'
-        // ]);
-
-        // dd($id);
-
         $transaction = Transaksi::find($id);
-
-
 
         $transaction->update([
             'nominal' => $request->nominalTransaksi,
