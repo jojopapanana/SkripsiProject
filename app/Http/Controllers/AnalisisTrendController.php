@@ -20,6 +20,7 @@ class AnalisisTrendController extends Controller
         $rangeWaktu = $request->input('rangeWaktu'); 
 
         $produkTerbanyak = collect();
+        $produkTerdikit = collect();
 
         if ($rangeWaktu == 'bulanan') {
             $produkTerbanyak = DB::table('transaction_details')
@@ -30,6 +31,7 @@ class AnalisisTrendController extends Controller
                 ->orderBy('total_terjual', 'desc')
                 ->get()
                 ->groupBy('bulan');
+
             $produkTerdikit = DB::table('transaction_details')
                 ->select(DB::raw('MONTH(transaksis.created_at) as bulan, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
@@ -48,6 +50,7 @@ class AnalisisTrendController extends Controller
                 ->orderBy('total_terjual', 'desc')
                 ->get()
                 ->groupBy('minggu');
+
             $produkTerdikit = DB::table('transaction_details')
                 ->select(DB::raw('WEEK(transaksis.created_at) as minggu, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
@@ -66,6 +69,7 @@ class AnalisisTrendController extends Controller
                 ->orderBy('total_terjual', 'desc')
                 ->get()
                 ->groupBy('tahun');
+
             $produkTerdikit = DB::table('transaction_details')
                 ->select(DB::raw('YEAR(transaksis.created_at) as tahun, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
