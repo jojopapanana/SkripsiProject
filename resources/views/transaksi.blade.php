@@ -150,7 +150,7 @@
 
                                                         <div class="form-group position-relative mb-4">
                                                             <label for="deskripsiTransaksi" class="col-form-label" id="inputModalLabel">Deskripsi Transaksi</label>
-                                                            <textarea class="form-control border-style" name="deskripsiTransaksi" rows="3">{{ $transaction->description }}</textarea>
+                                                            <textarea class="form-control border-style" id="transactionDesc" name="deskripsiTransaksi" rows="3" required>{{ $transaction->description }}</textarea>
                                                         </div>
 
                                                         <div class="modal-footer">
