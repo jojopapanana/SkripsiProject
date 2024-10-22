@@ -253,11 +253,11 @@
     </script>
 
     <!-- Modal that should appear on page load -->
-    <div class="modal fade" id="onboarding-modal-1" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <!-- <div class="modal fade" id="onboarding-modal-1" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
             <div class="modal-content">
                 <div class="modal-body custom-modal-body">
-                    <center> <!-- Change this into App logo -->
+                    <center>
                         <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
                     </center>
                     <h4 class="fw-bold text-center" id="modalText">Selamat Datang di Website "LOGO"</h4>
@@ -284,7 +284,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <script>
         $(document).ready(function() {
@@ -299,22 +299,10 @@
         });
     </script>
 
-    <!-- Initialize popover -->
+    <!-- initialize tooltip-->
     <script>
         $(document).ready(function() {
-            // Initialize the popover
-            $('[data-toggle="popover"]').popover({
-                html: true, // Enable HTML content
-                trigger: 'click', // Trigger on click
-                placement: 'right' // Placement of popover
-            });
-
-            // Close popover when clicking outside
-            $(document).on('click', function (e) {
-                if (!$(e.target).closest('[data-toggle="popover"]').length) {
-                    $('[data-toggle="popover"]').popover('hide');
-                }
-            });
+            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 
@@ -831,10 +819,10 @@
                             <textarea class="form-control border-style" id="deskripsiTransaksi" name="deskripsiTransaksi" placeholder="Masukkan deskripsi transaksi" rows="3" required></textarea>
                         </div>
                         <div class="form-group-select position-relative mb-2">
-                            <label for="kategori" class="col-form-label center-tooltip" id="inputModalLabel">
+                            <label for="kategori" class="col-form-label d-flex align-items-center" id="inputModalLabel">
                                 Kategori
-
-                                <span data-toggle="popover" title="Select a Category" data-content="Select the category to determine the type of expenses or investments.">
+                                <!-- Flexbox will align the icon vertically in the center -->
+                                <span data-toggle="tooltip" data-placement="top" title="Operasional: Pengeluaran untuk kegiatan sehari-hari, seperti gaji, listrik, dsb.\n\nInvestasi: Pengeluaran untuk pengembangan masa depan, seperti pembelian aset atau peralatan baru." class="ml-2 d-flex align-items-center">
                                     <span class="iconify" data-icon="ri:question-fill"></span>
                                 </span>
                             </label>
