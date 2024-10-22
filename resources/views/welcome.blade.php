@@ -200,6 +200,17 @@
         </div>
     </div>
 
+    <!-- jQuery, Popper.js, and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Iconify icon -->
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+    <!-- Lottie animation -->
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+
     <!-- Alert Modal Component -->
     <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -216,7 +227,7 @@
             </div>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module">
         const data = {
@@ -241,13 +252,71 @@
         );
     </script>
 
-    <!-- jQuery, Popper.js, and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Modal that should appear on page load -->
+    <div class="modal fade" id="onboarding-modal-1" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
+            <div class="modal-content">
+                <div class="modal-body custom-modal-body">
+                    <center> <!-- Change this into App logo -->
+                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                    </center>
+                    <h4 class="fw-bold text-center" id="modalText">Selamat Datang di Website "LOGO"</h4>
+                    <div class="d-flex justify-content-end gap-4 custom-button-container">
+                        <button class="btn btn-primary custom-btn-modal-onboarding" id="nextModalButton">Lanjut</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Iconify icon -->
-    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <div class="modal fade" id="onboarding-modal-2" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
+            <div class="modal-content">
+                <div class="modal-body custom-modal-body">
+                    <h3 class="fw-bold text-center" id="modalText">Hampir Selesai</h3>
+                    <center class="custom-lottie-container">
+                        <dotlottie-player src="https://lottie.host/7901cec0-c27f-418f-bb0f-04ea92357c73/Ns0p3a4GrY.json" background="transparent" speed="1.5" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
+                    </center>
+                    <h5 class="fw-bold text-center" id="modalText">Silahkan lengkapi 'Data Stok Barang' untuk melanjutkan!</h5>
+                    <div class="d-flex justify-content-end gap-4 custom-button-container">
+                        <button class="btn btn-primary custom-btn-modal-onboarding" data-bs-dismiss="modal">Lengkapi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#onboarding-modal-1').modal('show');
+
+            $('#nextModalButton').on('click', function() {
+                $('#onboarding-modal-1').modal('hide');
+
+                // Show the second modal
+                $('#onboarding-modal-2').modal('show');
+            });
+        });
+    </script>
+
+    <!-- Initialize popover -->
+    <script>
+        $(document).ready(function() {
+            // Initialize the popover
+            $('[data-toggle="popover"]').popover({
+                html: true, // Enable HTML content
+                trigger: 'click', // Trigger on click
+                placement: 'right' // Placement of popover
+            });
+
+            // Close popover when clicking outside
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('[data-toggle="popover"]').length) {
+                    $('[data-toggle="popover"]').popover('hide');
+                }
+            });
+        });
+    </script>
 
     <!-- Function to change modal text and show the modal -->
     <script>
@@ -762,7 +831,13 @@
                             <textarea class="form-control border-style" id="deskripsiTransaksi" name="deskripsiTransaksi" placeholder="Masukkan deskripsi transaksi" rows="3" required></textarea>
                         </div>
                         <div class="form-group-select position-relative mb-2">
-                            <label for="kategori" class="col-form-label" id="inputModalLabel">Kategori</label>
+                            <label for="kategori" class="col-form-label center-tooltip" id="inputModalLabel">
+                                Kategori
+
+                                <span data-toggle="popover" title="Select a Category" data-content="Select the category to determine the type of expenses or investments.">
+                                    <span class="iconify" data-icon="ri:question-fill"></span>
+                                </span>
+                            </label>
                             <select class="form-control border-style" id="kategori" name="kategori">
                                 <option value="Operasional">Operasional</option>
                                 <option value="Investasi">Investasi</option>
