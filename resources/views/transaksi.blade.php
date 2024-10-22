@@ -109,9 +109,16 @@
                                                             @forEach($totals as $total)
                                                                 @if ($transaction->id == $total->id)
                                                                     @if ($transaction->type == 'Pemasukan')
-                                                                        <input type="text" class="form-control border-style" name="nominalTransaksi" value="{{ $total->totalNominal }}" disabled>
+                                                                    <input type="text" class="form-control border-style" 
+                                                                        id="nominalTransaksi"
+                                                                        name="nominalTransaksi" 
+                                                                        value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-" 
+                                                                        disabled>
                                                                     @else
-                                                                        <input type="text" class="form-control border-style" name="nominalTransaksi" value="{{ $total->totalNominal }}">
+                                                                    <input type="text" class="form-control border-style"
+                                                                        id="nominalTransaksi"
+                                                                        name="nominalTransaksi" 
+                                                                        value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-">
                                                                     @endif
                                                                 @endif
                                                             @endforeach
@@ -218,6 +225,98 @@
         </div>
     </div>
     @endif
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <script>
+        document.querySelectorAll('form').forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                let nominalFields = form.querySelectorAll('#nominalTransaksi');  // Select nominal and nominalPengeluaran within the current form
+
+                nominalFields.forEach(function(field) {
+                    if (field) {
+                        let originalValue = field.value
+                        field.value = originalValue.replace(/\D/g, '');  // Replace all non-numeric characters
+                        setTimeout(function() {
+                            field.value = originalValue;  // Restore the original value to display
+                        }, 0);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $('[id^="editModal-"]').on('submit', function(e) {
+            var form = $(this);
+
+            if (form.find('#nominalTransaksi').val() === '') {
+                e.preventDefault();
+                alert('Silahkan isi nominal terlebih dahulu!');
+                return;
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var originalNominalValue = ''; // Variable to store the original value
+
+            // When any edit modal is shown, store the original value
+            $(document).on('show.bs.modal', '[id^="editModal-"]', function() {
+                var modal = $(this);
+                originalNominalValue = modal.find('#nominalTransaksi').val(); // Capture the original value
+            });
+
+            // When any edit modal is hidden (closed without form submission), restore the original value
+            $(document).on('hidden.bs.modal', '[id^="editModal-"]', function() {
+                var modal = $(this);
+                modal.find('#nominalTransaksi').val(originalNominalValue); // Restore the original value
+            });
+
+            $('#nominalTransaksi').on('keydown', preventBackspace);
+            $('#nominalTransaksi').on('input', enforceNumericInput);
+            $('#nominalTransaksi').on('blur', addCurrencySuffix);
+
+            // Function to enforce numeric input
+            function enforceNumericInput(input) {
+                var input = event.target;
+                var value = input.value;
+
+                // Remove any non-digit characters except the prefix
+                var numberValue = value.slice(4).replace(/\D/g, '');
+
+                // Restrict the input to prevent entering numbers starting with 0 (except 0 itself)
+                if (numberValue.startsWith('0')) {
+                    numberValue = ''; // If first character is 0, restrict the rest of the input
+                }
+
+                // Format the number with dots as thousand separators
+                var formattedValue = numberValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+                // Update the input value with the formatted number
+                input.value = 'Rp. ' + formattedValue;
+            }
+
+            function addCurrencySuffix() {
+                var input = event.target;
+                var value = input.value;
+
+                // Ensure the value ends with ",-"
+                if (value.length > 4 && !value.endsWith(',-')) {
+                    input.value = value + ',-';
+                }
+            }
+
+            // Function to prevent deleting the "Rp. " prefix
+            function preventBackspace(input, event) {
+                // Prevent user from deleting the "Rp. " prefix using backspace or delete key
+                if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
+                    event.preventDefault();
+                }
+            }
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 
