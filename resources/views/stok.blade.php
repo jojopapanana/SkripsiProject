@@ -95,11 +95,11 @@
                                 </div>
                                 <div class="form-group position-relative mb-2">
                                     <label for="nominal" class="col-form-label" id="inputModalLabel">Nominal</label>
-                                    <input type="text" class="form-control border-style" id="nominal" name="nominal" value="{{ $stok->nominal }}" required>
+                                    <input type="text" class="form-control border-style" id="nominal" name="nominal" value="Rp. {{ number_format($stok->nominal, 0, ',', '.') }},-" required>
                                 </div>
                                 <div class="form-group position-relative mb-4">
                                     <label for="sisa" class="col-form-label" id="inputModalLabel">Sisa Stok</label>
-                                    <input type="number" class="form-control border-style" id="sisa" name="sisa" value="{{ $stok->sisa }}" required>
+                                    <input type="number" class="form-control border-style" id="sisa" name="sisa" value="{{ $stok->sisa }}" required min="1">
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
@@ -136,6 +136,118 @@
             </div>
         @endforeach
         <br>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+        <script>
+            document.querySelectorAll('form').forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    let nominalFields = form.querySelectorAll('#nominal');  // Select nominal and nominalPengeluaran within the current form
+
+                    nominalFields.forEach(function(field) {
+                        if (field) {
+                            let originalValue = field.value
+                            field.value = originalValue.replace(/\D/g, '');  // Replace all non-numeric characters
+                            setTimeout(function() {
+                                field.value = originalValue;  // Restore the original value to display
+                            }, 0);
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <script>
+            $('[id^="editModal"]').on('submit', function(e) {
+                var form = $(this);
+
+                if (form.find('#nominal').val() === '') {
+                    e.preventDefault();
+                    alert('Silahkan isi nominal terlebih dahulu!');
+                    return;
+                }
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                // Enforce minimum value of 1 for #sisa input field
+                $('#sisa').on('input', function() {
+                    let sisaValue = $(this).val();
+
+                    // If the value is less than 1, reset it to 1
+                    if (parseInt(sisaValue) < 1) {
+                        $(this).val(1);
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                var originalNominalValue = ''; // Variable to store the original value
+                var originalNamaValue = '';
+                var originalSisaStokValue = '';
+
+                // When any edit modal is shown, store the original value
+                $(document).on('show.bs.modal', '[id^="editModal"]', function() {
+                    var modal = $(this);
+                    originalNominalValue = modal.find('#nominal').val(); // Capture the original value
+                    originalNamaValue = modal.find('#nama').val();
+                    originalSisaStokValue = modal.find('#sisa').val();
+                });
+
+                // When any edit modal is hidden (closed without form submission), restore the original value
+                $(document).on('hidden.bs.modal', '[id^="editModal"]', function() {
+                    var modal = $(this);
+                    modal.find('#nominal').val(originalNominalValue); // Restore the original value
+                    modal.find('#nama').val(originalNamaValue);
+                    modal.find('#sisa').val(originalSisaStokValue);
+                });
+
+                $('#nominal').on('keydown', preventBackspace);
+                $('#nominal').on('input', enforceNumericInput);
+                $('#nominal').on('blur', addCurrencySuffix);
+
+                // Function to enforce numeric input
+                function enforceNumericInput(input) {
+                    var input = event.target;
+                    var value = input.value;
+
+                    // Remove any non-digit characters except the prefix
+                    var numberValue = value.slice(4).replace(/\D/g, '');
+
+                    // Restrict the input to prevent entering numbers starting with 0 (except 0 itself)
+                    if (numberValue.startsWith('0')) {
+                        numberValue = ''; // If first character is 0, restrict the rest of the input
+                    }
+
+                    // Format the number with dots as thousand separators
+                    var formattedValue = numberValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+                    // Update the input value with the formatted number
+                    input.value = 'Rp. ' + formattedValue;
+                }
+
+                function addCurrencySuffix() {
+                    var input = event.target;
+                    var value = input.value;
+
+                    // Ensure the value ends with ",-"
+                    if (value.length > 4 && !value.endsWith(',-')) {
+                        input.value = value + ',-';
+                    }
+                }
+
+                // Function to prevent deleting the "Rp. " prefix
+                function preventBackspace(input, event) {
+                    // Prevent user from deleting the "Rp. " prefix using backspace or delete key
+                    if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
+                        event.preventDefault();
+                    }
+                }
+            });
+        </script>
 
         <!-- Alert Modal Component -->
         <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">

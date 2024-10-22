@@ -93,7 +93,7 @@
                                             <button class="btn" type="button" id="decrement">
                                                 <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
                                             </button>
-                                            <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang[]" id="jumlahBarang" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                            <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang[]" id="jumlahBarang" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
                                             <button class="btn" type="button" id="increment">
                                                 <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
                                             </button>
@@ -173,7 +173,7 @@
                                     <button class="btn" type="button" id="decrementPengeluaran">
                                         <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
                                     </button>
-                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
                                     <button class="btn" type="button" id="incrementPengeluaran">
                                         <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
                                     </button>
@@ -200,6 +200,17 @@
         </div>
     </div>
 
+    <!-- jQuery, Popper.js, and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Iconify icon -->
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+    <!-- Lottie animation -->
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+
     <!-- Alert Modal Component -->
     <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -216,7 +227,7 @@
             </div>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module">
         const data = {
@@ -241,13 +252,280 @@
         );
     </script>
 
-    <!-- jQuery, Popper.js, and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Modal that should appear on page load -->
+    <div class="modal fade" id="onboarding-modal-1" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
+            <div class="modal-content">
+                <div class="modal-body custom-modal-body">
+                    <center>
+                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                    </center>
+                    <h4 class="fw-bold text-center" id="modalText">Selamat Datang di Website "LOGO"</h4>
+                    <div class="d-flex justify-content-end gap-4 custom-button-container">
+                        <button class="btn btn-primary custom-btn-modal-onboarding" id="nextModalButton">Lanjut</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Iconify icon -->
-    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <div class="modal fade" id="onboarding-modal-2" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
+            <div class="modal-content">
+                <div class="modal-body custom-modal-body">
+                    <h3 class="fw-bold text-center" id="modalText">Hampir Selesai</h3>
+                    <center class="custom-lottie-container">
+                        <dotlottie-player src="https://lottie.host/7901cec0-c27f-418f-bb0f-04ea92357c73/Ns0p3a4GrY.json" background="transparent" speed="1.5" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
+                    </center>
+                    <h5 class="fw-bold text-center" id="modalText">Silahkan lengkapi 'Data Stok Barang' untuk melanjutkan!</h5>
+                    <div class="d-flex justify-content-end gap-4 custom-button-container">
+                        <button class="btn btn-primary custom-btn-modal-onboarding" id="nextModalButton-1">Lengkapi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="onboarding-modal-3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered custom-modal-width" role="document">
+            <div class="modal-content pl-3 pr-3">
+                <div class="modal-header justify-content-center">
+                    <p class="modal-title" id="exampleModalLabel">Daftar Stok Barang</p>
+                </div>
+                <div class="modal-body">
+                    <form id="formInputOnboarding" action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
+                        @csrf
+                        <div class="form-group-select position-relative mb-2 mt-4">
+                            <div class=" d-flex justify-content-between align-items-center">
+                                <label for="daftarBarang" class="col-form-label" id="inputModalLabel">Daftar Barang</label>
+                                <button class="btn p-0 d-flex align-items-center" type="button" id="addDaftarBarangOnboarding">
+                                    <span class="ms-2 mt-1 mb-1 iconify" data-icon="ph:plus-fill" data-width="20" data-height="20"></span>
+                                    <span class="ms-1 me-2">Tambah Barang</span>
+                                </button>
+                            </div>
+                                <table class="table mt-2" id="barangTableOnboarding">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">No.</th>
+                                        <th scope="col">Jenis Barang</th>
+                                        <th scope="col">Jumlah</th>
+                                        <th scope="col">Harga Satuan</th>
+                                        <th scope="col">Aksi</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>
+                                            <input type="text" class="form-control border-style-jenisBarang" id="namaBarangOnboarding" name="namaBarangOnboarding[]" value="None" required>
+                                        </td>
+                                        <td>
+                                            <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
+                                                <button class="btn decrement" type="button">
+                                                    <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
+                                                </button>
+                                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center jumlahBarang" name="jumlahBarangOnboarding[]" id="jumlahBarangOnboarding" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
+                                                <button class="btn increment" type="button">
+                                                    <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control border-style-jenisBarang" id="namaBarangOnboarding" name="namaBarangOnboarding[]" value="None" required>
+                                        </td>
+                                        <td>
+                                        <!-- Move the delete button into its own column to avoid overlapping -->
+                                        <button type="button" class="btn delete-button">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
+                                    </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- three steps onboarding-->
+    <script>
+        $(document).ready(function() {
+            $('#onboarding-modal-1').modal('show');
+
+            $('#nextModalButton').on('click', function() {
+                $('#onboarding-modal-1').modal('hide');
+
+                // Show the second modal
+                $('#onboarding-modal-2').modal('show');
+            });
+
+            $('#nextModalButton-1').on('click', function() {
+                $('#onboarding-modal-2').modal('hide');
+
+                // Show the second modal
+                $('#onboarding-modal-3').modal('show');
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Enforce minimum value of 1 for dynamically added #jumlahBarang and #jumlahBarangPengeluaran input fields
+            $(document).on('input', '#jumlahBarang, #jumlahBarangPengeluaran, #jumlahBarangOnboarding', function() {
+                let sisaValue = $(this).val();
+
+                // If the value is less than 1, reset it to 1
+                if (parseInt(sisaValue) < 1 || isNaN(sisaValue)) {
+                    $(this).val(1);
+                }
+            });
+        });
+    </script>
+
+    <!-- add daftar barang onboarding-->
+    <script>
+        $(document).ready(function () {
+            // Prevent increment/decrement if the namaBarangOnboarding[] field is empty or set to "None"
+            function preventInvalidOperations(event) {
+                var row = $(event.target).closest('tr'); // Find the closest row
+                var jenisBarangInput = row.find('input[name="namaBarangOnboarding[]"]'); // Select the corresponding namaBarang input
+                var jenisBarang = jenisBarangInput.val(); // Get the value of the input
+
+                // Check if the input is undefined or empty or contains "None"
+                if (jenisBarang.trim() === '' || jenisBarang === 'None') {
+                    alert('Silahkan ketik nama barang terlebih dahulu!');
+                    event.preventDefault();  // Prevent the action (increment, decrement, etc.)
+                    return false;
+                }
+
+                return true;
+            }
+
+            // Event to add a new row to the onboarding table
+            $('#addDaftarBarangOnboarding').on('click', function () {
+                var rowCount = $('#barangTableOnboarding tbody tr').length + 1;
+
+                var newRow = `
+                    <tr data-input-value="1">
+                        <!-- Set the initial input value for this row -->
+                        <th scope="row">${rowCount}</th>
+                        <td>
+                            <input type="text" class="form-control border-style-jenisBarang" name="namaBarangOnboarding[]" id="namaBarangOnboarding" value="None" required>
+                        </td>
+                        <td>
+                            <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
+                                <button class="btn decrement" type="button">
+                                    <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
+                                </button>
+                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center jumlahBarang" name="jumlahBarangOnboarding[]" id="jumlahBarangOnboarding" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <button class="btn increment" type="button">
+                                    <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
+                                </button>
+                            </div>
+                            <div class="overlay-button">
+                                <button type="button" class="btn delete-button">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                $('#barangTableOnboarding tbody').append(newRow);
+            });
+
+            // Event delegation for increment and decrement buttons
+            $(document).on('click', '.increment', function (event) {
+                if (!preventInvalidOperations(event)) {
+                    return; // Stop further execution if preventInvalidOperations returns false
+                }
+
+                var input = $(this).closest('tr').find('#jumlahBarangOnboarding');
+                var currentVal = parseInt(input.val()) || 1;
+                input.val(currentVal + 1);
+            });
+
+            $(document).on('click', '.decrement', function (event) {
+                if (!preventInvalidOperations(event)) {
+                    return; // Stop further execution if preventInvalidOperations returns false
+                }
+
+                var input = $(this).closest('tr').find('#jumlahBarangOnboarding');
+                var currentVal = parseInt(input.val()) || 1;
+                if (currentVal > 1) {
+                    input.val(currentVal - 1);
+                }
+            });
+
+            // Event delegation to handle delete button
+            $(document).on('click', '.delete-button', function () {
+                var rowCount = $('#barangTableOnboarding tbody tr').length;
+
+                // If there's only one row left, prevent deletion
+                if (rowCount === 1) {
+                    alert('Baris terakhir Daftar Barang tidak dapat dihapus!');
+                    return false;  // Prevent further execution
+                }
+
+                // Remove the row if there are multiple rows
+                $(this).closest('tr').remove();
+
+                // Update the row numbers after deleting a row
+                $('#barangTableOnboarding tbody tr').each(function (index) {
+                    $(this).find('th').text(index + 1);
+                });
+            });
+
+            $(document).on('input', 'input[name="namaBarangOnboarding[]"]', function() {
+                var currentInput = $(this);
+                var currentValue = currentInput.val().trim();
+
+                if (currentValue === '') {
+                    return; // If the input is empty, don't run the duplicate check
+                }
+
+                // Flag to track if we find a duplicate
+                var isDuplicate = false;
+
+                // Loop through all rows and check for duplicates
+                $('input[name="namaBarangOnboarding[]"]').each(function() {
+                    var otherInput = $(this);
+
+                    // Skip the current input being typed into
+                    if (otherInput.is(currentInput)) {
+                        return;
+                    }
+
+                    // If another input has the same value, set the duplicate flag
+                    if (otherInput.val().trim() === currentValue) {
+                        isDuplicate = true;
+                        return false; // Exit the loop early
+                    }
+                });
+
+                // If a duplicate is found, show an alert
+                if (isDuplicate) {
+                    alert('Nama barang sudah ada! Silakan masukkan nama barang yang berbeda.');
+                    currentInput.val('None');
+                }
+            });
+
+            // Prevent operations on jumlahBarangOnboarding[] if namaBarangOnboarding[] is empty or "None"
+            $(document).on('keydown', 'input[name="jumlahBarangOnboarding[]"]', preventInvalidOperations);
+        });
+    </script>
+
+    <!-- initialize tooltip-->
+    <script>
+        $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 
     <!-- Function to change modal text and show the modal -->
     <script>
@@ -337,24 +615,10 @@
 
                 // Retrieve the previous value from the data-attribute before making changes
                 var prevValue = row.attr('data-input-value') || 1;
-
-                if (isNaN(currVal) || currVal.trim() === '') {
-                    alert('Masukkan hanya angka!');
-                    input.value = prevValue; // Use row's stored data-input-value
-                    return;
-                }
-
                 var value = parseInt(input.value) || 0;
                 var jenisBarang = row.find('select[name="jenisBarang[]"]');
                 var selectedOption = jenisBarang.find('option:selected');
                 var productStock = parseInt(selectedOption.data('stock')) || 1;
-
-                // Ensure the value is not less than 1
-                if (value < 1) {
-                    alert('Jumlah tidak dapat kurang dari 1');
-                    input.value = prevValue; // Use row's stored data-input-value
-                    return;
-                }
 
                 // Limit the input value to not exceed productStock
                 if (value > productStock) {
@@ -428,7 +692,7 @@
                 // If there is only one row, show an alert and prevent deletion
                 if (rowCount === 1) {
                     alert('Baris terakhir Daftar Barang tidak dapat dihapus!');
-                    return; // Stop further execution to prevent deletion
+                    return false; // Stop further execution to prevent deletion
                 }
 
                 var row = $(this).closest('tr');
@@ -646,7 +910,6 @@
 
                 if (deskripsiValue != 'Lainnya') {
                     $('#jumlahBarangPengeluaran').on('keydown', preventDeletionPengeluaran);
-                    $('#jumlahBarangPengeluaran').on('input', inputPengeluaranCustom);
                 }
 
                 if (deskripsiValue === 'Tambah Stok Baru') {
@@ -654,26 +917,6 @@
                     $('#hargaJualSatuan').on('input', enforceNumericInput);
                     $('#hargaJualSatuan').on('blur', addCurrencySuffix);
                 }
-            }
-
-            function inputPengeluaranCustom(event) {
-                var input = event.target;
-                var currVal = input.value;
-                var value = parseInt(input.value) || 0;
-
-                if (isNaN(currVal) || currVal.trim() === '') {
-                    alert('Masukkan hanya angka!');
-                    input.value = globalInputValue;
-                    return;
-                }
-
-                if (value < 1) {
-                    alert('Jumlah tidak dapat kurang dari 1');
-                    input.value = globalInputValue;
-                    return;
-                }
-
-                globalInputValue = input.value
             }
 
             function preventDeletionPengeluaran(event) {
@@ -762,7 +1005,13 @@
                             <textarea class="form-control border-style" id="deskripsiTransaksi" name="deskripsiTransaksi" placeholder="Masukkan deskripsi transaksi" rows="3" required></textarea>
                         </div>
                         <div class="form-group-select position-relative mb-2">
-                            <label for="kategori" class="col-form-label" id="inputModalLabel">Kategori</label>
+                            <label for="kategori" class="col-form-label d-flex align-items-center" id="inputModalLabel">
+                                Kategori
+                                <!-- Flexbox will align the icon vertically in the center -->
+                                <span data-toggle="tooltip" data-placement="top" title="Operasional: Pengeluaran untuk kegiatan sehari-hari, seperti gaji, listrik, dsb.\n\nInvestasi: Pengeluaran untuk pengembangan masa depan, seperti pembelian aset atau peralatan baru." class="ml-2 d-flex align-items-center">
+                                    <span class="iconify" data-icon="ri:question-fill"></span>
+                                </span>
+                            </label>
                             <select class="form-control border-style" id="kategori" name="kategori">
                                 <option value="Operasional">Operasional</option>
                                 <option value="Investasi">Investasi</option>
@@ -802,7 +1051,7 @@
                                     <button class="btn" type="button" id="decrementPengeluaran">
                                         <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
                                     </button>
-                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
                                     <button class="btn" type="button" id="incrementPengeluaran">
                                         <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
                                     </button>
@@ -839,7 +1088,7 @@
                                     <button class="btn" type="button" id="decrementPengeluaran">
                                         <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
                                     </button>
-                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
                                     <button class="btn" type="button" id="incrementPengeluaran">
                                         <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
                                     </button>
