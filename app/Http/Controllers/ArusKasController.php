@@ -96,6 +96,7 @@ class ArusKasController extends Controller
 
         return $pdf->download('aruskas.pdf');
     }
+    
     public function index(Request $request)
     {
         $selectedMonth = $request->get('month', date('n'));
