@@ -99,7 +99,15 @@
                                 </div>
                                 <div class="form-group position-relative mb-4">
                                     <label for="sisa" class="col-form-label" id="inputModalLabel">Sisa Stok</label>
-                                    <input type="number" class="form-control border-style" id="sisa" name="sisa" value="{{ $stok->sisa }}" required min="1">
+                                    <div class="input-group input-group-outline border-style">
+                                        <button class="btn decrement" type="button">
+                                            <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
+                                        </button>
+                                        <input type="text" class="form-control border-style text-center" id="sisa" name="sisa" value="{{ $stok->sisa }}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
+                                        <button class="btn increment" type="button">
+                                            <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
@@ -138,6 +146,7 @@
         <br>
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 
         <script>
             document.querySelectorAll('form').forEach(function(form) {
@@ -246,6 +255,21 @@
                         event.preventDefault();
                     }
                 }
+
+                // Event delegation for increment and decrement buttons inside the modal
+                $(document).on('click', '.increment', function () {
+                    var input = $(this).closest('.input-group').find('input#sisa');
+                    var currentVal = parseInt(input.val()) || 1;
+                    input.val(currentVal + 1);
+                });
+
+                $(document).on('click', '.decrement', function () {
+                    var input = $(this).closest('.input-group').find('input#sisa');
+                    var currentVal = parseInt(input.val()) || 1;
+                    if (currentVal > 1) {
+                        input.val(currentVal - 1);
+                    }
+                });
             });
         </script>
 
