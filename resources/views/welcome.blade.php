@@ -180,7 +180,7 @@
                                 </div>
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField">
-                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
+                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
                                 <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
                             </div>
                             <div class="form-group-select position-relative mb-4">
@@ -286,7 +286,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="onboarding-modal-3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="onboarding-modal-3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered custom-modal-width" role="document">
             <div class="modal-content pl-3 pr-3">
                 <div class="modal-header justify-content-center">
@@ -295,6 +295,7 @@
                 <div class="modal-body">
                     <form id="formInputOnboarding" action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
                         @csrf
+                        <input type="hidden" name="modalType" value="onboarding">
                         <div class="form-group-select position-relative mb-2 mt-4">
                             <div class=" d-flex justify-content-between align-items-center">
                                 <label for="daftarBarang" class="col-form-label" id="inputModalLabel">Daftar Barang</label>
@@ -351,24 +352,42 @@
         </div>
     </div>
 
+    <button id="resetOnboarding">Reset Onboarding</button>
+
+<script>
+    document.getElementById('resetOnboarding').addEventListener('click', function() {
+        // Remove the onboarding flag
+        localStorage.removeItem('onboardingCompleted');
+        alert('Onboarding has been reset.');
+    });
+</script>
+
     <!-- three steps onboarding-->
     <script>
         $(document).ready(function() {
-            $('#onboarding-modal-1').modal('show');
+            // Check if the onboarding has already been shown using localStorage
+            if (!localStorage.getItem('onboardingCompleted')) {
+                // Show the first modal
+                $('#onboarding-modal-1').modal('show');
 
-            $('#nextModalButton').on('click', function() {
-                $('#onboarding-modal-1').modal('hide');
+                // When the user clicks the "next" button on the first modal
+                $('#nextModalButton').on('click', function() {
+                    $('#onboarding-modal-1').modal('hide');
+                    $('#onboarding-modal-2').modal('show'); // Show the second modal
+                });
 
-                // Show the second modal
-                $('#onboarding-modal-2').modal('show');
-            });
+                // When the user clicks the "next" button on the second modal
+                $('#nextModalButton-1').on('click', function() {
+                    $('#onboarding-modal-2').modal('hide');
+                    $('#onboarding-modal-3').modal('show'); // Show the third modal
+                });
 
-            $('#nextModalButton-1').on('click', function() {
-                $('#onboarding-modal-2').modal('hide');
-
-                // Show the second modal
-                $('#onboarding-modal-3').modal('show');
-            });
+                // When the user completes the onboarding (submit the form in the third modal)
+                $('#formInputOnboarding').on('submit', function() {
+                    // Set a flag in localStorage to mark onboarding as completed
+                    localStorage.setItem('onboardingCompleted', 'true');
+                });
+            }
         });
     </script>
 
@@ -620,7 +639,7 @@
         // Select all forms on the page, including both modals
         document.querySelectorAll('form').forEach(function(form) {
             form.addEventListener('submit', function(event) {
-                let nominalFields = form.querySelectorAll('#nominal, #nominalPengeluaran, #hargaJualSatuan, #nominalHargaBarangOnboarding');  // Select nominal and nominalPengeluaran within the current form
+                let nominalFields = form.querySelectorAll('#nominal, #nominalPengeluaran, #hargaJualSatuan');  // Select nominal and nominalPengeluaran within the current form
 
                 nominalFields.forEach(function(field) {
                     if (field) {
@@ -630,6 +649,24 @@
                             field.value = originalValue;  // Restore the original value to display
                         }, 0);
                     }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Attach form submit event handler
+            $('form').on('submit', function(event) {
+                // Find all rows with input[name="nominalHargaBarangOnboarding[]"]
+                $(this).find('input[name="nominalHargaBarangOnboarding[]"]').each(function() {
+                    var currentField = $(this);
+                    var originalValue = currentField.val();
+                    var cleanedValue = originalValue.replace(/\D/g, '');
+                    currentField.val(cleanedValue);
+                    setTimeout(function() {
+                        currentField.val(originalValue); // Restore original value with non-numeric characters
+                    }, 0);
                 });
             });
         });
@@ -1131,7 +1168,7 @@
                                 </div>
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField">
-                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
+                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
                                 <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
                             </div>
                             <div class="form-group-select position-relative mb-4">
@@ -1168,7 +1205,7 @@
                                 </div>
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField">
-                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
+                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
                                 <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField2">

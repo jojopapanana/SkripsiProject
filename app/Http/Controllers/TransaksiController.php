@@ -183,13 +183,42 @@ class TransaksiController extends Controller
         ]);
     }
 
+    private function tambahStokBaruOnboarding(Request $request) {
+        $validatedData = $request->validate([
+            'namaBarangOnboarding' => 'required|array',
+            'namaBarangOnboarding.*' => 'required|string',
+            'jumlahBarangOnboarding' => 'required|array',
+            'jumlahBarangOnboarding.*' => 'required|integer|min:1',
+            'nominalHargaBarangOnboarding' => 'required|array',
+            'nominalHargaBarangOnboarding.*' => 'required|integer|min:1',
+        ]);
+
+        // Loop over each product and insert into the 'products' table
+        foreach ($validatedData['namaBarangOnboarding'] as $index => $productName) {
+            // Get the corresponding values for productStock and productPrice
+            $productStock = $validatedData['jumlahBarangOnboarding'][$index];
+            $productPrice = $validatedData['nominalHargaBarangOnboarding'][$index];
+
+            // Insert the product into the products table
+            DB::table('products')->insert([
+                'productName' => $productName,
+                'productStock' => $productStock,
+                'productPrice' => $productPrice,
+            ]);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        // handle Stok initialization onboarding
+        if ($request->input('modalType') === 'onboarding') {
+            $this->tambahStokBaruOnboarding($request);
+
         // Handle Pemasukan
-        if ($request->input('modalType') === 'pemasukan') {
+        } else if ($request->input('modalType') === 'pemasukan') {
             $this->tambahPemasukan($request);
 
         // Handle Pengeluaran
