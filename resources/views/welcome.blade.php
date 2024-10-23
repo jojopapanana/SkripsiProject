@@ -200,18 +200,6 @@
         </div>
     </div>
 
-    <!-- jQuery, Popper.js, and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Iconify icon -->
-    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
-
-    <!-- Lottie animation -->
-    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
-
-    <!-- Alert Modal Component -->
     <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -228,29 +216,6 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module">
-        const data = {
-            labels: @json($data->map(fn ($data) => date('Y-m-d', strtotime($data->date)))),
-            datasets: [{
-                label: 'Pendapatan dalam bulan ini',
-                backgroundColor: 'rgba(30, 3, 66, 1)',
-                borderColor: 'rgba(30, 3, 66, 1)',
-                data: @json($data->map(fn ($data) => $data->total)),
-            }]
-        };
-
-        // console.log(data);
-
-        const config = {
-            type: 'bar',
-            data: data
-        };
-        const myChart = new Chart(
-            document.getElementById('myChart'),
-            config
-        );
-    </script>
 
     <!-- Modal that should appear on page load -->
     <div class="modal fade" id="onboarding-modal-1" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
@@ -361,6 +326,32 @@
             alert('Onboarding has been reset.');
         });
     </script> -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+
+    <script type="module">
+        const data = {
+            labels: @json($data->map(fn ($data) => date('Y-m-d', strtotime($data->date)))),
+            datasets: [{
+                label: 'Pendapatan dalam bulan ini',
+                backgroundColor: 'rgba(30, 3, 66, 1)',
+                borderColor: 'rgba(30, 3, 66, 1)',
+                data: @json($data->map(fn ($data) => $data->total)),
+            }]
+        };
+
+        // console.log(data);
+
+        const config = {
+            type: 'bar',
+            data: data
+        };
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+    </script>
 
     <!-- three steps onboarding-->
     <script>

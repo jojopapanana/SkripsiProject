@@ -111,7 +111,6 @@
         <p>Ups, belum ada penjualan!</p>
     @endif
     <br>
-
     
     <script type="module">
         const data = {
