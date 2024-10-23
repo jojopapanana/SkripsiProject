@@ -180,7 +180,7 @@
                                 </div>
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField">
-                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
+                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
                                 <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
                             </div>
                             <div class="form-group-select position-relative mb-4">
@@ -286,7 +286,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="onboarding-modal-3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="onboarding-modal-3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered custom-modal-width" role="document">
             <div class="modal-content pl-3 pr-3">
                 <div class="modal-header justify-content-center">
@@ -295,6 +295,7 @@
                 <div class="modal-body">
                     <form id="formInputOnboarding" action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
                         @csrf
+                        <input type="hidden" name="modalType" value="onboarding">
                         <div class="form-group-select position-relative mb-2 mt-4">
                             <div class=" d-flex justify-content-between align-items-center">
                                 <label for="daftarBarang" class="col-form-label" id="inputModalLabel">Daftar Barang</label>
@@ -317,7 +318,7 @@
                                     <tr>
                                         <th scope="row">1</th>
                                         <td>
-                                            <input type="text" class="form-control border-style-jenisBarang" id="namaBarangOnboarding" name="namaBarangOnboarding[]" value="None" required>
+                                            <input type="text" class="form-control border-style-jenisBarang-onboarding" name="namaBarangOnboarding[]" id="namaBarangOnboarding"  value="None" required>
                                         </td>
                                         <td>
                                             <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
@@ -331,14 +332,13 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control border-style-jenisBarang" id="namaBarangOnboarding" name="namaBarangOnboarding[]" value="None" required>
+                                            <input type="text" class="form-control border-style-jenisBarang-onboarding" name="nominalHargaBarangOnboarding[]" id="nominalHargaBarangOnboarding" value="Rp. " required>
                                         </td>
-                                        <td>
-                                        <!-- Move the delete button into its own column to avoid overlapping -->
-                                        <button type="button" class="btn delete-button">
-                                            <i class="bi bi-trash3-fill"></i>
-                                        </button>
-                                    </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn delete-button">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -352,31 +352,65 @@
         </div>
     </div>
 
+    <!-- <button id="resetOnboarding">Reset Onboarding</button> //uncomment this to reset local storage for testing
+
+    <script>
+        document.getElementById('resetOnboarding').addEventListener('click', function() {
+            // Remove the onboarding flag
+            localStorage.removeItem('onboardingCompleted');
+            alert('Onboarding has been reset.');
+        });
+    </script> -->
+
     <!-- three steps onboarding-->
     <script>
         $(document).ready(function() {
-            $('#onboarding-modal-1').modal('show');
+            // Check if the onboarding has already been shown using localStorage
+            if (localStorage.getItem('onboardingCompleted')) { // add "!" in front with the Reset Onboarding button above for testing
+                // Show the first modal
+                $('#onboarding-modal-1').modal('show');
 
-            $('#nextModalButton').on('click', function() {
-                $('#onboarding-modal-1').modal('hide');
+                // When the user clicks the "next" button on the first modal
+                $('#nextModalButton').on('click', function() {
+                    $('#onboarding-modal-1').modal('hide');
+                    $('#onboarding-modal-2').modal('show'); // Show the second modal
+                });
 
-                // Show the second modal
-                $('#onboarding-modal-2').modal('show');
-            });
+                // When the user clicks the "next" button on the second modal
+                $('#nextModalButton-1').on('click', function() {
+                    $('#onboarding-modal-2').modal('hide');
+                    $('#onboarding-modal-3').modal('show'); // Show the third modal
+                });
 
-            $('#nextModalButton-1').on('click', function() {
-                $('#onboarding-modal-2').modal('hide');
+                // When the user completes the onboarding (submit the form in the third modal)
+                $('#formInputOnboarding').on('submit', function() {
+                    // Set a flag in localStorage to mark onboarding as completed
+                    localStorage.setItem('onboardingCompleted', 'true');
+                });
+            }
+        });
+    </script>
 
-                // Show the second modal
-                $('#onboarding-modal-3').modal('show');
+    <script>
+        $(document).ready(function() {
+            // Enforce minimum value of 1 for dynamically added input fields
+            $(document).on('input', 'input[name="jumlahBarang[]"], input[name="jumlahBarangOnboarding[]"]', function() {
+                var input = $(this).closest('tr').find('input[name="jumlahBarangOnboarding[]"], input[name="jumlahBarang[]"]');
+
+                let sisaValue = input.val();
+
+                // If the value is less than 1, reset it to 1
+                if (parseInt(sisaValue) < 1 || isNaN(sisaValue)) {
+                    $(this).val(1);
+                }
             });
         });
     </script>
 
     <script>
         $(document).ready(function() {
-            // Enforce minimum value of 1 for dynamically added #jumlahBarang and #jumlahBarangPengeluaran input fields
-            $(document).on('input', '#jumlahBarang, #jumlahBarangPengeluaran, #jumlahBarangOnboarding', function() {
+            // Enforce minimum value of 1 for dynamically added input fields
+            $(document).on('input', '#jumlahBarangPengeluaran', function() {
                 let sisaValue = $(this).val();
 
                 // If the value is less than 1, reset it to 1
@@ -387,9 +421,63 @@
         });
     </script>
 
-    <!-- add daftar barang onboarding-->
+    <!-- daftar barang onboarding event handler -->
     <script>
         $(document).ready(function () {
+            // Apply input formatting to nominalHargaBarangOnboarding inputs
+            $(document).on('keydown', 'input[name="nominalHargaBarangOnboarding[]"]', function (event) {
+                if (!preventInvalidOperations(event)) {
+                    return; // Stop further execution if preventInvalidOperations returns false
+                }
+
+                preventBackspace(this, event);
+            });
+
+            $(document).on('input', 'input[name="nominalHargaBarangOnboarding[]"]', function () {
+                enforceNumericInput(this);
+            });
+
+            $(document).on('blur', 'input[name="nominalHargaBarangOnboarding[]"]', function () {
+                addCurrencySuffix(this);
+            });
+
+            // Function to enforce numeric input
+            function enforceNumericInput(input) {
+                var value = input.value;
+
+                // Remove any non-digit characters except the prefix
+                var numberValue = value.slice(4).replace(/\D/g, '');
+
+                // Restrict the input to prevent entering numbers starting with 0 (except 0 itself)
+                if (numberValue.startsWith('0')) {
+                    numberValue = ''; // If first character is 0, restrict the rest of the input
+                }
+
+                // Format the number with dots as thousand separators
+                var formattedValue = numberValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+                // Update the input value with the formatted number
+                input.value = 'Rp. ' + formattedValue;
+            }
+
+            // Function to add ",-" suffix on blur
+            function addCurrencySuffix(input) {
+                var value = input.value;
+
+                // Ensure the value ends with ",-"
+                if (value.length > 4 && !value.endsWith(',-')) {
+                    input.value = value + ',-';
+                }
+            }
+
+            // Function to prevent deleting the "Rp. " prefix
+            function preventBackspace(input, event) {
+                // Prevent user from deleting the "Rp. " prefix using backspace or delete key
+                if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
+                    event.preventDefault();
+                }
+            }
+
             // Prevent increment/decrement if the namaBarangOnboarding[] field is empty or set to "None"
             function preventInvalidOperations(event) {
                 var row = $(event.target).closest('tr'); // Find the closest row
@@ -415,27 +503,31 @@
                         <!-- Set the initial input value for this row -->
                         <th scope="row">${rowCount}</th>
                         <td>
-                            <input type="text" class="form-control border-style-jenisBarang" name="namaBarangOnboarding[]" id="namaBarangOnboarding" value="None" required>
+                            <input type="text" class="form-control border-style-jenisBarang-onboarding" name="namaBarangOnboarding[]" value="None" required>
                         </td>
                         <td>
                             <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
                                 <button class="btn decrement" type="button">
                                     <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
                                 </button>
-                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center jumlahBarang" name="jumlahBarangOnboarding[]" id="jumlahBarangOnboarding" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center jumlahBarang" name="jumlahBarangOnboarding[]" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
                                 <button class="btn increment" type="button">
                                     <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
                                 </button>
                             </div>
-                            <div class="overlay-button">
-                                <button type="button" class="btn delete-button">
-                                    <i class="bi bi-trash3-fill"></i>
-                                </button>
-                            </div>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control border-style-jenisBarang-onboarding" name="nominalHargaBarangOnboarding[]" value="Rp. " required>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn delete-button">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
                         </td>
                     </tr>
                 `;
 
+                // Append the new row to the table body
                 $('#barangTableOnboarding tbody').append(newRow);
             });
 
@@ -445,7 +537,7 @@
                     return; // Stop further execution if preventInvalidOperations returns false
                 }
 
-                var input = $(this).closest('tr').find('#jumlahBarangOnboarding');
+                var input = $(this).closest('tr').find('input[name="jumlahBarangOnboarding[]"]');
                 var currentVal = parseInt(input.val()) || 1;
                 input.val(currentVal + 1);
             });
@@ -455,7 +547,7 @@
                     return; // Stop further execution if preventInvalidOperations returns false
                 }
 
-                var input = $(this).closest('tr').find('#jumlahBarangOnboarding');
+                var input = $(this).closest('tr').find('input[name="jumlahBarangOnboarding[]"]');
                 var currentVal = parseInt(input.val()) || 1;
                 if (currentVal > 1) {
                     input.val(currentVal - 1);
@@ -557,6 +649,24 @@
                             field.value = originalValue;  // Restore the original value to display
                         }, 0);
                     }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Attach form submit event handler
+            $('form').on('submit', function(event) {
+                // Find all rows with input[name="nominalHargaBarangOnboarding[]"]
+                $(this).find('input[name="nominalHargaBarangOnboarding[]"]').each(function() {
+                    var currentField = $(this);
+                    var originalValue = currentField.val();
+                    var cleanedValue = originalValue.replace(/\D/g, '');
+                    currentField.val(cleanedValue);
+                    setTimeout(function() {
+                        currentField.val(originalValue); // Restore original value with non-numeric characters
+                    }, 0);
                 });
             });
         });
@@ -1058,7 +1168,7 @@
                                 </div>
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField">
-                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
+                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
                                 <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
                             </div>
                             <div class="form-group-select position-relative mb-4">
@@ -1095,7 +1205,7 @@
                                 </div>
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField">
-                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
+                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
                                 <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField2">
