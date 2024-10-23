@@ -352,21 +352,21 @@
         </div>
     </div>
 
-    <button id="resetOnboarding">Reset Onboarding</button>
+    <!-- <button id="resetOnboarding">Reset Onboarding</button> //uncomment this to reset local storage for testing
 
-<script>
-    document.getElementById('resetOnboarding').addEventListener('click', function() {
-        // Remove the onboarding flag
-        localStorage.removeItem('onboardingCompleted');
-        alert('Onboarding has been reset.');
-    });
-</script>
+    <script>
+        document.getElementById('resetOnboarding').addEventListener('click', function() {
+            // Remove the onboarding flag
+            localStorage.removeItem('onboardingCompleted');
+            alert('Onboarding has been reset.');
+        });
+    </script> -->
 
     <!-- three steps onboarding-->
     <script>
         $(document).ready(function() {
             // Check if the onboarding has already been shown using localStorage
-            if (!localStorage.getItem('onboardingCompleted')) {
+            if (localStorage.getItem('onboardingCompleted')) { // add "!" in front with the Reset Onboarding button above for testing
                 // Show the first modal
                 $('#onboarding-modal-1').modal('show');
 
