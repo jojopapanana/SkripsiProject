@@ -555,7 +555,7 @@
             });
 
             // Event delegation to handle delete button
-            $(document).on('click', '.delete-button', function () {
+            $(document).on('click', '#barangTableOnboarding .delete-button', function () {
                 var rowCount = $('#barangTableOnboarding tbody tr').length;
 
                 // If there's only one row left, prevent deletion
