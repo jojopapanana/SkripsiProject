@@ -12,11 +12,18 @@
 </head>
 <body>
     <div class="d-flex flex-row" id="app">
-        <x-navbar></x-navbar>
+        @unless (request()->routeIs('login') || request()->routeIs('register'))
+            <x-navbar></x-navbar>
+        @endunless
         <main class="max-vh-100 mt-5">
             {{ $slot }}
         </main>
-        {{-- <x-footer></x-footer> --}}
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+    @stack('scripts')
 </body>
 </html>

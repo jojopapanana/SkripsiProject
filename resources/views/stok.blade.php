@@ -2,6 +2,7 @@
     <div class="d-flex justify-content-center" style="width: 70vw">
         <h1 class="fw-bold">STOK BARANG</h1>
     </div>
+
     <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
         <div class="dropdown">
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,6 +51,7 @@
                 </table>
             </div>
         </div>
+
         @foreach($stokData as $stok)
             <div class="card mt-3">
                 <div class="card-body py-2">
@@ -136,8 +138,6 @@
             </div>
         @endforeach
         <br>
-
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
         <script>
             document.querySelectorAll('form').forEach(function(form) {
@@ -249,7 +249,6 @@
             });
         </script>
 
-        <!-- Alert Modal Component -->
         <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -266,9 +265,6 @@
             </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
-        <!-- Function to change modal text and show the modal -->
         <script>
           var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
 
@@ -338,5 +334,4 @@
                 });
             });
         </script>
-    </div>
 </x-layout>

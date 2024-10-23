@@ -112,7 +112,7 @@
     @endif
     <br>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <script type="module">
         const data = {
             labels: @json($data->map(fn ($data) => date('F', strtotime($data->month)))), 

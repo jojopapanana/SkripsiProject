@@ -23,10 +23,10 @@
                 <li><a class="dropdown-item" href="#" data-value="12">DESEMBER</a></li>
             </ul>
         </div>
-
+    
         <div class="dropdown">
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ now()->year }}
+              {{ now()->year }}
             </button>
             <ul class="dropdown-menu" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
                 <li><a class="dropdown-item" href="#" data-value="2022">2022</a></li>
@@ -194,18 +194,22 @@
                 </div>
             </div>
         @endforeach
+    </div>
 
     @if ($transactions->count() > 0)
-      <div class="d-flex justify-content-end mt-3">
-        <div class="dropdown">
-          <button class="btn dropdown-toggle fw-semibold" type="button" id="exportDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-              Ekspor
-          </button>
-          <ul class="dropdown-menu" id="export-dropdown-menu" aria-labelledby="exportDropdownButton">
-              <li><a class="dropdown-item" id="export-link-excel">xlsx</a></li>
-              <li><a class="dropdown-item" id="export-link-csv">csv</a></li>
-              <li><a class="dropdown-item" id="export-link-pdf">pdf</a></li>
-          </ul>
+        <div class="d-flex justify-content-end mt-3 mb-3">
+            <div class="dropdown">
+            <button class="btn dropdown-toggle fw-semibold" type="button" id="exportDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Ekspor
+            </button>
+            <ul class="dropdown-menu" id="export-dropdown-menu" aria-labelledby="exportDropdownButton">
+                <li><a class="dropdown-item" id="export-link-excel">xlsx</a></li>
+                <li><a class="dropdown-item" id="export-link-csv">csv</a></li>
+                <li><a class="dropdown-item" id="export-link-pdf">pdf</a></li>
+            </ul>
+            </div>
+        </div>
+    @endif
           
         <!-- Alert Modal Component -->
         <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
@@ -223,10 +227,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    @endif
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
     <script>
         document.querySelectorAll('form').forEach(function(form) {
@@ -318,9 +318,6 @@
         });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Function to change modal text and show the modal -->
     <script>
         var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
 
@@ -336,105 +333,103 @@
         </script>
     @endif
 
-  </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const monthDropdownButton = document.getElementById('monthDropdownButton');
+        const monthDropdownItems = document.querySelectorAll('#month-dropdown-menu .dropdown-item');
+        const yearDropdownButton = document.getElementById('yearDropdownButton');
+        const yearDropdownItems = document.querySelectorAll('#year-dropdown-menu .dropdown-item');
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const monthDropdownButton = document.getElementById('monthDropdownButton');
-      const monthDropdownItems = document.querySelectorAll('#month-dropdown-menu .dropdown-item');
-      const yearDropdownButton = document.getElementById('yearDropdownButton');
-      const yearDropdownItems = document.querySelectorAll('#year-dropdown-menu .dropdown-item');
+        let selectedMonthValue = new URLSearchParams(window.location.search).get('month') || (new Date().getMonth() + 1);
+        let selectedYearValue = new URLSearchParams(window.location.search).get('year') || new Date().getFullYear();
 
-      let selectedMonthValue = new URLSearchParams(window.location.search).get('month') || (new Date().getMonth() + 1);
-      let selectedYearValue = new URLSearchParams(window.location.search).get('year') || new Date().getFullYear();
+        function updateUrl() {
+            window.location.href = `{{ route('transaksi') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+        }
 
-      function updateUrl() {
-          window.location.href = `{{ route('transaksi') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
-      }
+        monthDropdownItems.forEach(function(item) {
+            item.addEventListener('click', function(event) {
+                event.preventDefault();
+                const selectedMonthText = this.textContent;
+                selectedMonthValue = this.getAttribute('data-value');
+                
+                monthDropdownButton.textContent = selectedMonthText;
+                updateUrl();
+            });
+        });
 
-      monthDropdownItems.forEach(function(item) {
-          item.addEventListener('click', function(event) {
-              event.preventDefault();
-              const selectedMonthText = this.textContent;
-              selectedMonthValue = this.getAttribute('data-value');
-              
-              monthDropdownButton.textContent = selectedMonthText;
-              updateUrl();
-          });
-      });
+        yearDropdownItems.forEach(function(item) {
+            item.addEventListener('click', function(event) {
+                event.preventDefault();
+                const selectedYearText = this.textContent;
+                selectedYearValue = this.getAttribute('data-value');
+                
+                yearDropdownButton.textContent = selectedYearText;
+                updateUrl();
+            });
+        });
 
-      yearDropdownItems.forEach(function(item) {
-          item.addEventListener('click', function(event) {
-              event.preventDefault();
-              const selectedYearText = this.textContent;
-              selectedYearValue = this.getAttribute('data-value');
-              
-              yearDropdownButton.textContent = selectedYearText;
-              updateUrl();
-          });
-      });
+        const urlParams = new URLSearchParams(window.location.search);
+        const month = urlParams.get('month');
+        if (month) {
+            const selectedItem = [...monthDropdownItems].find(item => item.getAttribute('data-value') === month);
+            if (selectedItem) {
+                monthDropdownButton.textContent = selectedItem.textContent;
+            }
+        }
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const month = urlParams.get('month');
-      if (month) {
-          const selectedItem = [...monthDropdownItems].find(item => item.getAttribute('data-value') === month);
-          if (selectedItem) {
-              monthDropdownButton.textContent = selectedItem.textContent;
-          }
-      }
+        const year = urlParams.get('year');
+        if (year) {
+            const selectedItem = [...yearDropdownItems].find(item => item.getAttribute('data-value') === year);
+            if (selectedItem) {
+                yearDropdownButton.textContent = selectedItem.textContent;
+            }
+        }
 
-      const year = urlParams.get('year');
-      if (year) {
-          const selectedItem = [...yearDropdownItems].find(item => item.getAttribute('data-value') === year);
-          if (selectedItem) {
-              yearDropdownButton.textContent = selectedItem.textContent;
-          }
-      }
+        function exportUrlExcel() {
+            const exportRoute = `{{ route('transaksi_export_excel') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
 
-      function exportUrlExcel() {
-          const exportRoute = `{{ route('transaksi_export_excel') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+            window.location.href = exportRoute;
+        }
 
-          window.location.href = exportRoute;
-      }
+        const exportButtonExcel = document.getElementById('export-link-excel');
+        exportButtonExcel.addEventListener('click', function(event) {
+            event.preventDefault();
+            exportUrlExcel();
+        });
 
-      const exportButtonExcel = document.getElementById('export-link-excel');
-      exportButtonExcel.addEventListener('click', function(event) {
-          event.preventDefault();
-          exportUrlExcel();
-      });
+        function exportUrlCSV() {
+            const exportRoute = `{{ route('transaksi_export_csv') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
 
-      function exportUrlCSV() {
-          const exportRoute = `{{ route('transaksi_export_csv') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+            window.location.href = exportRoute;
+        }
 
-          window.location.href = exportRoute;
-      }
+        const exportButtonCSV = document.getElementById('export-link-csv');
+        exportButtonCSV.addEventListener('click', function(event) {
+            event.preventDefault();
+            exportUrlCSV();
+        });
 
-      const exportButtonCSV = document.getElementById('export-link-csv');
-      exportButtonCSV.addEventListener('click', function(event) {
-          event.preventDefault();
-          exportUrlCSV();
-      });
+        function exportUrlPDF() {
+            const exportRoute = `{{ route('transaksi_export_pdf') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
 
-      function exportUrlPDF() {
-          const exportRoute = `{{ route('transaksi_export_pdf') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+            window.location.href = exportRoute;
+        }
 
-          window.location.href = exportRoute;
-      }
-
-      const exportButtonPDF = document.getElementById('export-link-pdf');
-      exportButtonPDF.addEventListener('click', function(event) {
-          event.preventDefault();
-          exportUrlPDF();
-      });
-    });
+        const exportButtonPDF = document.getElementById('export-link-pdf');
+        exportButtonPDF.addEventListener('click', function(event) {
+            event.preventDefault();
+            exportUrlPDF();
+        });
+        });
 
 
-    $(document).ready(function () {
-      $("#deleteModal").on("show.bs.modal", function (e) {
-        var id = $(e.relatedTarget).data('target-id');
-         $('#pass_id').val(id);
-      });
-    });
-</script>
+        $(document).ready(function () {
+        $("#deleteModal").on("show.bs.modal", function (e) {
+            var id = $(e.relatedTarget).data('target-id');
+            $('#pass_id').val(id);
+        });
+        });
+    </script>
 
 </x-layout>

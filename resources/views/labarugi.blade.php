@@ -130,7 +130,6 @@
             </button>
         </div>
     @endif
-        
 
     <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -197,6 +196,5 @@
                     exportUrl();
                 });
             });
-        </script>
-    </div>
+    </script>
 </x-layout>
