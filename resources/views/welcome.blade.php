@@ -181,7 +181,7 @@
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField">
                                 <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
-                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
+                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. " autocomplete="off">
                             </div>
                             <div class="form-group-select position-relative mb-4">
                                 <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
@@ -839,7 +839,7 @@
                                 <button class="btn" type="button" id="decrement">
                                     <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
                                 </button>
-                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang[]" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang[]" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
                                 <button class="btn" type="button" id="increment">
                                     <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
                                 </button>
@@ -959,10 +959,66 @@
     <!-- Increment/Decrement for Pengeluaran -->
     <script>
         $(document).ready(function(){
+            var isLoaded = false;
             var globalInputValue = 1;
 
-            // Initial bind for Pengeluaran modal
-            rebindPengeluaranEvents();
+            if (isLoaded == false) {
+                console.log("turu")
+                rebindPengeluaranEvents();
+                isLoaded = true
+            }
+
+            // Rebind custom input handling functions
+            $(document).on('keydown', '#nominalPengeluaran', function(event) {
+                preventBackspace(this, event);
+            });
+            $(document).on('input', '#nominalPengeluaran', function(event) {
+                enforceNumericInput(this);
+            });
+            $(document).on('blur', '#nominalPengeluaran', function(event) {
+                addCurrencySuffix(this);
+            });
+            $(document).on('keydown', '#jumlahBarangPengeluaran', function(event) {
+                preventDeletionPengeluaran(event);
+            });
+            $(document).on('keydown', '#hargaJualSatuan', function(event) {
+                preventBackspace(this, event);
+            });
+            $(document).on('input', '#hargaJualSatuan', function(event) {
+                enforceNumericInput(this);
+            });
+            $(document).on('blur', '#hargaJualSatuan', function(event) {
+                addCurrencySuffix(this);
+            });
+
+            function preventInvalidOperationsPengeluaran() {
+                var deskripsiValue = $('#deskripsi').val();
+
+                if (deskripsiValue === 'Tambah Stok Baru') {
+                    var jenisBarang = document.getElementById('stokBaru')
+
+                    if (jenisBarang.value === '') {
+                        alert('Silahkan masukkan nama stok barang terlebih dahulu!')
+                        return false;
+                    } 
+                } else if (deskripsiValue === 'Lainnya') {
+                    var deskripsiTransaksi = document.getElementById('deskripsiTransaksi')
+
+                    if (deskripsiTransaksi.value === '') {
+                        alert('Silahkan masukkan deskripsi transaksi terlebih dahulu!')
+                        return false;
+                    } 
+                } else {
+                    var jenisBarang = document.getElementById('jenisBarangPengeluaran');
+
+                    if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
+                        alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                        return false;
+                    } 
+                }
+                
+                return true;
+            }
 
             // Function to handle events for Pengeluaran modal dynamically
             function rebindPengeluaranEvents() {
@@ -1012,21 +1068,6 @@
                         globalInputValue = parseInt(jumlahBarang.val())
                     }
                 });
-
-                // Rebind custom input handling functions
-                $('#nominalPengeluaran').on('keydown', preventBackspace);
-                $('#nominalPengeluaran').on('input', enforceNumericInput);
-                $('#nominalPengeluaran').on('blur', addCurrencySuffix);
-
-                if (deskripsiValue != 'Lainnya') {
-                    $('#jumlahBarangPengeluaran').on('keydown', preventDeletionPengeluaran);
-                }
-
-                if (deskripsiValue === 'Tambah Stok Baru') {
-                    $('#hargaJualSatuan').on('keydown', preventBackspace);
-                    $('#hargaJualSatuan').on('input', enforceNumericInput);
-                    $('#hargaJualSatuan').on('blur', addCurrencySuffix);
-                }
             }
 
             function preventDeletionPengeluaran(event) {
@@ -1051,8 +1092,7 @@
                 }
             }
 
-            function enforceNumericInput(event) {
-                var input = event.target;
+            function enforceNumericInput(input) {
                 var value = input.value;
 
                 // Remove any non-digit characters except the prefix
@@ -1070,15 +1110,18 @@
                 input.value = 'Rp. ' + formattedValue;
             }
 
-            function preventBackspace(event) {
-                var input = event.target;
+            function preventBackspace(input, event) {
+                if (!preventInvalidOperationsPengeluaran()) {
+                    event.preventDefault();
+                    return;
+                }
+
                 if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
                     event.preventDefault();
                 }
             }
 
-            function addCurrencySuffix() {
-                var input = event.target;
+            function addCurrencySuffix(input) {
                 var value = input.value;
 
                 // Ensure the value ends with ",-"
@@ -1127,9 +1170,9 @@
                                 <option value="Investasi">Investasi</option>
                             </select>
                         </div>
-                        <div class="form-group position-relative mb-2">
-                            <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
-                            <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
+                        <div class="form-group position-relative mb-2" id="nominalField">
+                            <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Pengeluaran</label>
+                            <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. " autocomplete="off">
                         </div>
                         <div class="form-group-select position-relative mb-4">
                             <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
@@ -1169,7 +1212,7 @@
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField">
                                 <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
-                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
+                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. " autocomplete="off">
                             </div>
                             <div class="form-group-select position-relative mb-4">
                                 <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
@@ -1206,7 +1249,7 @@
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField">
                                 <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
-                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. ">
+                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. " autocomplete="off">
                             </div>
                             <div class="form-group position-relative mb-2" id="nominalField2">
                                 <label for="hargaJualSatuan" class="col-form-label" id="inputModalLabel">Harga Jual Barang Satuan</label>
