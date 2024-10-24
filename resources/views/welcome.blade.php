@@ -352,7 +352,7 @@
         </div>
     </div>
 
-    <!-- <button id="resetOnboarding">Reset Onboarding</button> //uncomment this to reset local storage for testing
+    <!-- <button id="resetOnboarding">Reset Onboarding</button>
 
     <script>
         document.getElementById('resetOnboarding').addEventListener('click', function() {
@@ -366,7 +366,7 @@
     <script>
         $(document).ready(function() {
             // Check if the onboarding has already been shown using localStorage
-            if (localStorage.getItem('onboardingCompleted')) { // add "!" in front with the Reset Onboarding button above for testing
+            if (!localStorage.getItem('onboardingCompleted')) {
                 // Show the first modal
                 $('#onboarding-modal-1').modal('show');
 
@@ -609,6 +609,34 @@
 
             // Prevent operations on jumlahBarangOnboarding[] if namaBarangOnboarding[] is empty or "None"
             $(document).on('keydown', 'input[name="jumlahBarangOnboarding[]"]', preventInvalidOperations);
+        });
+    </script>
+
+    <script>
+        $('[id^="onboarding-modal-3"]').on('submit', function(e) {
+            var form = $(this);
+            var hasNoValue = false;
+
+            // Loop through all 'namaBarangOnboarding[]' inputs
+            form.find('input[name="namaBarangOnboarding[]"]').each(function() {
+                if ($(this).val() === 'None') {
+                    hasNoValue = true;
+                    return false;
+                }
+            });
+
+            form.find('input[name="nominalHargaBarangOnboarding[]"]').each(function() {
+                if ($(this).val() === '') {
+                    hasNoValue = true;
+                    return false;
+                }
+            });
+
+            if (hasNoValue) {
+                e.preventDefault();
+                alert('Silahkan lengkapi Daftar Barang terlebih dahulu!');
+                return;
+            }
         });
     </script>
 
@@ -963,7 +991,6 @@
             var globalInputValue = 1;
 
             if (isLoaded == false) {
-                console.log("turu")
                 rebindPengeluaranEvents();
                 isLoaded = true
             }
