@@ -5,18 +5,17 @@ use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\LabaRugiController;
 use App\Http\Controllers\ArusKasController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\SignUpController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AnalisisTrendController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
+Auth::routes();
+Route::get('login', [LoginController::class, 'showUserLoginForm'])->name('login');
+Route::post('login/auth', [LoginController::class, 'userLogin'])->name('login.auth');
 
-// Route to show the registration form
-Route::get('/register', [SignUpController::class, 'showRegistrationForm'])->name('register');
 Route::post('/transaksi/store', [TransaksiController::class, 'store'])->name('transaksi.store');
-
-// Route to handle the registration form submission
-// Route::post('/register', [SignUpController::class, 'register']);
-Route::get('/', [DashboardController::class, 'index'])->name('Dashboard');
+Route::get('/', [DashboardController::class, 'index'])->name('Dashboard')->middleware('auth');
 Route::get('transaksi', [TransaksiController::class, 'index'])->name('transaksi');
 Route::get('/transaksi/export/excel', [TransaksiController::class, 'export_excel'])->name('transaksi_export_excel');
 Route::get('/transaksi/export/csv', [TransaksiController::class, 'export_csv'])->name('transaksi_export_csv');
@@ -34,3 +33,7 @@ Route::get('/analisis', [AnalisisTrendController::class, 'index'])->name('analis
 Route::delete('/stok/{id}/delete', [StokController::class, 'delete'])->name('stok.delete');
 Route::post('/stok/update/{id}', [StokController::class, 'update'])->name('stok.update');
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
