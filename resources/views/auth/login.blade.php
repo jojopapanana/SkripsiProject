@@ -41,10 +41,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="error-message" style="color: red; display: none;">
-                            Kata sandi tidak cocok!
-                        </div>
-                        <button type="submit" class="btn btn-daftar-signup">Daftar</button>
+                        <button type="submit" class="btn btn-daftar-signup">Masuk</button>
                     </form>
                 </div>
             </div>

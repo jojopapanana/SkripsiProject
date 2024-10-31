@@ -300,17 +300,17 @@ main{
     color: #1E0342;
     font-size: 1.25rem;
     font-weight: 600;
-    min-width: 100vh;
+    min-width: 60vh;
     border: 0.125rem solid #1E0342;
+}
+
+.form-signup {
+    min-width: 80vh;
 }
 
 .btn-custom-register:hover {
     color: #ffffff;
     background-color: #1E0342;
-}
-
-.form-signup {
-    min-width: 100vh;
 }
 
 .bg-color-signup {

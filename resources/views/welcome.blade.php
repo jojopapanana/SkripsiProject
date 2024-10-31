@@ -352,7 +352,7 @@
         </div>
     </div>
 
-    <!-- <button id="resetOnboarding">Reset Onboarding</button>
+    {{-- <button id="resetOnboarding">Reset Onboarding</button>
 
     <script>
         document.getElementById('resetOnboarding').addEventListener('click', function() {
@@ -360,7 +360,7 @@
             localStorage.removeItem('onboardingCompleted');
             alert('Onboarding has been reset.');
         });
-    </script> -->
+    </script> --}}
 
     <!-- three steps onboarding-->
     <script>
