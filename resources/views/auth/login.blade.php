@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>MASUK</title>
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 <body>
@@ -13,10 +13,10 @@
     <div class="container-fluid">
         <div class="row bg-color-signup" id="main">
             <!-- Left side -->
-            <div class="col left-side transitionClassSignIn">
+            <div class="col left-side transitionClassSignIn p-5">
                 <div class="login-section">
                     <h2>MASUK</h2>
-                    <form action="" class="form-signup" method="POST">
+                    <form action="{{ route('login.auth') }}" class="form-signup" method="POST">
                         @csrf
                         <div class="form-group adjust-align-left">
                             <label for="Email">Email</label>
@@ -41,10 +41,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="error-message" style="color: red; display: none;">
-                            Kata sandi tidak cocok!
-                        </div>
-                        <button type="submit" class="btn btn-daftar-signup">Daftar</button>
+                        <button type="submit" class="btn btn-daftar-signup">Masuk</button>
                     </form>
                 </div>
             </div>
@@ -84,7 +81,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><span class="iconify" data-icon="uis:lock" data-width="18" data-height="23"></span></div>
                                 </div>
-                                <input type="password" class="form-control edit-password" id="confirmPassword" name="confirmPassword" placeholder="Kata Sandi" required>
+                                <input type="password" class="form-control edit-password" id="password_confirmation" name="password_confirmation" placeholder="Kata Sandi" required>
                                 <div class="input-group-append">
                                     <span class="input-group-text toggle-password" style="cursor: pointer;">
                                         <span class="iconify" data-icon="mdi:eye-off" data-width="30" data-height="20"></span>

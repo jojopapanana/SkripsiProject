@@ -21,8 +21,15 @@
         <tr>
             <td valign="bottom">
                 <div class="d-flex gap-3 pb-5 profile-bottom" id="profile" style="color: white">
-                <i class="bi bi-person-circle"></i>
-                <a href="{{ route('register') }}" class="p-0 m-0">Profil</a>
+                    <i class="bi bi-box-arrow-right"></i>
+                    <a class="p-0 m-0" href="#" 
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Keluar
+                    </a>
+                    <!-- Logout form (hidden) -->
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                 </div>
             </td>
         </tr>
