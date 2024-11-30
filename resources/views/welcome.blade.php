@@ -253,104 +253,108 @@
     </script>
 
     <!-- Modal that should appear on page load -->
-    <div class="modal fade" id="onboarding-modal-1" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
-            <div class="modal-content">
-                <div class="modal-body custom-modal-body">
-                    <center>
-                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
-                    </center>
-                    <h4 class="fw-bold text-center" id="modalText">Selamat Datang di Website "LOGO"</h4>
-                    <div class="d-flex justify-content-end gap-4 custom-button-container">
-                        <button class="btn btn-primary custom-btn-modal-onboarding" id="nextModalButton">Lanjut</button>
+    {{-- @if ($products->isEmpty()) --}}
+
+        <div class="modal fade" id="onboarding-modal-1" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
+                <div class="modal-content">
+                    <div class="modal-body custom-modal-body">
+                        <center>
+                            <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                        </center>
+                        <h4 class="fw-bold text-center" id="modalText">Selamat Datang di Website "LOGO"</h4>
+                        <div class="d-flex justify-content-end gap-4 custom-button-container">
+                            <button class="btn btn-primary custom-btn-modal-onboarding" id="nextModalButton">Lanjut</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="onboarding-modal-2" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
-            <div class="modal-content">
-                <div class="modal-body custom-modal-body">
-                    <h3 class="fw-bold text-center" id="modalText">Hampir Selesai</h3>
-                    <center class="custom-lottie-container">
-                        <dotlottie-player src="https://lottie.host/7901cec0-c27f-418f-bb0f-04ea92357c73/Ns0p3a4GrY.json" background="transparent" speed="1.5" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
-                    </center>
-                    <h5 class="fw-bold text-center" id="modalText">Silahkan lengkapi 'Data Stok Barang' untuk melanjutkan!</h5>
-                    <div class="d-flex justify-content-end gap-4 custom-button-container">
-                        <button class="btn btn-primary custom-btn-modal-onboarding" id="nextModalButton-1">Lengkapi</button>
+        <div class="modal fade" id="onboarding-modal-2" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
+                <div class="modal-content">
+                    <div class="modal-body custom-modal-body">
+                        <h3 class="fw-bold text-center" id="modalText">Hampir Selesai</h3>
+                        <center class="custom-lottie-container">
+                            <dotlottie-player src="https://lottie.host/7901cec0-c27f-418f-bb0f-04ea92357c73/Ns0p3a4GrY.json" background="transparent" speed="1.5" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
+                        </center>
+                        <h5 class="fw-bold text-center" id="modalText">Silahkan lengkapi 'Data Stok Barang' untuk melanjutkan!</h5>
+                        <div class="d-flex justify-content-end gap-4 custom-button-container">
+                            <button class="btn btn-primary custom-btn-modal-onboarding" id="nextModalButton-1">Lengkapi</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="onboarding-modal-3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered custom-modal-width" role="document">
-            <div class="modal-content pl-3 pr-3">
-                <div class="modal-header justify-content-center">
-                    <p class="modal-title" id="exampleModalLabel">Daftar Stok Barang</p>
-                </div>
-                <div class="modal-body">
-                    <form id="formInputOnboarding" action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
-                        @csrf
-                        <input type="hidden" name="modalType" value="onboarding">
-                        <div class="form-group-select position-relative mb-2 mt-4">
-                            <div class=" d-flex justify-content-between align-items-center">
-                                <label for="daftarBarang" class="col-form-label" id="inputModalLabel">Daftar Barang</label>
-                                <button class="btn p-0 d-flex align-items-center" type="button" id="addDaftarBarangOnboarding">
-                                    <span class="ms-2 mt-1 mb-1 iconify" data-icon="ph:plus-fill" data-width="20" data-height="20"></span>
-                                    <span class="ms-1 me-2">Tambah Barang</span>
-                                </button>
+        <div class="modal fade" id="onboarding-modal-3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered custom-modal-width" role="document">
+                <div class="modal-content pl-3 pr-3">
+                    <div class="modal-header justify-content-center">
+                        <p class="modal-title" id="exampleModalLabel">Daftar Stok Barang</p>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formInputOnboarding" action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
+                            @csrf
+                            <input type="hidden" name="modalType" value="onboarding">
+                            <div class="form-group-select position-relative mb-2 mt-4">
+                                <div class=" d-flex justify-content-between align-items-center">
+                                    <label for="daftarBarang" class="col-form-label" id="inputModalLabel">Daftar Barang</label>
+                                    <button class="btn p-0 d-flex align-items-center" type="button" id="addDaftarBarangOnboarding">
+                                        <span class="ms-2 mt-1 mb-1 iconify" data-icon="ph:plus-fill" data-width="20" data-height="20"></span>
+                                        <span class="ms-1 me-2">Tambah Barang</span>
+                                    </button>
+                                </div>
+                                    <table class="table mt-2" id="barangTableOnboarding">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">No.</th>
+                                            <th scope="col">Jenis Barang</th>
+                                            <th scope="col">Jumlah</th>
+                                            <th scope="col">Harga Satuan</th>
+                                            <th scope="col">Aksi</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>
+                                                <input type="text" class="form-control border-style-jenisBarang-onboarding" name="namaBarangOnboarding[]" id="namaBarangOnboarding"  value="None" required>
+                                            </td>
+                                            <td>
+                                                <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
+                                                    <button class="btn decrement" type="button">
+                                                        <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
+                                                    </button>
+                                                    <input type="text" class="form-control border-style-jenisBarangJumlah text-center jumlahBarang" name="jumlahBarangOnboarding[]" id="jumlahBarangOnboarding" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
+                                                    <button class="btn increment" type="button">
+                                                        <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control border-style-jenisBarang-onboarding" name="nominalHargaBarangOnboarding[]" id="nominalHargaBarangOnboarding" value="Rp. " required>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn delete-button">
+                                                    <i class="bi bi-trash3-fill"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                             </div>
-                                <table class="table mt-2" id="barangTableOnboarding">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">No.</th>
-                                        <th scope="col">Jenis Barang</th>
-                                        <th scope="col">Jumlah</th>
-                                        <th scope="col">Harga Satuan</th>
-                                        <th scope="col">Aksi</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>
-                                            <input type="text" class="form-control border-style-jenisBarang-onboarding" name="namaBarangOnboarding[]" id="namaBarangOnboarding"  value="None" required>
-                                        </td>
-                                        <td>
-                                            <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
-                                                <button class="btn decrement" type="button">
-                                                    <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
-                                                </button>
-                                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center jumlahBarang" name="jumlahBarangOnboarding[]" id="jumlahBarangOnboarding" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
-                                                <button class="btn increment" type="button">
-                                                    <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control border-style-jenisBarang-onboarding" name="nominalHargaBarangOnboarding[]" id="nominalHargaBarangOnboarding" value="Rp. " required>
-                                        </td>
-                                        <td class="text-center">
-                                            <button type="button" class="btn delete-button">
-                                                <i class="bi bi-trash3-fill"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
-                        </div>
-                    </form>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+    {{-- @endif --}}
 
     {{-- <button id="resetOnboarding">Reset Onboarding</button>
 
@@ -366,7 +370,7 @@
     <script>
         $(document).ready(function() {
             // Check if the onboarding has already been shown using localStorage
-            if (!localStorage.getItem('onboardingCompleted')) {
+            @if ($products->isEmpty()) 
                 // Show the first modal
                 $('#onboarding-modal-1').modal('show');
 
@@ -387,7 +391,7 @@
                     // Set a flag in localStorage to mark onboarding as completed
                     localStorage.setItem('onboardingCompleted', 'true');
                 });
-            }
+            @endif
         });
     </script>
 

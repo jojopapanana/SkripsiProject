@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class StokController extends Controller
 {
@@ -14,9 +15,7 @@ class StokController extends Controller
      */
     public function index(Request $request)
     {
-        // $month = $request->input('month');
-        // $year = $request->input('year');
-
+        $userid = Auth::check() ? Auth::id() : null;
         $stokDataTemp = DB::table('products')
             ->select(
                 'products.id as stok_id',
@@ -25,7 +24,7 @@ class StokController extends Controller
                 'products.productStock as sisa',
             );
 
-        $stokData = $stokDataTemp->get();
+        $stokData = $stokDataTemp->where('userID', '=', $userid)->get();
 
         return view('stok', [
             'stokData' => $stokData,

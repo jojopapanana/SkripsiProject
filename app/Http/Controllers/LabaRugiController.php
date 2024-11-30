@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Transaksi;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LabaRugiController extends Controller
 {
@@ -13,16 +14,18 @@ class LabaRugiController extends Controller
     public function export(Request $request){
         $month = $request->input('month');
         $year = $request->input('year');
+        $userid = Auth::check() ? Auth::id() : null;
 
         $labaTemp = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                                 ->join('products', 'transaction_details.productID', '=', 'products.id')
                                                 ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalNominal'), 'transaksis.description')
                                                 ->whereNull('transaksis.nominal')
+                                                ->where('transaksis.userID', '=', $userid)
                                                 ->groupBy('transaksis.id', 'transaksis.description');
         
         $rugiTemp = DB::table('transaksis')
             ->select('description', 'nominal')
-            ->where('type', 'Pengeluaran')
+            ->where([['type', 'Pengeluaran'], ['userID', '=', $userid]])
             ->whereNotNull('nominal');
 
         if ($month) {
@@ -61,6 +64,7 @@ class LabaRugiController extends Controller
 
     public function index(Request $request)
     {
+        $userid = Auth::check() ? Auth::id() : null;
         $month = $request->get('month', date('n'));
         $year = $request->get('year', date('Y'));
 
@@ -68,11 +72,12 @@ class LabaRugiController extends Controller
                                                 ->join('products', 'transaction_details.productID', '=', 'products.id')
                                                 ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalNominal'), 'transaksis.description')
                                                 ->whereNull('transaksis.nominal')
+                                                ->where('transaksis.userID', '=', $userid)
                                                 ->groupBy('transaksis.id', 'transaksis.description');
         
         $rugiTemp = DB::table('transaksis')
             ->select('description', 'nominal')
-            ->where('type', 'Pengeluaran')
+            ->where([['type', 'Pengeluaran'], ['userID', '=', $userid]])
             ->whereNotNull('nominal');
 
         if ($month) {

@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Transaksi;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -17,18 +18,19 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $userid = Auth::check() ? Auth::id() : null;
         $selectedMonth = Carbon::now()->format('m');
         $pendapatan_kotor_harian = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                             ->join('products', 'transaction_details.productID', '=', 'products.id')
                                             ->select('transaksis.created_at as date', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as pendapatan'))
-                                            ->where([['transaksis.type', '=', 'Pemasukan'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth]])
+                                            ->where([['transaksis.type', '=', 'Pemasukan'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], ['transaksis.userID', '=', $userid]])
                                             ->groupBy('date')
                                             ->get()
                                             ->keyBy('date');
 
         $pengeluaran_harian = DB::table('transaksis')
                                             ->select('transaksis.created_at as date', DB::raw('SUM(transaksis.nominal) as pengeluaran'))
-                                            ->where([['transaksis.type', '=', 'Pengeluaran'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth]])
+                                            ->where([['transaksis.type', '=', 'Pengeluaran'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], ['transaksis.userID', '=', $userid]])
                                             ->groupBy('date')
                                             ->get()
                                             ->keyBy('date');
@@ -57,13 +59,13 @@ class DashboardController extends Controller
         $pendapatan_kotor = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                             ->join('products', 'transaction_details.productID', '=', 'products.id')
                                             ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as pendapatan'))
-                                            ->where([['transaksis.type', '=', 'Pemasukan'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth]])
+                                            ->where([['transaksis.type', '=', 'Pemasukan'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], ['transaksis.userID', '=', $userid]])
                                             ->groupBy('transactionMonth')
                                             ->get();
 
         $pengeluaran = DB::table('transaksis')
                                             ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as pengeluaran'))
-                                            ->where([['transaksis.type', '=', 'Pengeluaran'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth]])
+                                            ->where([['transaksis.type', '=', 'Pengeluaran'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], ['transaksis.userID', '=', $userid]])
                                             ->groupBy('transactionMonth')
                                             ->get();
 
@@ -78,7 +80,7 @@ class DashboardController extends Controller
                                                             [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
                                                             ['transaksis.category', '=', 'Operasional'], 
                                                             ['transaksis.type', '=', 'Pemasukan'], 
-                                                            ['transaksis.method', '=', 'Tunai']])
+                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
@@ -87,7 +89,7 @@ class DashboardController extends Controller
                                                             [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
                                                             ['transaksis.category', '=', 'Operasional'], 
                                                             ['transaksis.type', '=', 'Pengeluaran'], 
-                                                            ['transaksis.method', '=', 'Tunai']])
+                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
@@ -102,7 +104,7 @@ class DashboardController extends Controller
                                                             [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
                                                             ['transaksis.category', '=', 'Finansial'], 
                                                             ['transaksis.type', '=', 'Pemasukan'], 
-                                                            ['transaksis.method', '=', 'Tunai']])
+                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
@@ -111,7 +113,7 @@ class DashboardController extends Controller
                                                             [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
                                                             ['transaksis.category', '=', 'Finansial'], 
                                                             ['transaksis.type', '=', 'Pengeluaran'], 
-                                                            ['transaksis.method', '=', 'Tunai']])
+                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
@@ -122,7 +124,8 @@ class DashboardController extends Controller
         $total_arus_kas_investasi = $totalPendapatanInvestasi - $totalPengeluaranInvestasi;
         $kas_bulanan = $total_arus_kas_operasional + $total_arus_kas_investasi;
 
-        $products = Product::all();
+        $products = DB::table('products')->select('*')->where('userID', '=', $userid)->get();
+        
         return view('welcome', compact('products'), [
             'data' => $data,
             'pendapatan_bersih_bulanan' => $pendapatan_bersih_bulanan,

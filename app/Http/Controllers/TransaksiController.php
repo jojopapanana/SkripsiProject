@@ -6,11 +6,9 @@ use App\Exports\TransaksiExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
-use App\Models\TransactionDetail;
-use App\Models\Product;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Number;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 class TransaksiController extends Controller
 {
@@ -37,21 +35,22 @@ class TransaksiController extends Controller
      */
     public function index(Request $request)
     {
+        $userid = Auth::check() ? Auth::id() : null;
         $selectedMonth = $request->get('month', date('n'));
         $selectedYear = $request->get('year', date('Y'));
         $transactions = DB::table('transaksis')->select('*')
-                                                    ->where([[DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear]])
+                                                    ->where([[DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear], ['userID', '=', $userid]])
                                                     ->orderBy('id')
                                                     ->get();
         $income_totals = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                         ->join('products', 'transaction_details.productID', '=', 'products.id')
                                         ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalNominal'))
-                                        ->where([[DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear]])
+                                        ->where([[DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear], ['transaksis.userID', '=', $userid]])
                                         ->whereNull('transaksis.nominal')
                                         ->groupBy('transaksis.id');
 
         $expense_total = DB::table('transaksis')->select('transaksis.id as id', 'transaksis.nominal as totalNominal')
-                                                ->where([[DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear]])
+                                                ->where([[DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear], ['transaksis.userID', '=', $userid]])
                                                 ->whereNotNull('transaksis.nominal')
                                                 ->union($income_totals)
                                                 ->orderBy('id')
@@ -70,6 +69,8 @@ class TransaksiController extends Controller
     }
 
     private function tambahPemasukan(Request $request) {
+        $userid = Auth::check() ? Auth::id() : null;
+
         $validatedData = $request->validate([
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
@@ -84,6 +85,7 @@ class TransaksiController extends Controller
         // Insert into 'transaksis' and get the transaction ID
         $transactionID = DB::table('transaksis')->insertGetId([
             'created_at' => $validatedData['tanggal'],
+            'userID' => $userid,
             'type' => $validatedData['jenisTransaksi'],
             'category' => 'Operasional',
             'method' => $validatedData['metode'],
@@ -107,6 +109,8 @@ class TransaksiController extends Controller
     }
 
     private function tambahStokPengeluaran(Request $request) {
+        $userid = Auth::check() ? Auth::id() : null;
+
         $validatedData = $request->validate([
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
@@ -124,6 +128,7 @@ class TransaksiController extends Controller
         DB::table('transaksis')->insert([
             [
                 'created_at' => $validatedData['tanggal'],
+                'userID' => $userid,
                 'nominal' => $validatedData['nominalPengeluaran'],
                 'type' => $validatedData['jenisTransaksi'],
                 'category' => 'Operasional',
@@ -134,6 +139,8 @@ class TransaksiController extends Controller
     }
 
     private function tambahLainnyaPengeluaran(Request $request) {
+        $userid = Auth::check() ? Auth::id() : null;
+
         $validatedData = $request->validate([
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
@@ -146,6 +153,7 @@ class TransaksiController extends Controller
         DB::table('transaksis')->insert([
             [
                 'created_at' => $validatedData['tanggal'],
+                'userID' => $userid,
                 'nominal' => $validatedData['nominalPengeluaran'],
                 'type' => $validatedData['jenisTransaksi'],
                 'category' => $validatedData['kategori'],
@@ -156,6 +164,8 @@ class TransaksiController extends Controller
     }
 
     private function tambahStokBaruPengeluaran(Request $request) {
+        $userid = Auth::check() ? Auth::id() : null;
+
         $validatedData = $request->validate([
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
@@ -168,6 +178,7 @@ class TransaksiController extends Controller
         ]);
 
         DB::table('products')->insert([
+            'userID' => $userid,
             'productName' => $validatedData['stokBaru'],
             'productStock' => $validatedData['jumlahBarangPengeluaran'],
             'productPrice' => $validatedData['hargaJualSatuan']
@@ -175,6 +186,7 @@ class TransaksiController extends Controller
 
         DB::table('transaksis')->insert([
             'created_at' => $validatedData['tanggal'],
+            'userID' => $userid,
             'nominal' => $validatedData['nominalPengeluaran'],
             'type' => $validatedData['jenisTransaksi'],
             'category' => 'Operasional',
@@ -184,6 +196,8 @@ class TransaksiController extends Controller
     }
 
     private function tambahStokBaruOnboarding(Request $request) {
+        $userid = Auth::check() ? Auth::id() : null;
+
         $validatedData = $request->validate([
             'namaBarangOnboarding' => 'required|array',
             'namaBarangOnboarding.*' => 'required|string',
@@ -201,6 +215,7 @@ class TransaksiController extends Controller
 
             // Insert the product into the products table
             DB::table('products')->insert([
+                'userID' => $userid,
                 'productName' => $productName,
                 'productStock' => $productStock,
                 'productPrice' => $productPrice,

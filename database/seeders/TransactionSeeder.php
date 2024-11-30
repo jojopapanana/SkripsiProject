@@ -17,6 +17,7 @@ class TransactionSeeder extends Seeder
     {
         DB::table('transaksis')->insert([
             [
+                'userID' => 1,
                 'created_at' => Carbon::now(),
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
@@ -25,6 +26,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Hasil penjualan'
             ],
             [
+                'userID' => 1,
                 'created_at' => Carbon::now(),
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
@@ -33,6 +35,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Hasil penjualan'
             ],
             [
+                'userID' => 1,
                 'created_at' => Carbon::now(),
                 'nominal' => 100000,
                 'type' => 'Pengeluaran',
@@ -41,6 +44,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Uang makan'
             ],
             [
+                'userID' => 1,
                 'created_at' => Carbon::now(),
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
@@ -49,6 +53,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Hasil penjualan'
             ],
             [
+                'userID' => 1,
                 'created_at' => Carbon::now(),
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
@@ -57,6 +62,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Hasil penjualan'
             ],
             [
+                'userID' => 1,
                 'created_at' => Carbon::now(),
                 'nominal' => 200000,
                 'type' => 'Pengeluaran',
@@ -65,6 +71,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Pembayaran'
             ],
             [
+                'userID' => 1,
                 'created_at' => Carbon::now(),
                 'nominal' => 150000,
                 'type' => 'Pengeluaran',
@@ -73,6 +80,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Pembayaran gaji karyawan'
             ],
             [
+                'userID' => 1,
                 'created_at' => Carbon::now(),
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
@@ -81,6 +89,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Hasil penjualan'
             ],
             [
+                'userID' => 1,
                 'created_at' => Carbon::now(),
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
@@ -89,6 +98,7 @@ class TransactionSeeder extends Seeder
                 'description' => 'Hasil penjualan'
             ],
             [
+                'userID' => 1,
                 'created_at' => Carbon::now(),
                 'nominal' => 300000,
                 'type' => 'Pengeluaran',

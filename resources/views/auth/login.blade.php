@@ -10,12 +10,24 @@
     <div>
         <p class="logo-size">LOGO</p>
     </div>
+
     <div class="container-fluid">
         <div class="row bg-color-signup" id="main">
             <!-- Left side -->
             <div class="col left-side transitionClassSignIn p-5">
                 <div class="login-section">
                     <h2>MASUK</h2>
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form action="{{ route('login.auth') }}" class="form-signup" method="POST">
                         @csrf
                         <div class="form-group adjust-align-left">

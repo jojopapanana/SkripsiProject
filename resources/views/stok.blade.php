@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-center" style="width: 70vw">
         <h1 class="fw-bold">STOK BARANG</h1>
     </div>
-    <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
+    {{-- <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
         <div class="dropdown">
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ strtoupper(date('F')) }}
@@ -33,7 +33,7 @@
                 <li><a class="dropdown-item" href="#" data-value="2024">2024</a></li>
             </ul>
         </div>
-    </div>
+    </div> --}}
 
         <div class="card mt-3">
             <div class="card-body py-2">

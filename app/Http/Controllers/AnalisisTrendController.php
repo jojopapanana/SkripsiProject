@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Transaksi;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AnalisisTrendController extends Controller
 {
@@ -17,6 +18,7 @@ class AnalisisTrendController extends Controller
      */
     public function index(Request $request)
     {
+        $userid = Auth::check() ? Auth::id() : null;
         $rangeWaktu = $request->input('rangeWaktu'); 
 
         $produkTerbanyak = collect();
@@ -27,6 +29,7 @@ class AnalisisTrendController extends Controller
                 ->select(DB::raw('MONTH(transaksis.created_at) as bulan, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
                 ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
+                ->where('transaksis.userID', '=', $userid)
                 ->groupBy('bulan', 'products.productName')
                 ->orderBy('total_terjual', 'desc')
                 ->get()
@@ -36,6 +39,7 @@ class AnalisisTrendController extends Controller
                 ->select(DB::raw('MONTH(transaksis.created_at) as bulan, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
                 ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
+                ->where('transaksis.userID', '=', $userid)
                 ->groupBy('bulan', 'products.productName')
                 ->orderBy('total_terjual', 'asc')
                 ->get()
@@ -46,6 +50,7 @@ class AnalisisTrendController extends Controller
                 ->select(DB::raw('WEEK(transaksis.created_at) as minggu, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
                 ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
+                ->where('transaksis.userID', '=', $userid)
                 ->groupBy('minggu', 'products.productName')
                 ->orderBy('total_terjual', 'desc')
                 ->get()
@@ -55,6 +60,7 @@ class AnalisisTrendController extends Controller
                 ->select(DB::raw('WEEK(transaksis.created_at) as minggu, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
                 ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
+                ->where('transaksis.userID', '=', $userid)
                 ->groupBy('minggu', 'products.productName')
                 ->orderBy('total_terjual', 'asc')
                 ->get()
@@ -65,6 +71,7 @@ class AnalisisTrendController extends Controller
                 ->select(DB::raw('YEAR(transaksis.created_at) as tahun, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
                 ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
+                ->where('transaksis.userID', '=', $userid)
                 ->groupBy('tahun', 'products.productName')
                 ->orderBy('total_terjual', 'desc')
                 ->get()
@@ -74,6 +81,7 @@ class AnalisisTrendController extends Controller
                 ->select(DB::raw('YEAR(transaksis.created_at) as tahun, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
                 ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
+                ->where('transaksis.userID', '=', $userid)
                 ->groupBy('tahun', 'products.productName')
                 ->orderBy('total_terjual', 'asc')
                 ->get()
@@ -93,16 +101,14 @@ class AnalisisTrendController extends Controller
             ->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
             ->join('products', 'transaction_details.productID', '=', 'products.id')
             ->select(DB::raw('DATE_FORMAT(transaksis.created_at, "%Y-%m") as month'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as pendapatan'))
-            ->where('transaksis.type', 'Pemasukan')
-            ->where('transaksis.created_at', '>=', $batasBulan)
+            ->where([['transaksis.type', 'Pemasukan'], ['transaksis.created_at', '>=', $batasBulan], ['transaksis.userID', '=', $userid]])
             ->groupBy('month')
             ->get()
             ->keyBy('month');
 
         $pengeluaranBulanan = DB::table('transaksis')
             ->select(DB::raw('DATE_FORMAT(transaksis.created_at, "%Y-%m") as month'), DB::raw('SUM(transaksis.nominal) as pengeluaran'))
-            ->where('transaksis.type', 'Pengeluaran')
-            ->where('transaksis.created_at', '>=', $batasBulan)
+            ->where([['transaksis.type', 'Pengeluaran'], ['transaksis.created_at', '>=', $batasBulan], ['transaksis.userID', '=', $userid]])
             ->groupBy('month')
             ->get()
             ->keyBy('month');
@@ -113,16 +119,14 @@ class AnalisisTrendController extends Controller
             ->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
             ->join('products', 'transaction_details.productID', '=', 'products.id')
             ->select(DB::raw('DATE_FORMAT(transaksis.created_at, "%Y-%m-%d") as date'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as pendapatan'))
-            ->where('transaksis.type', 'Pemasukan')
-            ->where('transaksis.created_at', '>=', $batasHari)
+            ->where([['transaksis.type', 'Pemasukan'], ['transaksis.created_at', '>=', $batasHari], ['transaksis.userID', '=', $userid]])
             ->groupBy('date')
             ->get()
             ->keyBy('date');
 
         $pengeluaranHarian = DB::table('transaksis')
             ->select(DB::raw('DATE_FORMAT(transaksis.created_at, "%Y-%m-%d") as date'), DB::raw('SUM(transaksis.nominal) as pengeluaran'))
-            ->where('transaksis.type', 'Pengeluaran')
-            ->where('transaksis.created_at', '>=', $batasHari)
+            ->where([['transaksis.type', 'Pengeluaran'], ['transaksis.created_at', '>=', $batasHari], ['transaksis.userID', '=', $userid]])
             ->groupBy('date')
             ->get()
             ->keyBy('date');
