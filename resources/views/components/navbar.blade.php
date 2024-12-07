@@ -20,6 +20,9 @@
       <td><a href="{{ route('analisisTrend') }}">Analisis Tren</a></td>
     </tr>
     <tr>
+      <td><a href="{{ route('utangPiutang') }}">Utang Piutang</a></td>
+    </tr>
+    <tr>
       <td valign="bottom">
         <div class="d-flex gap-3 pb-5" id="profile" style="color: white">
           <i class="bi bi-person-circle"></i>

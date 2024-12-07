@@ -8,6 +8,7 @@ use App\Http\Controllers\ArusKasController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\SignUpController;
 use App\Http\Controllers\AnalisisTrendController;
+use App\Http\Controllers\UtangPiutangController;
 
 
 // Route to show the registration form
@@ -33,3 +34,7 @@ Route::get('/analisis', [AnalisisTrendController::class, 'index'])->name('analis
 Route::delete('/stok/{id}/delete', [StokController::class, 'delete'])->name('stok.delete');
 Route::post('/stok/update/{id}', [StokController::class, 'update'])->name('stok.update');
 
+Route::get('utangPiutang', [UtangPiutangController::class, 'index'])->name('utangPiutang');
+Route::delete('/utang/{id}/delete', [UtangPiutangController::class, 'delete'])->name('utang.delete');
+Route::post('/utang/update/{id}', [UtangPiutangController::class, 'update'])->name('utang.update');
+Route::post('/utang/store', [UtangPiutangController::class, 'store'])->name('utang.store');
