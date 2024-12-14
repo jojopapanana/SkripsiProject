@@ -25,20 +25,22 @@ class ArusKasController extends Controller
 
         $pendapatan_operasional = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                                         ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                                        ->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
                                                         ->where([
                                                             [DB::raw('month(transaksis.created_at)'), '=', $month], [DB::raw('year(transaksis.created_at)'), '=', $year],
                                                             ['transaksis.category', '=', 'Operasional'], 
                                                             ['transaksis.type', '=', 'Pemasukan'], 
-                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                            ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
 
-        $pengeluaran_operasional = DB::table('transaksis')->where([
+        $pengeluaran_operasional = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                        ->where([
                                                             [DB::raw('month(transaksis.created_at)'), '=', $month], [DB::raw('year(transaksis.created_at)'), '=', $year],
                                                             ['transaksis.category', '=', 'Operasional'], 
                                                             ['transaksis.type', '=', 'Pengeluaran'], 
-                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                            ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
@@ -48,11 +50,12 @@ class ArusKasController extends Controller
 
         $total_arus_kas_operasional = $totalPendapatan - $totalPengeluaran;
 
-        $pengeluaran_investasi = DB::table('transaksis')->where([
+        $pengeluaran_investasi = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                        ->where([
                                                             [DB::raw('month(transaksis.created_at)'), '=', $month], [DB::raw('year(transaksis.created_at)'), '=', $year],
-                                                            ['transaksis.category', '=', 'Finansial'], 
+                                                            ['transaksis.category', '=', 'Investasi'], 
                                                             ['transaksis.type', '=', 'Pengeluaran'], 
-                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                            ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
@@ -63,17 +66,19 @@ class ArusKasController extends Controller
 
         $previousMonth = ($request->get('month', date('n')) - 1) ?: 12;
 
-        $saldo_awal_kas_pendapatan = DB::table('transaksis')->where([
+        $saldo_awal_kas_pendapatan = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                ->where([
                                                     [DB::raw('month(transaksis.created_at)'), '=', $previousMonth], [DB::raw('year(transaksis.created_at)'), '=', $year],
                                                     ['transaksis.type', '=', 'Pendapatan'], 
-                                                    ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                    ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                 ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                 ->groupBy('transactionMonth')
                                                 ->get();
-        $saldo_awal_kas_pengeluaran = DB::table('transaksis')->where([
+        $saldo_awal_kas_pengeluaran = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                ->where([
                                                     [DB::raw('month(transaksis.created_at)'), '=', $previousMonth], [DB::raw('year(transaksis.created_at)'), '=', $year],
                                                     ['transaksis.type', '=', 'Pengeluaran'], 
-                                                    ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                    ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                 ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                 ->groupBy('transactionMonth')
                                                 ->get();
@@ -107,20 +112,22 @@ class ArusKasController extends Controller
 
         $pendapatan_operasional = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                                         ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                                        ->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
                                                         ->where([
                                                             [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
                                                             ['transaksis.category', '=', 'Operasional'], 
                                                             ['transaksis.type', '=', 'Pemasukan'], 
-                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                            ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
 
-        $pengeluaran_operasional = DB::table('transaksis')->where([
+        $pengeluaran_operasional = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                        ->where([
                                                             [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
                                                             ['transaksis.category', '=', 'Operasional'], 
                                                             ['transaksis.type', '=', 'Pengeluaran'], 
-                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                            ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
@@ -130,11 +137,12 @@ class ArusKasController extends Controller
 
         $total_arus_kas_operasional = $totalPendapatan - $totalPengeluaran;
 
-        $pengeluaran_investasi = DB::table('transaksis')->where([
+        $pengeluaran_investasi = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                        ->where([
                                                             [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
-                                                            ['transaksis.category', '=', 'Finansial'], 
+                                                            ['transaksis.category', '=', 'Investasi'], 
                                                             ['transaksis.type', '=', 'Pengeluaran'], 
-                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                            ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
@@ -144,17 +152,19 @@ class ArusKasController extends Controller
         $previousMonth = ($request->get('month', date('n')) - 1) ?: 12;
 
         $kenaikan_arus_kas = $total_arus_kas_operasional + $totalPengeluaranInvestasi;
-        $saldo_awal_kas_pendapatan = DB::table('transaksis')->where([
+        $saldo_awal_kas_pendapatan = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                ->where([
                                                     [DB::raw('month(transaksis.created_at)'), '=', $previousMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
                                                     ['transaksis.type', '=', 'Pendapatan'], 
-                                                    ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                    ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                 ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                 ->groupBy('transactionMonth')
                                                 ->get();
-        $saldo_awal_kas_pengeluaran = DB::table('transaksis')->where([
+        $saldo_awal_kas_pengeluaran = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                ->where([
                                                     [DB::raw('month(transaksis.created_at)'), '=', $previousMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
                                                     ['transaksis.type', '=', 'Pengeluaran'], 
-                                                    ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                    ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                 ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                 ->groupBy('transactionMonth')
                                                 ->get();

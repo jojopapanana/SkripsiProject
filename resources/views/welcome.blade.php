@@ -115,8 +115,9 @@
                         <div class="form-group-select position-relative mb-4">
                             <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
                             <select class="form-control border-style" id="metode" name="metode">
-                                <option value="Tunai">Tunai</option>
-                                <option value="Non-Tunai">Non-Tunai</option>
+                                @foreach($payment_methods as $method)
+                                    <option value="{{ $method->name }}">{{ $method->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="modal-footer">
@@ -186,8 +187,9 @@
                             <div class="form-group-select position-relative mb-4">
                                 <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
                                 <select class="form-control border-style" id="metode" name="metode">
-                                    <option value="Tunai">Tunai</option>
-                                    <option value="Non-Tunai">Non-Tunai</option>
+                                    @foreach($payment_methods as $method)
+                                        <option value="{{ $method->name }}">{{ $method->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="modal-footer">
@@ -1208,8 +1210,9 @@
                         <div class="form-group-select position-relative mb-4">
                             <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
                             <select class="form-control border-style" id="metode" name="metode">
-                                <option value="Tunai">Tunai</option>
-                                <option value="Non-Tunai">Non-Tunai</option>
+                                @foreach($payment_methods as $method)
+                                    <option value="{{ $method->name }}">{{ $method->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="modal-footer">
@@ -1248,8 +1251,9 @@
                             <div class="form-group-select position-relative mb-4">
                                 <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
                                 <select class="form-control border-style" id="metode" name="metode">
-                                    <option value="Tunai">Tunai</option>
-                                    <option value="Non-Tunai">Non-Tunai</option>
+                                    @foreach($payment_methods as $method)
+                                        <option value="{{ $method->name }}">{{ $method->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="modal-footer">
@@ -1289,8 +1293,9 @@
                             <div class="form-group-select position-relative mb-4">
                                 <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
                                 <select class="form-control border-style" id="metode" name="metode">
-                                    <option value="Tunai">Tunai</option>
-                                    <option value="Non-Tunai">Non-Tunai</option>
+                                    @foreach($payment_methods as $method)
+                                        <option value="{{ $method->name }}">{{ $method->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="modal-footer">

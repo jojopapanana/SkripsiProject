@@ -70,7 +70,7 @@
                                 @endforeach
                                 <td class="text-start" style="width: 16%;">{{ $transaction->type }}</td>
                                 <td class="text-start" style="width: 16%;">{{ $transaction->category }}</td>
-                                <td class="text-start" style="width: 16%;">{{ $transaction->method }}</td>
+                                <td class="text-start" style="width: 16%;">{{ $transaction->methodName }}</td>
                                 <td class="text-start" style="width: 10%;">
 
                                   <div class="d-flex gap-4">
@@ -142,9 +142,12 @@
 
                                                         <div class="form-group position-relative mb-2">
                                                             <label for="metodeTransaksi" class="col-form-label" id="inputModalLabel">Metode</label>
-                                                            <select class="form-select border-style" name="metodeTransaksi" value="{{ $transaction->method }}">
-                                                                <option value="Tunai" {{ $transaction->method == 'Tunai' ? 'selected' : '' }}>Tunai</option>
-                                                                <option value="Non-Tunai" {{ $transaction->method == 'Non-Tunai' ? 'selected' : '' }}>Non-Tunai</option>
+                                                            <select class="form-select border-style" name="metodeTransaksi" value="{{ $transaction->methodName }}">
+                                                                @foreach($payment_methods as $method)
+                                                                    <option value="{{ $method->name }}" {{ $transaction->methodName == $method->name ? 'selected' : '' }}>
+                                                                        {{ $method->name }}
+                                                                    </option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
 
