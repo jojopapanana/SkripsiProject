@@ -76,20 +76,22 @@ class DashboardController extends Controller
 
         $pendapatan_operasional = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                                         ->join('products', 'transaction_details.productID', '=', 'products.id')
+                                                        ->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
                                                         ->where([
                                                             [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
                                                             ['transaksis.category', '=', 'Operasional'], 
                                                             ['transaksis.type', '=', 'Pemasukan'], 
-                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                            ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
 
-        $pengeluaran_operasional = DB::table('transaksis')->where([
+        $pengeluaran_operasional = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                        ->where([
                                                             [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
                                                             ['transaksis.category', '=', 'Operasional'], 
                                                             ['transaksis.type', '=', 'Pengeluaran'], 
-                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                            ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
@@ -100,20 +102,22 @@ class DashboardController extends Controller
         $total_arus_kas_operasional = $totalPendapatan - $totalPengeluaran;
 
 
-        $pendapatan_investasi = DB::table('transaksis')->where([
+        $pendapatan_investasi = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                        ->where([
                                                             [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
                                                             ['transaksis.category', '=', 'Finansial'], 
                                                             ['transaksis.type', '=', 'Pemasukan'], 
-                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                            ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
 
-        $pengeluaran_investasi = DB::table('transaksis')->where([
+        $pengeluaran_investasi = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                        ->where([
                                                             [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth],
                                                             ['transaksis.category', '=', 'Finansial'], 
                                                             ['transaksis.type', '=', 'Pengeluaran'], 
-                                                            ['transaksis.method', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                            ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
                                                         ->get();
@@ -125,8 +129,11 @@ class DashboardController extends Controller
         $kas_bulanan = $total_arus_kas_operasional + $total_arus_kas_investasi;
 
         $products = DB::table('products')->select('*')->where('userID', '=', $userid)->get();
+        $payment_methods = DB::table('payment_methods')->select('*')->get();
         
-        return view('welcome', compact('products'), [
+        return view('welcome', [
+            'products' => $products,
+            'payment_methods' => $payment_methods,
             'data' => $data,
             'pendapatan_bersih_bulanan' => $pendapatan_bersih_bulanan,
             'kas_bulanan' => $kas_bulanan

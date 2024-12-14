@@ -22,7 +22,7 @@ class TransactionSeeder extends Seeder
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
-                'method' => 'Tunai',
+                'methodID' => 1,
                 'description' => 'Hasil penjualan'
             ],
             [
@@ -31,7 +31,7 @@ class TransactionSeeder extends Seeder
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
-                'method' => 'Tunai',
+                'methodID' => 2,
                 'description' => 'Hasil penjualan'
             ],
             [
@@ -40,7 +40,7 @@ class TransactionSeeder extends Seeder
                 'nominal' => 100000,
                 'type' => 'Pengeluaran',
                 'category' => 'Operasional',
-                'method' => 'Tunai',
+                'methodID' => 2,
                 'description' => 'Uang makan'
             ],
             [
@@ -49,7 +49,7 @@ class TransactionSeeder extends Seeder
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
-                'method' => 'Non-Tunai',
+                'methodID' => 2,
                 'description' => 'Hasil penjualan'
             ],
             [
@@ -58,7 +58,7 @@ class TransactionSeeder extends Seeder
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
-                'method' => 'Non-Tunai',
+                'methodID' => 1,
                 'description' => 'Hasil penjualan'
             ],
             [
@@ -67,7 +67,7 @@ class TransactionSeeder extends Seeder
                 'nominal' => 200000,
                 'type' => 'Pengeluaran',
                 'category' => 'Investasi',
-                'method' => 'Non-Tunai',
+                'methodID' => 2,
                 'description' => 'Pembayaran'
             ],
             [
@@ -76,7 +76,7 @@ class TransactionSeeder extends Seeder
                 'nominal' => 150000,
                 'type' => 'Pengeluaran',
                 'category' => 'Operasional',
-                'method' => 'Non-Tunai',
+                'methodID' => 2,
                 'description' => 'Pembayaran gaji karyawan'
             ],
             [
@@ -85,7 +85,7 @@ class TransactionSeeder extends Seeder
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
-                'method' => 'Tunai',
+                'methodID' => 3,
                 'description' => 'Hasil penjualan'
             ],
             [
@@ -94,7 +94,7 @@ class TransactionSeeder extends Seeder
                 'nominal' => NULL,
                 'type' => 'Pemasukan',
                 'category' => 'Operasional',
-                'method' => 'Non-Tunai',
+                'methodID' => 1,
                 'description' => 'Hasil penjualan'
             ],
             [
@@ -103,7 +103,7 @@ class TransactionSeeder extends Seeder
                 'nominal' => 300000,
                 'type' => 'Pengeluaran',
                 'category' => 'Investasi',
-                'method' => 'Tunai',
+                'methodID' => 1,
                 'description' => 'Pembayaran investasi'
             ]
         ]);
