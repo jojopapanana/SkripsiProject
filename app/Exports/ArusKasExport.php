@@ -23,7 +23,8 @@ class ArusKasExport implements WithHeadings, FromCollection
     
     public function collection()
     {
-        $query_data = DB::table('transaksis')->select('id', 'created_at as Tanggal Transaksi', 'nominal', 'type', 'category', 'method', 'description')->get();
+        $query_data = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payments.id')
+                                            ->select('id', 'created_at as Tanggal Transaksi', 'nominal', 'type', 'category', 'payments.name', 'description')->get();
         return $query_data;
     }
 

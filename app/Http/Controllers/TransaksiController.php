@@ -38,7 +38,11 @@ class TransaksiController extends Controller
         $userid = Auth::check() ? Auth::id() : null;
         $selectedMonth = $request->get('month', date('n'));
         $selectedYear = $request->get('year', date('Y'));
-        $transactions = DB::table('transaksis')->select('*')
+        $transactions = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                    ->select(
+                                                        'transaksis.*',
+                                                        'payment_methods.name as methodName'
+                                                    )
                                                     ->where([[DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear], ['userID', '=', $userid]])
                                                     ->orderBy('id')
                                                     ->get();
@@ -55,9 +59,15 @@ class TransaksiController extends Controller
                                                 ->union($income_totals)
                                                 ->orderBy('id')
                                                 ->get();
-
         $totals = $expense_total;
-        return view('transaksi', ['transactions' => $transactions], ['totals' => $totals]);
+
+        $payment_methods = DB::table('payment_methods')->select('*')->get();
+
+        return view('transaksi', [
+            'transactions' => $transactions,
+            'totals' => $totals,
+            'payment_methods' => $payment_methods
+        ]);
     }
 
     /**
@@ -68,6 +78,13 @@ class TransaksiController extends Controller
         //
     }
 
+    private function getMethodIdByName(string $methodName): int
+    {
+        return DB::table('payment_methods')
+            ->where('name', $methodName)
+            ->value('id');
+    }    
+
     private function tambahPemasukan(Request $request) {
         $userid = Auth::check() ? Auth::id() : null;
 
@@ -75,7 +92,7 @@ class TransaksiController extends Controller
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
             'nominal' => 'required|numeric',
-            'metode' => 'required|string',
+            'metode' => 'required|exists:payment_methods,name',
             'jenisBarang' => 'required|array',
             'jenisBarang.*' => 'required|integer|exists:products,id',
             'jumlahBarang' => 'required|array',
@@ -88,7 +105,7 @@ class TransaksiController extends Controller
             'userID' => $userid,
             'type' => $validatedData['jenisTransaksi'],
             'category' => 'Operasional',
-            'method' => $validatedData['metode'],
+            'methodID' => $this->getMethodIdByName($validatedData['metode']),
             'description' => 'Hasil penjualan'
         ]);
 
@@ -116,7 +133,7 @@ class TransaksiController extends Controller
             'jenisTransaksi' => 'required|string',
             'deskripsi' => 'required|string',
             'jenisBarangPengeluaran' => 'required|string',
-            'metode' => 'required|string',
+            'metode' => 'required|exists:payment_methods,name',
             'jumlahBarangPengeluaran' => 'required|integer',
             'nominalPengeluaran' => 'required|numeric'
         ]);
@@ -132,7 +149,7 @@ class TransaksiController extends Controller
                 'nominal' => $validatedData['nominalPengeluaran'],
                 'type' => $validatedData['jenisTransaksi'],
                 'category' => 'Operasional',
-                'method' => $validatedData['metode'],
+                'methodID' => $this->getMethodIdByName($validatedData['metode']),
                 'description' => $validatedData['deskripsi']
             ]
         ]);
@@ -145,7 +162,7 @@ class TransaksiController extends Controller
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
             'deskripsiTransaksi' => 'required|string',
-            'metode' => 'required|string',
+            'metode' => 'required|exists:payment_methods,name',
             'kategori' => 'required|string',
             'nominalPengeluaran' => 'required|numeric'
         ]);
@@ -157,7 +174,7 @@ class TransaksiController extends Controller
                 'nominal' => $validatedData['nominalPengeluaran'],
                 'type' => $validatedData['jenisTransaksi'],
                 'category' => $validatedData['kategori'],
-                'method' => $validatedData['metode'],
+                'methodID' => $this->getMethodIdByName($validatedData['metode']),
                 'description' => $validatedData['deskripsiTransaksi']
             ]
         ]);
@@ -171,7 +188,7 @@ class TransaksiController extends Controller
             'jenisTransaksi' => 'required|string',
             'deskripsi' => 'required|string',
             'stokBaru' => 'required|string',
-            'metode' => 'required|string',
+            'metode' => 'required|exists:payment_methods,name',
             'hargaJualSatuan' => 'required|numeric',
             'jumlahBarangPengeluaran' => 'required|integer',
             'nominalPengeluaran' => 'required|numeric'
@@ -190,7 +207,7 @@ class TransaksiController extends Controller
             'nominal' => $validatedData['nominalPengeluaran'],
             'type' => $validatedData['jenisTransaksi'],
             'category' => 'Operasional',
-            'method' => $validatedData['metode'],
+            'methodID' => $this->getMethodIdByName($validatedData['metode']),
             'description' => $validatedData['deskripsi']
         ]);
     }
@@ -278,7 +295,7 @@ class TransaksiController extends Controller
             'nominal' => $request->nominalTransaksi,
             'type' => $request->jenisTransaksi,
             'category' => $request->kategoriTransaksi,
-            'method' => $request->metodeTransaksi,
+            'methodID' => $this->getMethodIdByName($request->metodeTransaksi),
             'description' => $request->deskripsiTransaksi
         ]);
 

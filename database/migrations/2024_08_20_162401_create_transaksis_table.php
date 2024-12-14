@@ -19,7 +19,8 @@ return new class extends Migration
             $table->integer('nominal')->nullable();
             $table->string('type');
             $table->string('category');
-            $table->string('method');
+            $table->unsignedBigInteger('methodID');
+            $table->foreign('methodID')->references('id')->on('payment_methods')->onUpdate('cascade')->onDelete('cascade');            
             $table->text('description');
         });
     }
