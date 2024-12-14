@@ -354,18 +354,6 @@
             </div>
         </div>
 
-    {{-- @endif --}}
-
-    {{-- <button id="resetOnboarding">Reset Onboarding</button>
-
-    <script>
-        document.getElementById('resetOnboarding').addEventListener('click', function() {
-            // Remove the onboarding flag
-            localStorage.removeItem('onboardingCompleted');
-            alert('Onboarding has been reset.');
-        });
-    </script> --}}
-
     <!-- three steps onboarding-->
     <script>
         $(document).ready(function() {

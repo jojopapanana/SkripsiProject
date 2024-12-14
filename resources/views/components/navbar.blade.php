@@ -18,6 +18,12 @@
         <tr class="{{ Route::is('analisisTrend') ? 'active-row' : '' }}">
             <td><a href="{{ route('analisisTrend') }}">Analisis Tren</a></td>
         </tr>
+        <tr class="{{ Route::is('utangPiutang') ? 'active-row' : '' }}">
+            <td><a href="{{ route('utangPiutang') }}">Utang Piutang</a></td>
+        </tr>
+        <tr class="{{ Route::is('reminder') ? 'active-row' : '' }}">
+            <td><a href="{{ route('reminder') }}">Pengingat</a></td>
+        </tr>
         <tr>
             <td valign="bottom">
                 <div class="d-flex gap-3 pb-5 profile-bottom" id="profile" style="color: white">
