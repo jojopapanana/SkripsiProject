@@ -314,7 +314,7 @@
                                             <th scope="col">No.</th>
                                             <th scope="col">Jenis Barang</th>
                                             <th scope="col">Jumlah</th>
-                                            <th scope="col">Harga Satuan</th>
+                                            <th scope="col">Harga Jual Satuan</th>
                                             <th scope="col">Aksi</th>
                                         </tr>
                                         </thead>
@@ -356,41 +356,23 @@
             </div>
         </div>
 
-    {{-- @endif --}}
-
-    {{-- <button id="resetOnboarding">Reset Onboarding</button>
-
-    <script>
-        document.getElementById('resetOnboarding').addEventListener('click', function() {
-            // Remove the onboarding flag
-            localStorage.removeItem('onboardingCompleted');
-            alert('Onboarding has been reset.');
-        });
-    </script> --}}
-
     <!-- three steps onboarding-->
     <script>
         $(document).ready(function() {
-            // Check if the onboarding has already been shown using localStorage
             @if ($products->isEmpty()) 
-                // Show the first modal
                 $('#onboarding-modal-1').modal('show');
 
-                // When the user clicks the "next" button on the first modal
                 $('#nextModalButton').on('click', function() {
                     $('#onboarding-modal-1').modal('hide');
-                    $('#onboarding-modal-2').modal('show'); // Show the second modal
+                    $('#onboarding-modal-2').modal('show');
                 });
 
-                // When the user clicks the "next" button on the second modal
                 $('#nextModalButton-1').on('click', function() {
                     $('#onboarding-modal-2').modal('hide');
-                    $('#onboarding-modal-3').modal('show'); // Show the third modal
+                    $('#onboarding-modal-3').modal('show');
                 });
 
-                // When the user completes the onboarding (submit the form in the third modal)
                 $('#formInputOnboarding').on('submit', function() {
-                    // Set a flag in localStorage to mark onboarding as completed
                     localStorage.setItem('onboardingCompleted', 'true');
                 });
             @endif
