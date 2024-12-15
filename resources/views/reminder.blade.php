@@ -25,7 +25,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
+                        <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
                     </div>
                 </form>
             </div>
@@ -56,13 +56,10 @@
                             <input type="text" class="form-control border-style" id="editReminderDescription" name="deskripsi" required>
                         </div>
                         <div class="modal-footer p-0">
-                            <form id="deleteReminderForm" method="POST" action="{{ route('reminder.delete', $reminder->id) }}">>
-                                @csrf
-                                @method('DELETE')
-                                <input type="hidden" name="reminder_id" id="deleteReminderId">
-                                <button class="btn fw-semibold" style="background-color: rgba(210, 0, 0, 1); width: 5vw; color: white">Hapus</button>
-                            </form>
-                            <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="btn p-0 me-5" style="color: red; border: none">
+                                <i class="bi bi-trash3-fill" style="font-size: 1.1rem"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary custom-btn ms-3 mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
                             @method('PUT')
                             <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
                         </div>
@@ -72,12 +69,48 @@
         </div>
     </div>
 
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <center>
+                        <i class="bi bi-exclamation-triangle-fill" style="font-size: 5rem; color: red"></i>
+                    </center>
+
+                    <h4 class="fw-bold text-center">Apakah Anda yakin ingin menghapus pengingat ini?</h4>
+
+                    <div class="d-flex justify-content-center gap-4 mt-4">
+                        <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-bs-dismiss="modal">Tidak</button>
+
+                        <form id="deleteReminderForm" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn fw-semibold" style="background-color: rgba(210, 0, 0, 1); width: 5vw; color: white">Ya</button>
+                            @csrf
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/locales-all.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'id',
+                locales: [{
+                    code: 'id',
+                    buttonText: {
+                        today: 'Hari Ini',
+                        month: 'Bulan',
+                        week: 'Minggu',
+                        day: 'Hari',
+                    }
+                }],
                 initialView: 'dayGridMonth',
                 dayMaxEvents: true,
                 textColor: 'black',
@@ -99,6 +132,9 @@
                     document.getElementById('editReminderDeadline').value = date;
                     document.getElementById('editReminderDescription').value = description;
 
+                    const deleteForm = document.getElementById('deleteReminderForm');
+                    deleteForm.action = `{{ url('/reminder/delete') }}/${reminderId}`;
+
                     $('#editReminderModal').modal('show');
                 },
                 events: [
@@ -116,14 +152,6 @@
             });
     
             calendar.render();
-
-            // document.querySelector('#deleteReminderForm button').addEventListener('click', function(e) {
-            //     e.preventDefault();
-            //     if (confirm('Are you sure you want to delete this reminder?')) {
-            //         document.getElementById('deleteReminderForm').action = `{{ url('/reminder/delete') }}/${reminderId}`;
-            //         document.getElementById('deleteReminderForm').submit();
-            //     }
-            // });
         });
     </script>
 </x-layout>

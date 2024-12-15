@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Reminder;
+use App\Models\UtangPiutang;
 use Illuminate\Support\Facades\Auth;
 
 class ReminderController extends Controller
@@ -13,6 +14,22 @@ class ReminderController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function addUtangtoReminder(string $id){
+        $utangPiutang = UtangPiutang::find($id);
+
+        $userid = Auth::check() ? Auth::id() : null;
+        $reminder = new Reminder();
+        $reminder->userID = $userid;
+        $reminder->reminderName = $utangPiutang->deskripsi;
+        $reminder->reminderDeadline = $utangPiutang->batasWaktu;
+        $reminder->reminderDescription = $utangPiutang->nominal;
+
+        $reminder->save();
+
+        return redirect()->route('reminder');
+    }
+
     public function index()
     {
         $userid = Auth::check() ? Auth::id() : null;

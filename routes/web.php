@@ -47,6 +47,7 @@ Route::get('reminder', [ReminderController::class, 'index'])->name('reminder');
 Route::post('reminder/store', [ReminderController::class, 'store'])->name('reminder.store');
 Route::put('reminder/update/{id}', [ReminderController::class, 'update'])->name('reminder.update');
 Route::delete('reminder/delete/{id}', [ReminderController::class, 'destroy'])->name('reminder.delete');
+Route::post('/add-utang-to-reminder/{utang}', [ReminderController::class, 'addUtangtoReminder'])->name('addUtangToReminder');
 
 Auth::routes();
 

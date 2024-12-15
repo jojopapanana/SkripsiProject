@@ -29,13 +29,54 @@
                                 <td class="text-start" style="widd: 15%;">{{ $utang->utang_id }}</td>
                                 <td class="text-start" style="width: 25%;">{{ $utang->deskripsi }}</td>
                                 <td class="text-start" style="width: 16%;">{{ $utang->batasWaktu }}</td>
-                                <td class="text-start" style="width: 15%;">{{ $utang->nominal }}</td>
+                                <td class="text-start" style="width: 15%;">Rp. {{ number_format($utang->nominal, 0, ',', '.') }}</td>
                                 <td class="text-start" style="width: 19%;">{{ $utang->jenis }}</td>
                                 <td class="text-start" style="width: 10%;">
                                 <div class="d-flex gap-4">
-                                        <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#calendarModal{{ $utang->utang_id }}">
-                                            <i class="bi bi-calendar-event-fill"></i>
+                                    @php
+                                        $reminder = App\Models\Reminder::where('reminderName', $utang->deskripsi)
+                                            ->where('reminderDeadline', $utang->batasWaktu)
+                                            ->where('reminderDescription', $utang->nominal)
+                                            ->first();
+                                    @endphp
+
+                                    @if($reminder)
+                                        <button data-bs-toggle="modal" data-bs-target="#deleteReminderModal{{ $reminder->id }}" type="button" class="btn p-0" style="border: none">
+                                            <i class="bi bi-check-circle-fill" style="color: green;"></i>
                                         </button>
+
+                                        <div class="modal fade" id="deleteReminderModal{{ $reminder->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-body">
+                                                        <center>
+                                                            <i class="bi bi-exclamation-triangle-fill" style="font-size: 5rem; color: red"></i>
+                                                        </center>
+                                    
+                                                        <h4 class="fw-bold text-center">Apakah Anda yakin ingin menghapus pengingat ini?</h4>
+                                    
+                                                        <div class="d-flex justify-content-center gap-4 mt-4">
+                                                            <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-bs-dismiss="modal">Tidak</button>
+                                    
+                                                            <form id="deleteReminderForm" method="POST" action="{{ route('reminder.delete', $reminder->id) }}">
+                                                                <input type="hidden" name="_method" value="DELETE">
+                                                                <button class="btn fw-semibold" style="background-color: rgba(210, 0, 0, 1); width: 5vw; color: white">Ya</button>
+                                                                @csrf
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <form action="{{ route('addUtangToReminder', $utang->utang_id) }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            <button type="submit" class="btn p-0" style="border: none">
+                                                <i class="bi bi-calendar-event-fill"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                        
                                         <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal{{ $utang->utang_id }}">
                                             <i class="bi bi-pencil-fill"></i>
                                         </button>
@@ -105,7 +146,7 @@
                                 <div class="form-group position-relative mb-2">
                                     <label for="jenis" class="col-form-label" id="inputModalLabel">Jenis</label>
                                     <select class="form-select border-style" name="jenis" value="{{ $utang->jenis }}">
-                                        <option value="Pemasukan" {{ $utang->jenis == 'Utang' ? 'selected' : '' }}>Utang</option>
+                                        <option value="Utang" {{ $utang->jenis == 'Utang' ? 'selected' : '' }}>Utang</option>
                                         <option value="Piutang" {{ $utang->jenis == 'Piutang' ? 'selected' : '' }}>Piutang</option>
                                     </select>
                                 </div>
@@ -129,13 +170,9 @@
                         <div class="modal-header justify-content-center">
                             <p class="modal-title" id="exampleModalLabel">Tambah Utang Piutang</p>
                         </div>
-                        <form action="{{ route('utang.store') }}" method="POST">
+                        <form action="{{ route('utang.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="modal-body">
-                                <div class="form-group position-relative mb-2">
-                                    <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
-                                    <input type="text" class="form-control border-style" id="kodeTransaksi" name="kodeTransaksi" placeholder="{{ $transactionID }}" disabled>
-                                </div>
                                 <div class="form-group position-relative mb-2">
                                     <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
                                     <input type="text" class="form-control border-style" id="deskripsi" name="deskripsi" required>
@@ -150,7 +187,7 @@
                                 </div>
                                 <div class="form-group position-relative mb-2">
                                     <label for="jenis" class="col-form-label">Jenis</label>
-                                    <select class="form-control border-style" id="jenis" name="jenis" required>
+                                    <select class="form-select border-style" id="jenis" name="jenis" required>
                                         <option value="Utang">Utang</option>
                                         <option value="Piutang">Piutang</option>
                                     </select>
