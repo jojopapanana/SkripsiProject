@@ -8,7 +8,8 @@
 </head>
 <body>
     <div>
-        <p class="logo-size">LOGO</p>
+        {{-- <p class="logo-size">LOGO</p> --}}
+        <img src="/assets/dark icon.png" alt="LOGO" class="icon-size">
     </div>
 
     <div class="container-fluid">

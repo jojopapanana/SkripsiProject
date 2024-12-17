@@ -156,7 +156,7 @@
                                 <option value="Lainnya">Lainnya</option>
                             </select>
                         </div>
-                        <!-- Changing form group based on selected Deskripsi option -->
+                        
                         <input type="hidden" name="modalType1" value="tambahStok">
                         <div id="dynamicFields">
                             <div class="form-group-select position-relative mb-2" id="jenisBarangField">
@@ -180,6 +180,7 @@
                                     </button>
                                 </div>
                             </div>
+
                             <div class="form-group position-relative mb-2" id="nominalField">
                                 <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
                                 <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. " autocomplete="off">
@@ -242,8 +243,6 @@
             }]
         };
 
-        // console.log(data);
-
         const config = {
             type: 'bar',
             data: data
@@ -253,9 +252,6 @@
             config
         );
     </script>
-
-    <!-- Modal that should appear on page load -->
-    {{-- @if ($products->isEmpty()) --}}
 
         <div class="modal fade" id="onboarding-modal-1" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
@@ -652,17 +648,16 @@
     @endif
 
     <script>
-        // Select all forms on the page, including both modals
         document.querySelectorAll('form').forEach(function(form) {
             form.addEventListener('submit', function(event) {
-                let nominalFields = form.querySelectorAll('#nominal, #nominalPengeluaran, #hargaJualSatuan');  // Select nominal and nominalPengeluaran within the current form
+                let nominalFields = form.querySelectorAll('#nominal, #nominalPengeluaran, #hargaJualSatuan');
 
                 nominalFields.forEach(function(field) {
                     if (field) {
                         let originalValue = field.value
-                        field.value = originalValue.replace(/\D/g, '');  // Replace all non-numeric characters
+                        field.value = originalValue.replace(/\D/g, '');
                         setTimeout(function() {
-                            field.value = originalValue;  // Restore the original value to display
+                            field.value = originalValue;
                         }, 0);
                     }
                 });
@@ -672,29 +667,25 @@
 
     <script>
         $(document).ready(function() {
-            // Attach form submit event handler
             $('form').on('submit', function(event) {
-                // Find all rows with input[name="nominalHargaBarangOnboarding[]"]
                 $(this).find('input[name="nominalHargaBarangOnboarding[]"]').each(function() {
                     var currentField = $(this);
                     var originalValue = currentField.val();
                     var cleanedValue = originalValue.replace(/\D/g, '');
                     currentField.val(cleanedValue);
                     setTimeout(function() {
-                        currentField.val(originalValue); // Restore original value with non-numeric characters
+                        currentField.val(originalValue);
                     }, 0);
                 });
             });
         });
     </script>
 
-    <!-- Set current date -->
     <script>
         $(document).ready(function(){
-            // Set current date to the 'tanggal' input field
             var today = new Date();
             var day = String(today.getDate()).padStart(2, '0');
-            var month = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            var month = String(today.getMonth() + 1).padStart(2, '0');
             var year = today.getFullYear();
 
             today = year + '-' + month + '-' + day;
@@ -702,12 +693,10 @@
         });
     </script>
 
-    <!-- Update Nominal for Pemasukan -->
     <script>
         $(document).ready(function() {
-            var selectedItems = []; // Array to keep track of selected jenisBarang
+            var selectedItems = [];
 
-            // Update all rows' nominal calculation
             function updateTotalNominal(revertSkipRow = null) {
                 var totalNominal = 0;
 
@@ -726,53 +715,45 @@
 
                     var nominal = pricePerItem * jumlahBarang;
 
-                    totalNominal += nominal; // accumulate total
+                    totalNominal += nominal;
                 });
 
-                // Update the total nominal field
                 $('#nominal').val('Rp. ' + totalNominal.toLocaleString('id-ID') + ',-');
             }
 
-            // Limit the input value and ensure it doesn't exceed stock
             function limitInput(event) {
                 var input = event.target;
                 var row = $(input).closest('tr');
                 var currVal = input.value;
 
-                // Retrieve the previous value from the data-attribute before making changes
                 var prevValue = row.attr('data-input-value') || 1;
                 var value = parseInt(input.value) || 0;
                 var jenisBarang = row.find('select[name="jenisBarang[]"]');
                 var selectedOption = jenisBarang.find('option:selected');
                 var productStock = parseInt(selectedOption.data('stock')) || 1;
 
-                // Limit the input value to not exceed productStock
                 if (value > productStock) {
                     alert('Jumlah tidak boleh melebihi stok yang tersedia: ' + productStock);
-                    input.value = prevValue; // Use row's stored data-input-value
+                    input.value = prevValue;
                     return;
                 }
 
-                // Store the new input value in the row's data-attribute
                 row.attr('data-input-value', value);
-                updateTotalNominal(); // Update total nominal after adjusting quantity
+                updateTotalNominal();
             }
 
-            // Prevent deletion or invalid input in jumlahBarang
             function preventDeletion(event) {
                 var input = event.target;
                 var row = $(input).closest('tr');
                 var jenisBarang = row.find('select[name="jenisBarang[]"]');
                 var selectedOption = jenisBarang.val();
 
-                // Check if the selected option is 'None' and prevent backspace or delete
                 if (selectedOption === 'None') {
                     alert('Silahkan pilih Jenis Barang terlebih dahulu!');
                     event.preventDefault();
                 }
             }
 
-            // Handle the increment and decrement buttons for each row
             $('#barangTable').on('click', '#increment, #decrement', function() {
                 var button = $(this);
                 var row = button.closest('tr');
@@ -791,34 +772,31 @@
                 if (button.attr('id') === 'increment') {
                     if (currentVal < productStock) {
                         currentVal++;
-                        jumlahBarang.val(currentVal); // Update input value
+                        jumlahBarang.val(currentVal);
                     } else {
                         alert('Stok tidak mencukupi! Stok tersedia: ' + productStock);
                     }
                 } else if (button.attr('id') === 'decrement') {
                     if (currentVal > 1) {
                         currentVal--;
-                        jumlahBarang.val(currentVal); // Update input value
+                        jumlahBarang.val(currentVal);
                     }
                 }
 
-                row.attr('data-input-value', currentVal); // Store the updated value in the row
-                updateTotalNominal(); // Update total nominal
+                row.attr('data-input-value', currentVal);
+                updateTotalNominal();
             });
 
-            // Update nominal when the quantity or product changes
             $('#barangTable').on('input change', 'select[name="jenisBarang[]"], input[name="jumlahBarang[]"]', function() {
                 updateTotalNominal();
             });
 
-            // Delete row functionality
             $('#barangTable').on('click', '.delete-button', function() {
-                var rowCount = $('#barangTable tbody tr').length; // Get the total number of rows
+                var rowCount = $('#barangTable tbody tr').length;
 
-                // If there is only one row, show an alert and prevent deletion
                 if (rowCount === 1) {
                     alert('Baris terakhir Daftar Barang tidak dapat dihapus!');
-                    return false; // Stop further execution to prevent deletion
+                    return false;
                 }
 
                 var row = $(this).closest('tr');

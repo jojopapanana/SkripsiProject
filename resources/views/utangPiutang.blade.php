@@ -183,10 +183,10 @@
                                 </div>
                                 <div class="form-group position-relative mb-2">
                                     <label for="nominal" class="col-form-label" id="inputModalLabel">Nominal</label>
-                                    <input type="text" class="form-control border-style" id="nominal" name="nominal" required>
+                                    <input type="text" class="form-control border-style" id="nominal" name="nominal" value="Rp. " required>
                                 </div>
                                 <div class="form-group position-relative mb-2">
-                                    <label for="jenis" class="col-form-label">Jenis</label>
+                                    <label for="jenis" class="col-form-label" id="inputModalLabel">Jenis</label>
                                     <select class="form-select border-style" id="jenis" name="jenis" required>
                                         <option value="Utang">Utang</option>
                                         <option value="Piutang">Piutang</option>
@@ -194,7 +194,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
-                                    <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
+                                    <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
                                 </div>
                             </div>
                         </form>

@@ -1,5 +1,7 @@
-<x-layout title="Analisis Trend">
-    <h1 class="fw-bold">Analisis Tren</h1>
+<x-layout title="Analisis Tren">
+    <div class="d-flex justify-content-center" style="width: 70vw">
+        <h1 class="fw-bold">ANALISIS TREN</h1>
+    </div>
 
     <div class="dashboard-trenkeuntungan">
         <h3 class="fw-bold text-center">Pendapatan dan Pengeluaran Selama 6 Bulan Terakhir!</h3>
@@ -115,7 +117,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module">
         const data = {
-            labels: @json($data->map(fn ($data) => date('F', strtotime($data->month)))), 
+            labels: @json($data->map(fn ($data) => \Carbon\Carbon::parse($data->month)->translatedFormat('F'))), 
             datasets: [
                 {
                     label: 'Pendapatan',

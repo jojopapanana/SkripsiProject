@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
         <div class="dropdown">
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ strtoupper(date('F')) }}
+                {{ strtoupper(\Carbon\Carbon::now()->translatedFormat('F')) }}
             </button>
             <ul class="dropdown-menu" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
                 <li><a class="dropdown-item" href="#" data-value="1">JANUARI</a></li>
