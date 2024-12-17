@@ -6,6 +6,9 @@ use App\Exports\TransaksiExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
+use App\Models\PaymentMethod;
+use App\Models\Product;
+use App\Models\TransactionDetail;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
@@ -61,7 +64,7 @@ class TransaksiController extends Controller
                                                 ->get();
         $totals = $expense_total;
 
-        $payment_methods = DB::table('payment_methods')->select('*')->get();
+        $payment_methods = PaymentMethod::all();
 
         return view('transaksi', [
             'transactions' => $transactions,
@@ -99,7 +102,6 @@ class TransaksiController extends Controller
             'jumlahBarang.*' => 'required|integer|min:1',
         ]);
 
-        // Insert into 'transaksis' and get the transaction ID
         $transactionID = DB::table('transaksis')->insertGetId([
             'created_at' => $validatedData['tanggal'],
             'userID' => $userid,
@@ -109,15 +111,12 @@ class TransaksiController extends Controller
             'description' => 'Hasil penjualan'
         ]);
 
-        // Loop over each product and update stock and transaction details
         foreach ($validatedData['jenisBarang'] as $index => $productID) {
-            // Update product stock
             DB::table('products')
                 ->where('id', $productID)
                 ->decrement('productStock', $validatedData['jumlahBarang'][$index]);
 
-            // Insert into 'transaction_details'
-            DB::table('transaction_details')->insert([
+            TransactionDetail::insert([
                 'transactionID' => $transactionID,
                 'productID' => $productID,
                 'productQuantity' => $validatedData['jumlahBarang'][$index]
@@ -142,7 +141,7 @@ class TransaksiController extends Controller
             ->where('id', $validatedData['jenisBarangPengeluaran'])
             ->increment('productStock', $validatedData['jumlahBarangPengeluaran']);
 
-        DB::table('transaksis')->insert([
+        Transaksi::insert([
             [
                 'created_at' => $validatedData['tanggal'],
                 'userID' => $userid,
@@ -167,7 +166,7 @@ class TransaksiController extends Controller
             'nominalPengeluaran' => 'required|numeric'
         ]);
 
-        DB::table('transaksis')->insert([
+        Transaksi::insert([
             [
                 'created_at' => $validatedData['tanggal'],
                 'userID' => $userid,
@@ -194,14 +193,14 @@ class TransaksiController extends Controller
             'nominalPengeluaran' => 'required|numeric'
         ]);
 
-        DB::table('products')->insert([
+        Product::insert([
             'userID' => $userid,
             'productName' => $validatedData['stokBaru'],
             'productStock' => $validatedData['jumlahBarangPengeluaran'],
             'productPrice' => $validatedData['hargaJualSatuan']
         ]);
 
-        DB::table('transaksis')->insert([
+        Transaksi::insert([
             'created_at' => $validatedData['tanggal'],
             'userID' => $userid,
             'nominal' => $validatedData['nominalPengeluaran'],
@@ -224,14 +223,11 @@ class TransaksiController extends Controller
             'nominalHargaBarangOnboarding.*' => 'required|integer|min:1',
         ]);
 
-        // Loop over each product and insert into the 'products' table
         foreach ($validatedData['namaBarangOnboarding'] as $index => $productName) {
-            // Get the corresponding values for productStock and productPrice
             $productStock = $validatedData['jumlahBarangOnboarding'][$index];
             $productPrice = $validatedData['nominalHargaBarangOnboarding'][$index];
 
-            // Insert the product into the products table
-            DB::table('products')->insert([
+            Product::insert([
                 'userID' => $userid,
                 'productName' => $productName,
                 'productStock' => $productStock,
@@ -245,15 +241,12 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
-        // handle Stok initialization onboarding
         if ($request->input('modalType') === 'onboarding') {
             $this->tambahStokBaruOnboarding($request);
 
-        // Handle Pemasukan
         } else if ($request->input('modalType') === 'pemasukan') {
             $this->tambahPemasukan($request);
 
-        // Handle Pengeluaran
         } else if ($request->input('modalType') === 'pengeluaran') {
             if ($request->input('modalType1') === 'tambahStok') {
                 $this->tambahStokPengeluaran($request);
@@ -264,7 +257,6 @@ class TransaksiController extends Controller
             }
         }
 
-        // Redirect or return response
         return redirect()->back()->with('success', 'Transaksi berhasil ditambahkan!');
     }
 

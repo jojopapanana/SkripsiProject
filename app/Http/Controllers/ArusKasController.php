@@ -4,12 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\TransactionDetail;
-use App\Models\Product;
-use App\Models\Transaksi;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Number;
-use Barryvdh\DomPDF\PDF as PDF;
 use Illuminate\Support\Facades\Auth;
 
 class ArusKasController extends Controller

@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Product;
-use App\Models\Transaksi;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -113,7 +110,6 @@ class AnalisisTrendController extends Controller
             ->get()
             ->keyBy('month');
 
-        // Mengambil data harian
         $batasHari = Carbon::now()->subDays(7);
         $pendapatanHarian = DB::table('transaksis')
             ->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')

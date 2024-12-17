@@ -93,13 +93,12 @@ class UtangPiutangController extends Controller
             $utang = UtangPiutang::find($id);
     
             if ($utang) {
-                
-                // $request->validate([
-                //     'deskripsi' => 'required|string|max:255',
-                //     'batasWaktu' => 'required|date',
-                //     'nominal' => 'required|numeric',
-                //     'jenis' => 'required|string',
-                // ]);
+                $request->validate([
+                    'deskripsi' => 'required|string|max:255',
+                    'batasWaktu' => 'required|date',
+                    'nominal' => 'required|numeric',
+                    'jenis' => 'required|string|max:255'
+                ]);
                 
                 $utang->update([
                     'deskripsi' => $request->deskripsi,

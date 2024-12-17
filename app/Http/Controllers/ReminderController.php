@@ -51,6 +51,13 @@ class ReminderController extends Controller
     public function store(Request $request)
     {
         $userid = Auth::check() ? Auth::id() : null;
+
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'deadline' => 'required|date',
+            'description' => 'required|string|max:255',
+        ]);
+        
         $reminder = new Reminder();
         $reminder->userID = $userid;
         $reminder->reminderName = $request->judul;
@@ -83,6 +90,12 @@ class ReminderController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'judul' => 'required|string|max:255',
+            'deadline' => 'required|date',
+            'description' => 'required|string|max:255',
+        ]);
+
         $reminder = Reminder::find($id);
         $reminder->reminderName = $request->judul;
         $reminder->reminderDeadline = $request->deadline;
