@@ -126,7 +126,7 @@
 
                                                         <div class="form-group position-relative mb-2">
                                                             <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis Transaksi</label>
-                                                            <select class="form-select border-style" name="jenisTransaksi" value="{{ $transaction->type }}">
+                                                            <select class="form-select border-style" id="jenisTransaksi" name="jenisTransaksi" value="{{ $transaction->type }}">
                                                                 <option value="Pemasukan" {{ $transaction->type == 'Pemasukan' ? 'selected' : '' }}>Pemasukan</option>
                                                                 <option value="Pengeluaran" {{ $transaction->type == 'Pengeluaran' ? 'selected' : '' }}>Pengeluaran</option>
                                                             </select>
@@ -134,7 +134,7 @@
 
                                                         <div class="form-group position-relative mb-2">
                                                             <label for="kategoriTransaksi" class="col-form-label" id="inputModalLabel">Kategori</label>
-                                                            <select class="form-select border-style" name="kategoriTransaksi" value="{{ $transaction->category }}">
+                                                            <select class="form-select border-style" id="kategoriTransaksi" name="kategoriTransaksi" value="{{ $transaction->category }}">
                                                                 <option value="Operasional" {{ $transaction->category == 'Operasional' ? 'selected' : '' }}>Operasional</option>
                                                                 <option value="Investasi" {{ $transaction->category == 'Investasi' ? 'selected' : '' }}>Investasi</option>
                                                             </select>
@@ -142,7 +142,7 @@
 
                                                         <div class="form-group position-relative mb-2">
                                                             <label for="metodeTransaksi" class="col-form-label" id="inputModalLabel">Metode</label>
-                                                            <select class="form-select border-style" name="metodeTransaksi" value="{{ $transaction->methodName }}">
+                                                            <select class="form-select border-style" id="metodeTransaksi" name="metodeTransaksi" value="{{ $transaction->methodName }}">
                                                                 @foreach($payment_methods as $method)
                                                                     <option value="{{ $method->name }}" {{ $transaction->methodName == $method->name ? 'selected' : '' }}>
                                                                         {{ $method->name }}
@@ -265,17 +265,29 @@
     <script>
         $(document).ready(function() {
             var originalNominalValue = ''; // Variable to store the original value
+            var originalJenisTransaksiValue = '';
+            var originalKategoriValue = '';
+            var originalMetodeValue = '';
+            var originalDeskripsiValue = '';
 
             // When any edit modal is shown, store the original value
             $(document).on('show.bs.modal', '[id^="editModal-"]', function() {
                 var modal = $(this);
                 originalNominalValue = modal.find('#nominalTransaksi').val(); // Capture the original value
+                originalJenisTransaksiValue = modal.find('#jenisTransaksi').val();
+                originalKategoriValue = modal.find('#kategoriTransaksi').val();
+                originalMetodeValue = modal.find('#metodeTransaksi').val();
+                originalDeskripsiValue = modal.find('#transactionDesc').val();
             });
 
             // When any edit modal is hidden (closed without form submission), restore the original value
             $(document).on('hidden.bs.modal', '[id^="editModal-"]', function() {
                 var modal = $(this);
                 modal.find('#nominalTransaksi').val(originalNominalValue); // Restore the original value
+                modal.find('#jenisTransaksi').val(originalJenisTransaksiValue);
+                modal.find('#kategoriTransaksi').val(originalKategoriValue);
+                modal.find('#metodeTransaksi').val(originalMetodeValue);
+                modal.find('#transactionDesc').val(originalDeskripsiValue);
             });
 
             $(document).on('keydown', '#nominalTransaksi', function(event) {
