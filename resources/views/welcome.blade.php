@@ -31,7 +31,7 @@
         <canvas id="myChart" style="width: 70vw; height: 40vh"></canvas>
     </div>
 
-    <div class="d-flex justify-content-between mt-5 mb-5">
+    <div class="d-flex justify-content-between mt-5">
         <button type="button" class="btn btn-primary custom-modal-btn mr-2" data-toggle="modal" data-target="#modalityPemasukan">
             Tambah Pemasukan
         </button>
