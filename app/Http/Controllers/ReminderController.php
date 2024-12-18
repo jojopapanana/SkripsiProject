@@ -55,7 +55,7 @@ class ReminderController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'deadline' => 'required|date',
-            'description' => 'required|string|max:255',
+            'deskripsi' => 'required|string|max:255',
         ]);
         
         $reminder = new Reminder();
@@ -93,7 +93,7 @@ class ReminderController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'deadline' => 'required|date',
-            'description' => 'required|string|max:255',
+            'deskripsi' => 'required|string|max:255',
         ]);
 
         $reminder = Reminder::find($id);

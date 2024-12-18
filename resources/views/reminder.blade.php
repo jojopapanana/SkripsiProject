@@ -55,14 +55,14 @@
                             <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
                             <input type="text" class="form-control border-style" id="editReminderDescription" name="deskripsi" required>
                         </div>
-                        <div class="modal-footer p-0">
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="btn p-0 me-5" style="color: red; border: none">
-                                <i class="bi bi-trash3-fill" style="font-size: 1.1rem"></i>
-                            </button>
-                            <button type="button" class="btn btn-primary custom-btn ms-3 mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
-                            @method('PUT')
-                            <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="btn p-0 me-5" style="color: red; border: none">
+                            <i class="bi bi-trash3-fill" style="font-size: 1.1rem"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary custom-btn ms-3 mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
+                        @method('PUT')
+                        <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
                     </div>
                 </form>
             </div>

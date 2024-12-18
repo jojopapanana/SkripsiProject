@@ -1,5 +1,22 @@
 // NAVBAR
 
+/* Lock the minimum screen width to prevent shrinking */
+body {
+    min-width: 1024px; /* Set your desired minimum width */
+    overflow-x: auto; /* Allow horizontal scrolling if the screen size is smaller */
+}
+
+@media (max-width: 1024px) {
+    html, body {
+        width: 1024px; /* Force the layout width */
+    }
+
+    .container, .navbar, .content {
+        max-width: 1024px; /* Ensure content fits within the locked width */
+    }
+}
+
+
 #navbar-container{
     width: 20%;
     background-color: rgba(30, 3, 66, 1);

@@ -169,12 +169,11 @@
                                     <option value="Piutang" {{ $utang->jenis == 'Piutang' ? 'selected' : '' }}>Piutang</option>
                                 </select>
                             </div>
-                            
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
-                                @method('PUT')
-                                <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
+                            @method('PUT')
+                            <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
                         </div>
                     </form>
                 </div>
