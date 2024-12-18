@@ -3,6 +3,25 @@
         <h1 class="fw-bold">UTANG PIUTANG</h1>
     </div>
 
+    <div class="d-flex justify-content-center mt-2">
+        <div class="btn-group" role="group" aria-label="utang filter button group">
+            <input type="radio" class="btn-check" id="btncheck1" name="filter" autocomplete="off" value="Utang"
+                onclick="location.href='{{ url('utangPiutang/Utang') }}'" 
+                {{ $selectedType == 'Utang' ? 'checked' : '' }}>
+            <label class="btn btn-outline-primary {{ $selectedType == 'Utang' ? 'active' : '' }}" for="btncheck1" id="utangButton">Utang</label>
+
+            <input type="radio" class="btn-check" id="btncheck2" name="filter" autocomplete="off" value="Piutang"
+                onclick="location.href='{{ url('utangPiutang/Piutang') }}'" 
+                {{ $selectedType == 'Piutang' ? 'checked' : '' }}>
+            <label class="btn btn-outline-primary {{ $selectedType == 'Piutang' ? 'active' : '' }}" for="btncheck2">Piutang</label>
+
+            <input type="radio" class="btn-check" id="btncheck3" name="filter" autocomplete="off" value="all"
+                onclick="location.href='{{ url('utangPiutang/all') }}'" 
+                {{ $selectedType == 'all' || $selectedType === null ? 'checked' : '' }}>
+            <label class="btn btn-outline-primary {{ $selectedType == 'all' || $selectedType === null ? 'active' : '' }}" for="btncheck3">Semua</label>
+        </div>
+    </div>
+
         <div class="card mt-3">
             <div class="card-body py-2">
                 <table class="w-100">
@@ -164,6 +183,7 @@
             @endforeach
 
             <button type="submit" class="btn btn-primary custom-btn mt-2 float-end" data-bs-toggle="modal" data-bs-target="#addModal">Tambah</button>
+
             <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered custom-modal-width">
                     <div class="modal-content pl-3 pr-3">
@@ -201,6 +221,4 @@
                     </div>
                 </div>
             </div>
-        <br>
-    </div>
 </x-layout>

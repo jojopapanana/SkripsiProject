@@ -675,6 +675,42 @@ main{
     width: 15vw;
 }
 
+//UTANG PIUTANG
+#utangButton{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.btn-outline-primary {
+    border-color: rgba(30, 3, 66, 1) !important;
+    color: rgba(30, 3, 66, 1) !important;
+    background-color: transparent !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-outline-primary:hover {
+    background-color: rgba(255, 102, 0, 0.1) !important;
+    border-color: rgba(30, 3, 66, 1) !important;
+    color: rgba(30, 3, 66, 1) !important;
+}
+
+.btn-check:checked + .btn-outline-primary,
+.btn-outline-primary.active {
+    background-color: rgba(30, 3, 66, 1) !important;
+    border-color: rgba(30, 3, 66, 1) !important;
+    color: #fff !important;
+}
+
+.btn-outline-primary {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.btn.active {
+    background-color: rgba(30, 3, 66, 1);
+    color: white;
+    border-color: rgba(30, 3, 66, 1);
+}
+
 //REMINDER
 #calendar{
     height: 100vh;
