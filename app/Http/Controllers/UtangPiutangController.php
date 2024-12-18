@@ -10,29 +10,6 @@ use App\Models\UtangPiutang;
 
 class UtangPiutangController extends Controller
 {
-    public function filterData(?string $type = null){
-        $userid = Auth::check() ? Auth::id() : null;
-
-        $query = DB::table('utang_piutangs')->select(
-            'utang_piutangs.id as utang_id',
-            'utang_piutangs.deskripsi as deskripsi',
-            'utang_piutangs.batasWaktu as batasWaktu',
-            'utang_piutangs.nominal as nominal',
-            'utang_piutangs.jenis as jenis'
-        )->where('userID', '=', $userid);
-    
-        if ($type && $type !== 'all') {
-            $query->where('jenis', '=', $type);
-        }
-    
-        $result = $query->get();
-
-        return view('utangPiutang', [
-            'utangPiutang' => $result,
-            'selectedType' => $type
-        ]);
-    }
-
     /**
      * Display a listing of the resource.
      */

@@ -36,7 +36,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content pl-3 pr-3">
                 <div class="modal-header justify-content-center">
-                    <p class="modal-title" id="exampleModalLabel">Ubah Pengingat</p>
+                    <p class="modal-title" id="exampleModalLabel">Detail Pengingat</p>
                 </div>
                 <form id="editReminderForm" method="POST">
                     @csrf
