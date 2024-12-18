@@ -221,42 +221,4 @@
             </div>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <script>
-        document.querySelectorAll('form').forEach(function(form) {
-            form.addEventListener('submit', function(event) {
-                let nominalFields = form.querySelectorAll('#nominal');  // Select nominal and nominalPengeluaran within the current form
-
-                nominalFields.forEach(function(field) {
-                    if (field) {
-                        let originalValue = field.value
-                        field.value = originalValue.replace(/\D/g, '');  // Replace all non-numeric characters
-                        setTimeout(function() {
-                            field.value = originalValue;  // Restore the original value to display
-                        }, 0);
-                    }
-                });
-            });
-        });
-    </script>
-
-    <script>
-        $('[id^="addModal"]').on('submit', function(e) {
-            var form = $(this);
-
-            if (form.find('#nominal').val() === '') {
-                e.preventDefault();
-                alert('Silahkan isi nominal terlebih dahulu!');
-                return;
-            }
-        });
-    </script>
-
-    
-
-
 </x-layout>
