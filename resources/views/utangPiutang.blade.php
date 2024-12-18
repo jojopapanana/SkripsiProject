@@ -181,7 +181,7 @@
         </div>
     @endforeach
 
-    <button type="submit" class="btn btn-primary custom-btn mt-2 float-end" data-bs-toggle="modal" data-bs-target="#addModal">Tambah</button>
+    <button type="submit" class="btn btn-primary custom-btn mt-3 float-end" data-bs-toggle="modal" data-bs-target="#addModal">Tambah</button>
 
     <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered custom-modal-width">
@@ -211,10 +211,10 @@
                                 <option value="Piutang">Piutang</option>
                             </select>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
-                            <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
                     </div>
                 </form>
             </div>
