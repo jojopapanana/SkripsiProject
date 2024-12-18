@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="form-group position-relative mb-2">
                                     <label for="nominal" class="col-form-label" id="inputModalLabel">Nominal</label>
-                                    <input type="text" class="form-control border-style" id="nominal" name="nominal" value="Rp. {{ number_format($stok->nominal, 0, ',', '.') }},-" required>
+                                    <input type="text" class="form-control border-style nominal" id="nominal" name="nominal" value="Rp. {{ number_format($stok->nominal, 0, ',', '.') }},-" required>
                                 </div>
                                 <div class="form-group position-relative mb-4">
                                     <label for="sisa" class="col-form-label" id="inputModalLabel">Sisa Stok</label>
@@ -72,7 +72,7 @@
                                         <button class="btn decrement" type="button">
                                             <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
                                         </button>
-                                        <input type="text" class="form-control border-style text-center" id="sisa" name="sisa" value="{{ $stok->sisa }}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
+                                        <input type="text" class="form-control border-style text-center sisa" id="sisa" name="sisa" value="{{ $stok->sisa }}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="0">
                                         <button class="btn increment" type="button">
                                             <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
                                         </button>
@@ -150,20 +150,6 @@
 
         <script>
             $(document).ready(function() {
-                // Enforce minimum value of 1 for #sisa input field
-                $('#sisa').on('input', function() {
-                    let sisaValue = $(this).val();
-
-                    // If the value is less than 1, reset it to 1
-                    if (parseInt(sisaValue) < 1) {
-                        $(this).val(1);
-                    }
-                });
-            });
-        </script>
-
-        <script>
-            $(document).ready(function() {
                 var originalNominalValue = ''; // Variable to store the original value
                 var originalNamaValue = '';
                 var originalSisaStokValue = '';
@@ -184,12 +170,14 @@
                     modal.find('#sisa').val(originalSisaStokValue);
                 });
 
-                $('#nominal').on('keydown', preventBackspace);
-                $('#nominal').on('input', enforceNumericInput);
-                $('#nominal').on('blur', addCurrencySuffix);
+                $(document).on('keydown', '.nominal', preventBackspace);
+                $(document).on('input', '.nominal', enforceNumericInput);
+                $(document).on('blur', '.nominal', addCurrencySuffix);
+
+                $(document).on('input', '.sisa', handleSisaInput);
 
                 // Function to enforce numeric input
-                function enforceNumericInput(input) {
+                function enforceNumericInput(event) {
                     var input = event.target;
                     var value = input.value;
 
@@ -206,6 +194,27 @@
 
                     // Update the input value with the formatted number
                     input.value = 'Rp. ' + formattedValue;
+                }
+
+                function handleSisaInput(event) {
+                    var input = event.target;
+                    var value = input.value;
+
+                    // Allow only numeric input
+                    var numberValue = value.replace(/\D/g, '');
+
+                    // If input starts with '0' and is not just '0', remove the leading '0'
+                    if (numberValue.startsWith('0') && numberValue.length > 1) {
+                        numberValue = numberValue.replace(/^0+/, '');
+                    }
+
+                    // If the input becomes empty, default back to '0'
+                    if (numberValue === '') {
+                        numberValue = '0';
+                    }
+
+                    // Update the input value
+                    input.value = numberValue;
                 }
 
                 function addCurrencySuffix() {
@@ -229,14 +238,14 @@
                 // Event delegation for increment and decrement buttons inside the modal
                 $(document).on('click', '.increment', function () {
                     var input = $(this).closest('.input-group').find('input#sisa');
-                    var currentVal = parseInt(input.val()) || 1;
+                    var currentVal = parseInt(input.val()) || 0;
                     input.val(currentVal + 1);
                 });
 
                 $(document).on('click', '.decrement', function () {
                     var input = $(this).closest('.input-group').find('input#sisa');
-                    var currentVal = parseInt(input.val()) || 1;
-                    if (currentVal > 1) {
+                    var currentVal = parseInt(input.val()) || 0;
+                    if (currentVal > 0) {
                         input.val(currentVal - 1);
                     }
                 });
