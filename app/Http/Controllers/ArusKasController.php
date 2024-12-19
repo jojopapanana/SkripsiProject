@@ -14,15 +14,15 @@ class ArusKasController extends Controller
      */
 
     public function export(Request $request){
-        $month = $request->input('month');
-        $year = $request->input('year');
+        $selectedMonth = $request->get('month', date('n'));
+        $selectedYear = $request->get('year', date('Y'));
         $userid = Auth::check() ? Auth::id() : null;
 
         $pendapatan_operasional = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                                         ->join('products', 'transaction_details.productID', '=', 'products.id')
                                                         ->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
                                                         ->where([
-                                                            [DB::raw('month(transaksis.created_at)'), '=', $month], [DB::raw('year(transaksis.created_at)'), '=', $year],
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
                                                             ['transaksis.category', '=', 'Operasional'], 
                                                             ['transaksis.type', '=', 'Pemasukan'], 
                                                             ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
@@ -32,7 +32,7 @@ class ArusKasController extends Controller
 
         $pengeluaran_operasional = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
                                                         ->where([
-                                                            [DB::raw('month(transaksis.created_at)'), '=', $month], [DB::raw('year(transaksis.created_at)'), '=', $year],
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
                                                             ['transaksis.category', '=', 'Operasional'], 
                                                             ['transaksis.type', '=', 'Pengeluaran'], 
                                                             ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
@@ -47,7 +47,7 @@ class ArusKasController extends Controller
 
         $pengeluaran_investasi = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
                                                         ->where([
-                                                            [DB::raw('month(transaksis.created_at)'), '=', $month], [DB::raw('year(transaksis.created_at)'), '=', $year],
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
                                                             ['transaksis.category', '=', 'Investasi'], 
                                                             ['transaksis.type', '=', 'Pengeluaran'], 
                                                             ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
@@ -57,13 +57,15 @@ class ArusKasController extends Controller
 
         $totalPengeluaranInvestasi = $pengeluaran_investasi->isNotEmpty() ? $pengeluaran_investasi->first()->totalPerMonth : 0;
 
-        $kenaikan_arus_kas = $total_arus_kas_operasional + $totalPengeluaranInvestasi;
+        $total_arus_kas_investasi = 0 - $totalPengeluaranInvestasi;
 
         $previousMonth = ($request->get('month', date('n')) - 1) ?: 12;
 
+        $kenaikan_arus_kas = $total_arus_kas_operasional + $total_arus_kas_investasi;
+
         $saldo_awal_kas_pendapatan = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
                                                 ->where([
-                                                    [DB::raw('month(transaksis.created_at)'), '=', $previousMonth], [DB::raw('year(transaksis.created_at)'), '=', $year],
+                                                    [DB::raw('month(transaksis.created_at)'), '=', $previousMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
                                                     ['transaksis.type', '=', 'Pendapatan'], 
                                                     ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                 ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
@@ -71,7 +73,7 @@ class ArusKasController extends Controller
                                                 ->get();
         $saldo_awal_kas_pengeluaran = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
                                                 ->where([
-                                                    [DB::raw('month(transaksis.created_at)'), '=', $previousMonth], [DB::raw('year(transaksis.created_at)'), '=', $year],
+                                                    [DB::raw('month(transaksis.created_at)'), '=', $previousMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
                                                     ['transaksis.type', '=', 'Pengeluaran'], 
                                                     ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                 ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
@@ -89,7 +91,7 @@ class ArusKasController extends Controller
             'pengeluaran_operasional' => $pengeluaran_operasional,
             'total_arus_kas_operasional' => $total_arus_kas_operasional,
             'pengeluaran_investasi' => $pengeluaran_investasi,
-            'total_pengeluaran_investasi' => $totalPengeluaranInvestasi,
+            'total_pengeluaran_investasi' => $total_arus_kas_investasi,
             'kenaikan_arus_kas' => $kenaikan_arus_kas,
             'saldo_awal_kas' => $saldo_awal_kas,
             'saldo_akhir_kas' => $saldo_akhir_kas,
@@ -97,7 +99,7 @@ class ArusKasController extends Controller
         ];
 
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('aruskas', $data);
+        $pdf->loadView('exports/aruskasExport', $data);
 
         return $pdf->download('aruskas.pdf');
     }
@@ -147,9 +149,12 @@ class ArusKasController extends Controller
 
         $totalPengeluaranInvestasi = $pengeluaran_investasi->isNotEmpty() ? $pengeluaran_investasi->first()->totalPerMonth : 0;
 
+        $total_arus_kas_investasi = 0 - $totalPengeluaranInvestasi;
+
         $previousMonth = ($request->get('month', date('n')) - 1) ?: 12;
 
-        $kenaikan_arus_kas = $total_arus_kas_operasional + $totalPengeluaranInvestasi;
+        $kenaikan_arus_kas = $total_arus_kas_operasional + $total_arus_kas_investasi;
+
         $saldo_awal_kas_pendapatan = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
                                                 ->where([
                                                     [DB::raw('month(transaksis.created_at)'), '=', $previousMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
@@ -178,7 +183,7 @@ class ArusKasController extends Controller
             'pengeluaran_operasional' => $pengeluaran_operasional,
             'total_arus_kas_operasional' => $total_arus_kas_operasional,
             'pengeluaran_investasi' => $pengeluaran_investasi,
-            'total_pengeluaran_investasi' => $totalPengeluaranInvestasi,
+            'total_pengeluaran_investasi' => $total_arus_kas_investasi,
             'kenaikan_arus_kas' => $kenaikan_arus_kas,
             'saldo_awal_kas' => $saldo_awal_kas,
             'saldo_akhir_kas' => $saldo_akhir_kas,

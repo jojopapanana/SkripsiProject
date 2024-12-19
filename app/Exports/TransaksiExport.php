@@ -23,10 +23,11 @@ class TransaksiExport implements WithHeadings, FromCollection
 
     public function collection()
     {
-        $query_data = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payments.id')
-                                            ->select('id', 'created_at as Tanggal Transaksi', 'nominal', 'type', 'category', 'payments.name', 'description')
+        $query_data = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                            ->select('transaksis.id', 'created_at as Tanggal Transaksi', 'nominal', 'type', 'category', 'payment_methods.name', 'description')
                                             ->whereMonth('created_at', $this->month)
                                             ->whereYear('created_at', $this->year)
+                                            ->orderBy('transaksis.id')
                                             ->get();
         return $query_data;
     }

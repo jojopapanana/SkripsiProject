@@ -84,7 +84,7 @@
                 <div class="col">
                     @forEach($rugi as $loss)
                             <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold text-danger">(Rp. {{ number_format($loss->nominal, 0, ',', '.') }})</h3>
+                            <h3 class="text-end fs-6 fw-bold" style="color: red">(Rp. {{ number_format($loss->nominal, 0, ',', '.') }})</h3>
                         </div>
                     @endforeach
                 </div>
@@ -104,7 +104,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+
+            <div class="row mt-2">
                 <div class="col">
                     <div class="justify-content-start">
                         <h5 class="text-start fs-6 fw-bold">Total Laba/Rugi</h4>
@@ -117,7 +118,7 @@
                         </div>
                     @elseif($status == 'Rugi')
                         <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold" style="color: rgba(255, 0, 0, 1)">Rp. {{ number_format($balance, 0, ',', '.') }}</h3>
+                            <h3 class="text-end fs-6 fw-bold" style="color: red">Rp. {{ number_format($balance, 0, ',', '.') }}</h3>
                         </div>
                     @else
                         <div class="justify-content-end">
