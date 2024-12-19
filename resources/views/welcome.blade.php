@@ -6,7 +6,7 @@
         <div class="dashboard-card">
             <div class="d-flex justify-content-between align-items-top">
                 <div>
-                    <h4 class="fw-bold">Pendapatan bersihmu per hari ini</h4>
+                    <h4 class="fw-normal">Pendapatan bersihmu per hari ini</h4>
                     <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1)">Rp. {{ number_format($pendapatan_bersih_bulanan, 0, ',', '.') }}</h4>
                 </div>
 
@@ -17,7 +17,7 @@
         <div class="dashboard-card">
             <div class="d-flex justify-content-between align-items-top">
                 <div>
-                    <h4 class="fw-bold">Kasmu per hari ini</h4>
+                    <h4 class="fw-normal">Kasmu per hari ini</h4>
                     <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1)">Rp. {{ number_format($kas_bulanan, 0, ',', '.') }}</h4>
                 </div>
 
@@ -27,11 +27,11 @@
     </div>
 
     <div class="dashboard-trenkeuntungan">
-        <h3 class="fw-bold">Tren Pendapatan-mu Bulan Ini!</h3>
-        <canvas id="myChart" style="width: 70vw; height: 40vh"></canvas>
+        <h3 class="fw-bold" style="font-size: 25px; margin-bottom: 20px;">Tren Pendapatan-mu Bulan Ini!</h3>
+        <canvas id="myChart" style="width: 60vw; height: 30vh"></canvas>
     </div>
 
-    <div class="d-flex justify-content-between mt-5">
+    <div class="d-flex justify-content-between" style="margin-top: 70px">
         <button type="button" class="btn btn-primary custom-modal-btn mr-2" data-toggle="modal" data-target="#modalityPemasukan">
             Tambah Pemasukan
         </button>
