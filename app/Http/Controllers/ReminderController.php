@@ -132,9 +132,11 @@ class ReminderController extends Controller
     public function destroy(string $id)
     {
         $utangPiutang = UtangPiutang::where('reminderID', $id)->first();
-        $utangPiutang->update([
-            'reminderID' => NULL
-        ]);
+        if ($utangPiutang) {
+            $utangPiutang->update([
+                'reminderID' => NULL
+            ]);
+        }
 
         Reminder::find($id)->delete();
         return redirect()->route('reminder');
