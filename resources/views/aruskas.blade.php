@@ -36,8 +36,144 @@
         </div>
     </div>
 
+    <div class="card mt-4">
+        <div class="card-body">
+            <h6 class="fw-bold">Arus Kas Operasional</h6>
+            <div class="row">
+                <div class="col">
+                        <div class="justify-content-start">
+                            <h3 class="text-start fs-6 fw-normal mt-2">Penerimaan Kas Penjualan</h3>
+                        </div>
+                </div>
+                <div class="col">
+                    @foreach ($pendapatan_operasional as $p)
+                    <div class="justify-content-end">
+                        <h3 class="text-end fs-6 fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }}</h3>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
 
-    <div class="aruskas-container">
+            <div class="row">
+                <div class="col">
+                        <div class="justify-content-start">
+                            <h3 class="text-start fs-6 fw-normal mt-2">Biaya Operasional Usaha</h3>
+                        </div>
+                </div>
+                <div class="col">
+                    @foreach ($pengeluaran_operasional as $p)
+                    <div class="justify-content-end">
+                        <h3 class="text-end fs-6 fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }}</h3>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col">
+                    <div class="justify-content-start">
+                        <h5 class="text-start fs-6 fw-bold">Total Arus Kas Operasional</h4>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="justify-content-end">
+                        <h3 class="text-end fs-6 fw-bold">Rp. {{ number_format($total_arus_kas_operasional, 0, ',', '.') }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <h6 class="fw-bold">Arus Kas Investasi</h6>
+            <div class="row">
+                <div class="col">
+                        <div class="justify-content-start">
+                            <h3 class="text-start fs-6 fw-normal mt-2">Biaya Investasi Usaha</h3>
+                        </div>
+                </div>
+                <div class="col">
+                    @foreach ($pengeluaran_investasi as $p)
+                        <div class="justify-content-end">
+                            <h3 class="text-end fs-6 fw-bold text-danger">(Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }})</h3>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col">
+                    <div class="justify-content-start">
+                        <h5 class="text-start fs-6 fw-bold">Total Arus Kas Investasi</h4>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="justify-content-end">
+                        <h3 class="text-end fs-6 fw-bold">Rp. {{ number_format($total_pengeluaran_investasi, 0, ',', '.') }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="justify-content-start">
+                        <h5 class="text-start fs-6 fw-bold">Kenaikan/Penurunan Kas</h4>
+                    </div>
+                </div>
+
+                <div class="col">
+                    @if($status == 'Untung')
+                        <div class="justify-content-end">
+                            <h3 class="text-end fs-6 fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($kenaikan_arus_kas, 0, ',', '.') }}</h3>
+                        </div>
+                    @elseif($status == 'Rugi')
+                        <div class="justify-content-end">
+                            <h3 class="text-end fs-6 fw-bold" style="rgba(255, 0, 0, 1)">Rp. {{ number_format($kenaikan_arus_kas, 0, ',', '.') }}</h3>
+                        </div>
+                    @else
+                        <div class="justify-content-end">
+                            <h3 class="text-end fs-6 fw-bold">Rp. 0</h3>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="justify-content-start">
+                        <h5 class="text-start fs-6 fw-bold">Saldo Kas Awal</h4>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="justify-content-end">
+                        <h3 class="text-end fs-6 fw-bold">Rp. {{ number_format($saldo_awal_kas, 0, ',', '.') }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="justify-content-start">
+                        <h5 class="text-start fs-6 fw-bold">Saldo Kas Akhir</h4>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="justify-content-end">
+                        <h3 class="text-end fs-6 fw-bold">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- <div class="aruskas-container">
         <p class="fw-bold">Arus Kas Operasional</p>
         <div class="d-flex justify-content-between">
             <p>Penerimaan kas penjualan</p>
@@ -89,7 +225,7 @@
             <p class="fw-bold">Saldo Kas Akhir</p>
             <p class="fw-bold">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</p>
         </div>
-    </div>
+    </div> --}}
 
     @if ($pendapatan_operasional->count() != 0 || $pengeluaran_operasional->count() != 0 || $pengeluaran_investasi->count() != 0)
       <div class="d-flex justify-content-end mt-3 mb-5">

@@ -693,6 +693,7 @@ main{
 }
 
 //UTANG PIUTANG
+
 #utangButton{
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -700,9 +701,13 @@ main{
 
 .btn-outline-primary {
     border-color: rgba(30, 3, 66, 1) !important;
+    border: 2px solid;
     color: rgba(30, 3, 66, 1) !important;
-    background-color: transparent !important;
+    background-color: white !important;
     transition: all 0.2s ease-in-out;
+    font-size: 1.25rem;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .btn-outline-primary:hover {

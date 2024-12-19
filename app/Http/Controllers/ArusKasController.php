@@ -82,6 +82,8 @@ class ArusKasController extends Controller
         $saldo_awal_kas = $totalPendapatanAwal - $totalPengeluaranAwal;
         $saldo_akhir_kas = $kenaikan_arus_kas + $saldo_awal_kas;
 
+        $status = $kenaikan_arus_kas > 0 ? 'Untung' : ($kenaikan_arus_kas < 0 ? 'Rugi' : 'Seimbang');
+
         $data = [
             'pendapatan_operasional' => $pendapatan_operasional,
             'pengeluaran_operasional' => $pengeluaran_operasional,
@@ -90,7 +92,8 @@ class ArusKasController extends Controller
             'total_pengeluaran_investasi' => $totalPengeluaranInvestasi,
             'kenaikan_arus_kas' => $kenaikan_arus_kas,
             'saldo_awal_kas' => $saldo_awal_kas,
-            'saldo_akhir_kas' => $saldo_akhir_kas
+            'saldo_akhir_kas' => $saldo_akhir_kas,
+            'status' => $status
         ];
 
         $pdf = app('dompdf.wrapper');
@@ -168,6 +171,8 @@ class ArusKasController extends Controller
         $saldo_awal_kas = $totalPendapatanAwal - $totalPengeluaranAwal;
         $saldo_akhir_kas = $kenaikan_arus_kas + $saldo_awal_kas;
 
+        $status = $kenaikan_arus_kas > 0 ? 'Untung' : ($kenaikan_arus_kas < 0 ? 'Rugi' : 'Seimbang');
+
         return view('aruskas', [
             'pendapatan_operasional' => $pendapatan_operasional,
             'pengeluaran_operasional' => $pengeluaran_operasional,
@@ -176,7 +181,8 @@ class ArusKasController extends Controller
             'total_pengeluaran_investasi' => $totalPengeluaranInvestasi,
             'kenaikan_arus_kas' => $kenaikan_arus_kas,
             'saldo_awal_kas' => $saldo_awal_kas,
-            'saldo_akhir_kas' => $saldo_akhir_kas
+            'saldo_akhir_kas' => $saldo_akhir_kas,
+            'status' => $status
         ]);
     }
 
