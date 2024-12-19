@@ -20,6 +20,8 @@ return new class extends Migration
             $table->date('batasWaktu');
             $table->integer('nominal');
             $table->string('jenis');
+            $table->unsignedBigInteger('reminderID')->nullable();
+            $table->foreign('reminderID')->references('id')->on('reminders')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

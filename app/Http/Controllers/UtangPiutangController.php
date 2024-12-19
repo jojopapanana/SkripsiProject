@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UtangPiutang;
+use App\Models\Reminder;
 
 class UtangPiutangController extends Controller
 {
@@ -22,7 +23,8 @@ class UtangPiutangController extends Controller
             'utang_piutangs.deskripsi as deskripsi',
             'utang_piutangs.batasWaktu as batasWaktu',
             'utang_piutangs.nominal as nominal',
-            'utang_piutangs.jenis as jenis'
+            'utang_piutangs.jenis as jenis',
+            'utang_piutangs.reminderID as reminderID'
         )->where('userID', '=', $userid);
     
         if ($type && $type !== 'all') {
@@ -64,6 +66,7 @@ class UtangPiutangController extends Controller
             'batasWaktu' => $request->batasWaktu,
             'nominal' => $request->nominal,
             'jenis' => $request->jenis,
+            'reminderID' => NULL,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -93,6 +96,7 @@ class UtangPiutangController extends Controller
     public function update(Request $request, string $id)
     {
             $utang = UtangPiutang::find($id);
+            $reminder = Reminder::find($utang->reminderID);
     
             if ($utang) {
                 $request->validate([
@@ -108,6 +112,14 @@ class UtangPiutangController extends Controller
                     'nominal' => $request->nominal,
                     'jenis' => $request->jenis
                 ]);
+
+                if ($reminder) {
+                    $reminder->update([
+                        'reminderName' => $request->deskripsi,
+                        'reminderDeadline' => $request->batasWaktu,
+                        'reminderDescription' => $request->nominal
+                    ]);
+                }
     
                 return redirect()->back()->with('success', 'Utang/Piutang berhasil diperbarui!');
             }
@@ -122,9 +134,12 @@ class UtangPiutangController extends Controller
     {
         {
             $utangPiutang = UtangPiutang::find($id);
+            $reminder = Reminder::find($utangPiutang->reminderID);
     
             if ($utangPiutang) {
+                $reminder->delete();
                 $utangPiutang->delete();
+
                 return redirect()->back()->with('success', 'SUCCESS : Berhasil Dihapus');
             }
     
