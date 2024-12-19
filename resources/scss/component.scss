@@ -779,3 +779,14 @@ main{
 .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
     color: #1E0342;
 }
+
+// icon in onboarding
+.icon-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 9rem;
+    margin-left: 7rem;
+    overflow: hidden;
+}

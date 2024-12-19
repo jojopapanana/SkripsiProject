@@ -23,7 +23,7 @@
                             <input type="text" class="form-control border-style" id="deskripsi" name="deskripsi" placeholder="Barang masuk 30 buah, ..." required>
                         </div>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer mb-2">
                         <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
                     </div>
@@ -56,7 +56,7 @@
                             <input type="text" class="form-control border-style" id="editReminderDescription" name="deskripsi" required>
                         </div>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer mb-2">
                         <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="btn p-0 me-5" style="color: red; border: none">
                             <i class="bi bi-trash3-fill" style="font-size: 1.1rem"></i>
                         </button>

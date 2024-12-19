@@ -16,9 +16,9 @@ class PaymentMethodSeeder extends Seeder
     {
         DB::table('payment_methods')->insert([
             ['name' => 'Tunai'],
-            ['name' => 'BCA'],
-            ['name' => 'OVO'],
-            ['name' => 'GOPAY']
+            ['name' => 'Kartu Kredit'],
+            ['name' => 'Kartu Debit'],
+            ['name' => 'E-Wallet']
         ]);
     }
 }

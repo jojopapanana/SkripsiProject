@@ -166,7 +166,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer mb-2">
                             <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
                             @method('PUT')
                             <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
@@ -208,7 +208,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer mb-2">
                         <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
                     </div>

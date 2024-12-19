@@ -88,11 +88,11 @@
                                             <div class="modal-header justify-content-center">
                                                 <p class="modal-title" id="exampleModalLabel">Detail Transaksi</p>
                                             </div>
-                                            <div class="modal-body">
-                                                <form id="editTransaction" method="POST" action="{{ route('transaksi.update', $transaction->id) }}" enctype="multipart/form-data">
-                                                    @csrf
-                                                    @method('UPDATE')
-
+                                            <form id="editTransaction" method="POST" action="{{ route('transaksi.update', $transaction->id) }}" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('UPDATE')
+                                                
+                                                <div class="modal-body">
                                                     <div class="form-group position-relative mb-2">
                                                         <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
                                                         <input type="text" class="form-control border-style" name="kodeTransaksi" placeholder="{{ $transaction->id }}" disabled>
@@ -150,18 +150,17 @@
                                                         </select>
                                                     </div>
 
-                                                    <div class="form-group position-relative mb-4">
+                                                    <div class="form-group position-relative mb-2">
                                                         <label for="deskripsiTransaksi" class="col-form-label" id="inputModalLabel">Deskripsi Transaksi</label>
                                                         <textarea class="form-control border-style" id="transactionDesc" name="deskripsiTransaksi" rows="3" required>{{ $transaction->description }}</textarea>
                                                     </div>
-
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
-                                                        @method('PUT')
-                                                        <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                                </div>
+                                                <div class="modal-footer mb-2">
+                                                    <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
+                                                    @method('PUT')
+                                                    <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
