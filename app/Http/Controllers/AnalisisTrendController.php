@@ -16,7 +16,7 @@ class AnalisisTrendController extends Controller
     public function index(Request $request)
     {
         $userid = Auth::check() ? Auth::id() : null;
-        $rangeWaktu = $request->input('rangeWaktu'); 
+        $rangeWaktu = $request->input('rangeWaktu', 'mingguan'); 
 
         $produkTerbanyak = collect();
         $produkTerdikit = collect();
@@ -92,6 +92,14 @@ class AnalisisTrendController extends Controller
         $produkTerdikit = $produkTerdikit->map(function ($items) {
             return $items->first();
         });
+
+        if ($request->ajax()) {
+            return view('components.analisisStokForTrend', [
+                'produkTerbanyak' => $produkTerbanyak, 
+                'produkTerdikit' => $produkTerdikit, 
+                'rangeWaktu' => $rangeWaktu
+            ]);
+        }
 
         $batasBulan = Carbon::now()->subMonths(6);
         $pendapatanBulanan = DB::table('transaksis')
