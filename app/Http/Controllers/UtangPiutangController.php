@@ -137,7 +137,10 @@ class UtangPiutangController extends Controller
             $reminder = Reminder::find($utangPiutang->reminderID);
     
             if ($utangPiutang) {
-                $reminder->delete();
+                if ($reminder) {
+                    $reminder->delete();
+                }
+                
                 $utangPiutang->delete();
 
                 return redirect()->back()->with('success', 'SUCCESS : Berhasil Dihapus');
