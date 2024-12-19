@@ -98,6 +98,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/locales-all.min.js"></script>
 
     <script>
+        $(document).ready(function() {
+            // When the "Tidak" button is clicked and the delete modal is closed, show the edit modal again
+            $('#deleteModal').on('hidden.bs.modal', function() {
+                // Reopen the edit reminder modal
+                $('#editReminderModal').modal('show');
+            });
+
+            // If the delete button in the delete modal is clicked, ensure the modal doesn't reopen
+            $('#deleteReminderForm').on('submit', function() {
+                $('#deleteModal').off('hidden.bs.modal'); // Remove the reopen behavior
+            });
+        });
+    </script>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
