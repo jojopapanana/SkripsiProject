@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <div class="card mt-3">
+    <div class="card mt-5">
         <div class="card-body py-2">
             <table class="w-100">
                 <thead>
@@ -39,8 +39,8 @@
         </div>
     </div>
 
-    @foreach($utangPiutang as $utang)
-        <div class="card mt-3">
+    @foreach($utangPiutang as $index => $utang)
+    <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }}">
             <div class="card-body py-2">
                 <table class="w-100">
                     <tbody>
@@ -177,7 +177,7 @@
         </div>
     @endforeach
 
-    <button type="submit" class="btn btn-primary custom-btn mt-3 float-end" data-bs-toggle="modal" data-bs-target="#addModal">Tambah</button>
+    <button type="submit" class="btn btn-primary custom-btn mt-5 float-end" data-bs-toggle="modal" data-bs-target="#addModal">Tambah</button>
 
     <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered custom-modal-width">

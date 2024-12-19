@@ -3,7 +3,7 @@
         <h1 class="fw-bold">LAPORAN ARUS KAS</h1>
     </div>
     
-    <div class="d-flex justify-content-center gap-3 mt-3" style="width: 70vw">
+    <div class="d-flex justify-content-center gap-3 mt-2" style="width: 70vw">
         <div class="dropdown">
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ strtoupper(\Carbon\Carbon::now()->translatedFormat('F')) }}
@@ -36,10 +36,10 @@
         </div>
     </div>
 
-    <div class="card mt-4">
+    <div class="card mt-5">
         <div class="card-body">
             <h6 class="fw-bold">Arus Kas Operasional</h6>
-            <div class="row">
+            <div class="row" style="margin-bottom: -5px;">
                 <div class="col">
                         <div class="justify-content-start">
                             <h3 class="text-start fs-6 fw-normal mt-2">Penerimaan Kas Penjualan</h3>
@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" style="margin-bottom: -5px;">
                 <div class="col">
                         <div class="justify-content-start">
                             <h3 class="text-start fs-6 fw-normal mt-2">Biaya Operasional Usaha</h3>
@@ -69,7 +69,7 @@
                 </div>
             </div>
 
-            <hr>
+            <hr class="my-2">
 
             <div class="row">
                 <div class="col">
@@ -86,12 +86,12 @@
 
             <br>
 
-            <h6 class="fw-bold">Arus Kas Investasi</h6>
+            <h6 class="fw-bold mt-2">Arus Kas Investasi</h6>
             <div class="row">
                 <div class="col">
-                        <div class="justify-content-start">
-                            <h3 class="text-start fs-6 fw-normal mt-2">Biaya Investasi Usaha</h3>
-                        </div>
+                    <div class="justify-content-start" style="margin-bottom: -5px;">
+                        <h3 class="text-start fs-6 fw-normal mt-2">Biaya Investasi Usaha</h3>
+                    </div>
                 </div>
                 <div class="col">
                     @foreach ($pengeluaran_investasi as $p)
@@ -102,7 +102,7 @@
                 </div>
             </div>
 
-            <hr>
+            <hr class="my-2">
 
             <div class="row">
                 <div class="col">
@@ -118,7 +118,9 @@
                 </div>
             </div>
 
-            <div class="row">
+            <br>
+
+            <div class="row mt-2">
                 <div class="col">
                     <div class="justify-content-start">
                         <h5 class="text-start fs-6 fw-bold">Kenaikan/Penurunan Kas</h4>
@@ -132,7 +134,7 @@
                         </div>
                     @elseif($status == 'Rugi')
                         <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold" style="rgba(255, 0, 0, 1)">Rp. {{ number_format($kenaikan_arus_kas, 0, ',', '.') }}</h3>
+                            <h3 class="text-end fs-6 fw-bold" style="color: rgba(255, 0, 0, 1)">Rp. {{ number_format($kenaikan_arus_kas, 0, ',', '.') }}</h3>
                         </div>
                     @else
                         <div class="justify-content-end">
@@ -164,9 +166,19 @@
                 </div>
                 
                 <div class="col">
-                    <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</h3>
-                    </div>
+                    @if($saldo_akhir_kas > 0)
+                        <div class="justify-content-end">
+                            <h3 class="text-end fs-6 fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</h3>
+                        </div>
+                    @elseif($saldo_akhir_kas < 0)
+                        <div class="justify-content-end">
+                            <h3 class="text-end fs-6 fw-bold" style="color: rgba(255, 0, 0, 1)">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</h3>
+                        </div>
+                    @else
+                        <div class="justify-content-end">
+                            <h3 class="text-end fs-6 fw-bold">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</h3>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -228,7 +240,7 @@
     </div> --}}
 
     @if ($pendapatan_operasional->count() != 0 || $pengeluaran_operasional->count() != 0 || $pengeluaran_investasi->count() != 0)
-      <div class="d-flex justify-content-end mt-3 mb-5">
+      <div class="d-flex justify-content-end mt-5">
           <button class="btn fw-semibold" type="button" id="exportButton">
             Ekspor
           </button>
