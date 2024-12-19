@@ -113,6 +113,16 @@
     </script>
 
     <script>
+        $(document).ready(function() {
+            // Clear the values of 'judul' and 'deskripsi' every time the modal is shown
+            $('#addReminderModal').on('show.bs.modal', function() {
+                $('#judul').val('');
+                $('#deskripsi').val('');
+            });
+        });
+    </script>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
