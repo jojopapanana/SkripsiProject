@@ -53,10 +53,7 @@
                             <td class="text-start" style="width: 10%;">
                             <div class="d-flex gap-4">
                                 @php
-                                    $reminder = App\Models\Reminder::where('reminderName', $utang->deskripsi)
-                                        ->where('reminderDeadline', $utang->batasWaktu)
-                                        ->where('reminderDescription', $utang->nominal)
-                                        ->first();
+                                    $reminder = App\Models\Reminder::where('id', $utang->reminderID)->first();
                                 @endphp
 
                                 @if($reminder)

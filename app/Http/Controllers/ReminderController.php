@@ -18,6 +18,10 @@ class ReminderController extends Controller
     public function addUtangtoReminder(string $id){
         $utangPiutang = UtangPiutang::find($id);
 
+        if (!$utangPiutang) {
+            return redirect()->back()->with('error', 'Utang/Piutang not found.');
+        }
+
         $userid = Auth::check() ? Auth::id() : null;
         $reminder = new Reminder();
         $reminder->userID = $userid;
@@ -26,6 +30,9 @@ class ReminderController extends Controller
         $reminder->reminderDescription = $utangPiutang->nominal;
 
         $reminder->save();
+
+        $utangPiutang->reminderID = $reminder->id;
+        $utangPiutang->save();
 
         return redirect()->route('reminder');
     }
@@ -97,11 +104,24 @@ class ReminderController extends Controller
         ]);
 
         $reminder = Reminder::find($id);
+        if (!$reminder) {
+            return redirect()->route('reminder')->with('error', 'Reminder not found.');
+        }
+
         $reminder->reminderName = $request->judul;
         $reminder->reminderDeadline = $request->deadline;
         $reminder->reminderDescription = $request->deskripsi;
 
         $reminder->save();
+
+        $utangPiutang = UtangPiutang::where('reminderID', $id)->first();
+        if ($utangPiutang) {
+            $utangPiutang->update([
+                'deskripsi' => $request->judul,
+                'batasWaktu' => $request->deadline,
+                'nominal' => $request->deskripsi
+            ]);
+        }
 
         return redirect()->route('reminder');
     }
@@ -111,6 +131,11 @@ class ReminderController extends Controller
      */
     public function destroy(string $id)
     {
+        $utangPiutang = UtangPiutang::where('reminderID', $id)->first();
+        $utangPiutang->update([
+            'reminderID' => NULL
+        ]);
+
         Reminder::find($id)->delete();
         return redirect()->route('reminder');
     }
