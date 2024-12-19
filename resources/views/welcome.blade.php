@@ -260,7 +260,7 @@
                         <center>
                             <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
                         </center>
-                        <h4 class="fw-bold text-center" id="modalText">Selamat Datang di Website "LOGO"</h4>
+                        <h4 class="fw-bold text-center" id="modalText">Selamat Datang di Website BukuKasUMKM</h4>
                         <div class="d-flex justify-content-end gap-4 custom-button-container">
                             <button class="btn btn-primary custom-btn-modal-onboarding" id="nextModalButton">Lanjut</button>
                         </div>

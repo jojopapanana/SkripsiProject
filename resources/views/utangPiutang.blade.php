@@ -3,7 +3,7 @@
         <h1 class="fw-bold">UTANG PIUTANG</h1>
     </div>
 
-    <div class="d-flex justify-content-center mt-2">
+    <div class="d-flex justify-content-center mt-2" id="utangFilterGroup">
         <div class="btn-group" role="group" aria-label="utang filter button group">
             <input type="radio" class="btn-check" id="btncheck1" name="filter" autocomplete="off" value="Utang"
                 onclick="location.href='{{ url('utangPiutang/Utang') }}'" 
@@ -199,7 +199,7 @@
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="nominal" class="col-form-label" id="inputModalLabel">Nominal</label>
-                            <input type="text" class="form-control border-style" id="nominal" name="nominal" value="Rp. " required>
+                            <input type="text" class="form-control border-style" id="nominal" name="nominal" required>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="jenis" class="col-form-label" id="inputModalLabel">Jenis</label>
