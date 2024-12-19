@@ -56,7 +56,7 @@ class LabaRugiController extends Controller
         ];
 
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('labarugi', $data);
+        $pdf->loadView('exports/labaRugiExport', $data);
 
         return $pdf->download('labarugi.pdf');
     }

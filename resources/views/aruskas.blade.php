@@ -63,7 +63,7 @@
                 <div class="col">
                     @foreach ($pengeluaran_operasional as $p)
                     <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }}</h3>
+                        <h3 class="text-end fs-6 fw-bold" style="color: red">(Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }})</h3>
                     </div>
                     @endforeach
                 </div>
@@ -96,7 +96,7 @@
                 <div class="col">
                     @foreach ($pengeluaran_investasi as $p)
                         <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold text-danger">(Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }})</h3>
+                            <h3 class="text-end fs-6 fw-bold" style="color: red">(Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }})</h3>
                         </div>
                     @endforeach
                 </div>
@@ -134,7 +134,7 @@
                         </div>
                     @elseif($status == 'Rugi')
                         <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold" style="color: rgba(255, 0, 0, 1)">Rp. {{ number_format($kenaikan_arus_kas, 0, ',', '.') }}</h3>
+                            <h3 class="text-end fs-6 fw-bold" style="color: red">Rp. {{ number_format($kenaikan_arus_kas, 0, ',', '.') }}</h3>
                         </div>
                     @else
                         <div class="justify-content-end">
@@ -166,78 +166,13 @@
                 </div>
                 
                 <div class="col">
-                    @if($saldo_akhir_kas > 0)
-                        <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</h3>
-                        </div>
-                    @elseif($saldo_akhir_kas < 0)
-                        <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold" style="color: rgba(255, 0, 0, 1)">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</h3>
-                        </div>
-                    @else
-                        <div class="justify-content-end">
-                            <h3 class="text-end fs-6 fw-bold">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</h3>
-                        </div>
-                    @endif
+                    <div class="justify-content-end">
+                        <h3 class="text-end fs-6 fw-bold">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</h3>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-    {{-- <div class="aruskas-container">
-        <p class="fw-bold">Arus Kas Operasional</p>
-        <div class="d-flex justify-content-between">
-            <p>Penerimaan kas penjualan</p>
-            @foreach ($pendapatan_operasional as $p)
-                <p class="fw-bold" style="color: rgba(13, 190, 0, 1)">Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }}</p>
-            @endforeach
-        </div>
-
-        <div class="d-flex justify-content-between" style="border-bottom: 1px solid black; border-bottom-color: black">
-            <p>Biaya operasional usaha</p>
-            @foreach ($pengeluaran_operasional as $p)
-                <p class="fw-bold" style="color: rgba(255, 0, 0, 1)">(Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }})</p>
-            @endforeach
-        </div>
-
-        <div class="d-flex justify-content-between">
-            <p class="fw-bold">Total Arus Kas Operasional</p>
-            <p class="fw-bold">Rp. {{ number_format($total_arus_kas_operasional, 0, ',', '.') }}</p>
-        </div>
-
-        <br><br><br>
-
-
-        <p class="fw-bold">Arus Kas Investasi</p>
-
-        <div class="d-flex justify-content-between" style="border-bottom: 1px solid black; border-bottom-color: black">
-            <p>Biaya investasi usaha</p>
-            @foreach ($pengeluaran_investasi as $p)
-                <p class="fw-bold" style="color: rgba(255, 0, 0, 1)">(Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }})</p>
-            @endforeach
-        </div>
-
-        <div class="d-flex justify-content-between">
-            <p class="fw-bold">Total Arus Kas Investasi</p>
-            <p class="fw-bold">Rp. {{ number_format($total_pengeluaran_investasi, 0, ',', '.') }}</p>
-        </div>
-
-        <div class="d-flex justify-content-between">
-            <p class="fw-bold">Kenaikan/Penurunan Kas</p>
-            <p class="fw-bold">Rp. {{ number_format($kenaikan_arus_kas, 0, ',', '.') }}</p>
-        </div>
-        
-        <div class="d-flex justify-content-between">
-            <p class="fw-bold">Saldo Kas Awal</p>
-            <p class="fw-bold">Rp. {{ number_format($saldo_awal_kas, 0, ',', '.') }}</p>
-        </div>
-
-        <div class="d-flex justify-content-between">
-            <p class="fw-bold">Saldo Kas Akhir</p>
-            <p class="fw-bold">Rp. {{ number_format($saldo_akhir_kas, 0, ',', '.') }}</p>
-        </div>
-    </div> --}}
 
     @if ($pendapatan_operasional->count() != 0 || $pengeluaran_operasional->count() != 0 || $pengeluaran_investasi->count() != 0)
       <div class="d-flex justify-content-end mt-5">
