@@ -187,6 +187,11 @@
                     numberValue = ''; // If first character is 0, restrict the rest of the input
                 }
 
+                // Limit the input to the first 9 digits
+                if (numberValue.length > 9) {
+                    numberValue = numberValue.slice(0, 9); // Keep only the first 9 characters
+                }
+
                 // Format the number with dots as thousand separators
                 var formattedValue = numberValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 

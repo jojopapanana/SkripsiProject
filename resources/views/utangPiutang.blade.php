@@ -292,6 +292,11 @@
                     numberValue = ''; // If first character is 0, restrict the rest of the input
                 }
 
+                // Limit the input to the first 12 digits
+                if (numberValue.length > 12) {
+                    numberValue = numberValue.slice(0, 12); // Keep only the first 12 characters
+                }
+
                 // Format the number with dots as thousand separators
                 var formattedValue = numberValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
