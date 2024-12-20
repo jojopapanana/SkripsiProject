@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('userID');
             $table->foreign('userID')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('nominal')->nullable();
+            $table->bigInteger('nominal')->nullable();
             $table->string('type');
             $table->string('category');
             $table->unsignedBigInteger('methodID');

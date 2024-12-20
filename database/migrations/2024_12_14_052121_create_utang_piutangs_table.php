@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('userID')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('deskripsi');
             $table->date('batasWaktu');
-            $table->integer('nominal');
+            $table->bigInteger('nominal');
             $table->string('jenis');
             $table->unsignedBigInteger('reminderID')->nullable();
             $table->foreign('reminderID')->references('id')->on('reminders')->onUpdate('cascade')->onDelete('cascade');
