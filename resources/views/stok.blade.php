@@ -187,6 +187,11 @@
                     numberValue = ''; // If first character is 0, restrict the rest of the input
                 }
 
+                // Limit the input to the first 9 digits
+                if (numberValue.length > 9) {
+                    numberValue = numberValue.slice(0, 9); // Keep only the first 9 characters
+                }
+
                 // Format the number with dots as thousand separators
                 var formattedValue = numberValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
@@ -211,6 +216,10 @@
                     numberValue = '0';
                 }
 
+                if (numberValue.length > 5) {
+                    numberValue = numberValue.slice(0, 5);
+                }
+
                 // Update the input value
                 input.value = numberValue;
             }
@@ -229,7 +238,9 @@
             $(document).on('click', '.increment', function () {
                 var input = $(this).closest('.input-group').find('input#sisa');
                 var currentVal = parseInt(input.val()) || 0;
-                input.val(currentVal + 1);
+                if (currentVal < 99999) {
+                    input.val(currentVal + 1);
+                }
             });
 
             $(document).on('click', '.decrement', function () {

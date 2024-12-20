@@ -165,7 +165,7 @@
                                 <select class="form-control border-style" id="jenisBarangPengeluaran" name="jenisBarangPengeluaran">
                                     <option value="None">None</option>
                                     @foreach($products as $product)
-                                        <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                        <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -309,10 +309,10 @@
                             <table class="table mt-2" id="barangTableOnboarding">
                                 <thead>
                                 <tr>
-                                    <th scope="col">No.</th>
+                                    <th scope="col" style="width: 8%">No.</th>
                                     <th scope="col">Jenis Barang</th>
                                     <th scope="col">Jumlah</th>
-                                    <th scope="col">Harga Jual Satuan</th>
+                                    <th scope="col" style="width: 30%">Harga Jual Satuan</th>
                                     <th scope="col"></th>
                                 </tr>
                                 </thead>
@@ -416,7 +416,7 @@
                     return; // Stop further execution if preventInvalidOperations returns false
                 }
 
-                preventBackspace(this, event);
+                // preventBackspace(this, event);
             });
 
             $(document).on('input', 'input[name="nominalHargaBarangOnboarding[]"]', function () {
@@ -437,6 +437,11 @@
                 // Restrict the input to prevent entering numbers starting with 0 (except 0 itself)
                 if (numberValue.startsWith('0')) {
                     numberValue = ''; // If first character is 0, restrict the rest of the input
+                }
+
+                // Limit the input to the first 9 digits
+                if (numberValue.length > 9) {
+                    numberValue = numberValue.slice(0, 9); // Keep only the first 9 characters
                 }
 
                 // Format the number with dots as thousand separators
@@ -478,6 +483,20 @@
                 }
 
                 return true;
+            }
+
+            function preventNullAndMaxInput(event) {
+                var input = event.target;
+                var value = input.value
+
+                if (input.value === '') {
+                    input.value = 1
+                }
+
+                if (value.length > 5) {
+                    value = value.slice(0, 5);
+                    input.value = value
+                }
             }
 
             // Event to add a new row to the onboarding table
@@ -525,7 +544,10 @@
 
                 var input = $(this).closest('tr').find('input[name="jumlahBarangOnboarding[]"]');
                 var currentVal = parseInt(input.val()) || 1;
-                input.val(currentVal + 1);
+
+                if (currentVal < 99999) {
+                    input.val(currentVal + 1);
+                }
             });
 
             $(document).on('click', '.decrement', function (event) {
@@ -559,42 +581,10 @@
                 });
             });
 
-            $(document).on('input', 'input[name="namaBarangOnboarding[]"]', function() {
-                var currentInput = $(this);
-                var currentValue = currentInput.val().trim();
-
-                if (currentValue === '') {
-                    return; // If the input is empty, don't run the duplicate check
-                }
-
-                // Flag to track if we find a duplicate
-                var isDuplicate = false;
-
-                // Loop through all rows and check for duplicates
-                $('input[name="namaBarangOnboarding[]"]').each(function() {
-                    var otherInput = $(this);
-
-                    // Skip the current input being typed into
-                    if (otherInput.is(currentInput)) {
-                        return;
-                    }
-
-                    // If another input has the same value, set the duplicate flag
-                    if (otherInput.val().trim() === currentValue) {
-                        isDuplicate = true;
-                        return false; // Exit the loop early
-                    }
-                });
-
-                // If a duplicate is found, show an alert
-                if (isDuplicate) {
-                    alert('Nama barang sudah ada! Silakan masukkan nama barang yang berbeda.');
-                    currentInput.val('None');
-                }
-            });
-
             // Prevent operations on jumlahBarangOnboarding[] if namaBarangOnboarding[] is empty or "None"
             $(document).on('keydown', 'input[name="jumlahBarangOnboarding[]"]', preventInvalidOperations);
+
+            $(document).on('input', 'input[name="jumlahBarangOnboarding[]"]', preventNullAndMaxInput);
         });
     </script>
 
@@ -602,8 +592,9 @@
         $('[id^="onboarding-modal-3"]').on('submit', function(e) {
             var form = $(this);
             var hasNoValue = false;
+            var hasDuplicates = false;
 
-            // Loop through all 'namaBarangOnboarding[]' inputs
+            // Check for empty or "None" values in 'namaBarangOnboarding[]'
             form.find('input[name="namaBarangOnboarding[]"]').each(function() {
                 if ($(this).val() === 'None') {
                     hasNoValue = true;
@@ -611,6 +602,7 @@
                 }
             });
 
+            // Check for empty values in 'nominalHargaBarangOnboarding[]'
             form.find('input[name="nominalHargaBarangOnboarding[]"]').each(function() {
                 if ($(this).val() === '') {
                     hasNoValue = true;
@@ -618,9 +610,26 @@
                 }
             });
 
+            // Check for duplicate values in 'namaBarangOnboarding[]'
+            var values = [];
+            form.find('input[name="namaBarangOnboarding[]"]').each(function() {
+                var value = $(this).val().trim();
+                if (values.includes(value)) {
+                    hasDuplicates = true;
+                    return false; // Stop the loop once a duplicate is found
+                }
+                values.push(value);
+            });
+
             if (hasNoValue) {
                 e.preventDefault();
                 alert('Silahkan lengkapi Daftar Barang terlebih dahulu!');
+                return;
+            }
+
+            if (hasDuplicates) {
+                e.preventDefault();
+                alert('Terdapat nama barang yang duplikat. Mohon untuk diperbaiki terlebih dahulu!');
                 return;
             }
         });
@@ -729,7 +738,7 @@
                 var currVal = input.value;
 
                 var prevValue = row.attr('data-input-value') || 1;
-                var value = parseInt(input.value) || 0;
+                var value = parseInt(input.value) || 1;
                 var jenisBarang = row.find('select[name="jenisBarang[]"]');
                 var selectedOption = jenisBarang.find('option:selected');
                 var productStock = parseInt(selectedOption.data('stock')) || 1;
@@ -738,6 +747,10 @@
                     alert('Jumlah tidak boleh melebihi stok yang tersedia: ' + productStock);
                     input.value = prevValue;
                     return;
+                }
+
+                if (input.value === '') {
+                    input.value = 1
                 }
 
                 row.attr('data-input-value', value);
@@ -976,6 +989,9 @@
             $(document).on('keydown', '#jumlahBarangPengeluaran', function(event) {
                 preventDeletionPengeluaran(event);
             });
+            $(document).on('input', '#jumlahBarangPengeluaran', function(event) {
+                handleJumlahBarangPengeluaranInput(event);
+            });
             $(document).on('keydown', '#hargaJualSatuan', function(event) {
                 preventBackspace(this, event);
             });
@@ -985,6 +1001,37 @@
             $(document).on('blur', '#hargaJualSatuan', function(event) {
                 addCurrencySuffix(this);
             });
+
+            function handleJumlahBarangPengeluaranInput(event) {
+                var input = event.target;
+                var value = input.value;
+                var deskripsiValue = $('#deskripsi').val();
+
+                if (deskripsiValue === 'Tambah Stok') {
+                    var jenisBarang = document.getElementById('jenisBarangPengeluaran');
+                    var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
+                    var productStock = parseInt(selectedOption.dataset.stock) || 1;
+                    var maxProductToBeAdded = 99999 - productStock;
+
+                    if (value > maxProductToBeAdded) {
+                        alert('Jumlah stok maksimal yang dapat ditambahkan adalah ' + maxProductToBeAdded);
+                        value = String(globalInputValue);
+                    }
+                }
+
+                if (value.length > 5) {
+                    value = value.slice(0, 5);
+                }
+
+                // If the input becomes empty, default back to '0'
+                if (value === '') {
+                    value = '1';
+                }
+
+                // Update the input value
+                input.value = value;
+                globalInputValue = value;
+            }
 
             function preventInvalidOperationsPengeluaran() {
                 var deskripsiValue = $('#deskripsi').val();
@@ -1025,8 +1072,12 @@
                         var jenisBarang = document.getElementById('stokBaru')
 
                         if (jenisBarang.value === '') {
-                            alert('Silahkan masukkan nama stok barang terlebih dahulu!')
+                            alert('Silahkan masukkan nama stok barang terlebih dahulu!');
                             return;
+                        }
+
+                        if (parseInt(jumlahBarang.val()) < 99999) {
+                            jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
                         }
                     } else {
                         var jenisBarang = document.getElementById('jenisBarangPengeluaran');
@@ -1035,10 +1086,23 @@
                             alert('Silahkan pilih Jenis Barang terlebih dahulu!');
                             return;
                         }
+
+                        // pake if === Tambah Stok cuman buat make sure aja yang valuenya si Tambah Stok
+                        if (deskripsiValue === 'Tambah Stok') {
+                            var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
+                            var productStock = parseInt(selectedOption.dataset.stock) || 1;
+                            var maxProductToBeAdded = 99999 - productStock;
+
+                            if (parseInt(jumlahBarang.val()) >= maxProductToBeAdded) {
+                                alert('Jumlah stok maksimal yang dapat ditambahkan adalah ' + maxProductToBeAdded);
+                                return;
+                            } else {
+                                jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
+                            }
+                        }
                     }
 
-                    jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
-                    globalInputValue = parseInt(jumlahBarang.val())
+                    globalInputValue = parseInt(jumlahBarang.val());
                 });
 
                 $('#decrementPengeluaran').on('click', function() {
@@ -1046,7 +1110,7 @@
                         var jenisBarang = document.getElementById('stokBaru')
 
                         if (jenisBarang.value === '') {
-                            alert('Silahkan masukkan nama stok barang terlebih dahulu!')
+                            alert('Silahkan masukkan nama stok barang terlebih dahulu!');
                             return;
                         }
                     } else {
@@ -1060,7 +1124,7 @@
 
                     if (parseInt(jumlahBarang.val()) > 1) {
                         jumlahBarang.val(parseInt(jumlahBarang.val()) - 1);
-                        globalInputValue = parseInt(jumlahBarang.val())
+                        globalInputValue = parseInt(jumlahBarang.val());
                     }
                 });
             }
@@ -1096,6 +1160,13 @@
                 // Restrict the input to prevent entering numbers starting with 0 (except 0 itself)
                 if (numberValue.startsWith('0')) {
                     numberValue = ''; // If first character is 0, restrict the rest of the input
+                }
+
+                // Limit the input
+                var maxLength = (input.id === 'hargaJualSatuan' ? 9 : 12);
+
+                if (numberValue.length > maxLength) {
+                    numberValue = numberValue.slice(0, maxLength);
                 }
 
                 // Format the number with dots as thousand separators
@@ -1188,7 +1259,7 @@
                                 <select class="form-control border-style" id="jenisBarangPengeluaran" name="jenisBarangPengeluaran">
                                     <option value="None">None</option>
                                     @foreach($products as $product)
-                                        <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                        <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
                                     @endforeach
                                 </select>
                             </div>

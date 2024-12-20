@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('transactionID')->references('id')->on('transaksis')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('productID');
             $table->foreign('productID')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('productQuantity');
+            $table->bigInteger('productQuantity');
         });
     }
 
