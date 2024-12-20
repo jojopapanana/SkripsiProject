@@ -87,16 +87,16 @@
                                 @else
                                     <form action="{{ route('addUtangToReminder', $utang->utang_id) }}" method="POST" style="display: inline;">
                                         @csrf
-                                        <button type="submit" class="btn p-0" style="border: none">
+                                        <button type="submit" class="btn p-0 icon-default-button" style="border: none">
                                             <i class="bi bi-calendar-event-fill"></i>
                                         </button>
                                     </form>
                                 @endif
                                     
-                                    <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal{{ $utang->utang_id }}">
+                                    <button type="button" class="btn p-0 icon-default-button" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal{{ $utang->utang_id }}">
                                         <i class="bi bi-pencil-fill"></i>
                                     </button>
-                                    <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $utang->utang_id }}" class="btn p-0" style="color: red; border: none">
+                                    <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $utang->utang_id }}" class="btn p-0 delete-button" style="border: none">
                                         <i class="bi bi-trash3-fill"></i>
                                     </button>
                             </div>

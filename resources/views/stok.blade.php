@@ -31,10 +31,10 @@
                             <td class="text-start" style="width: 15%;">{{ $stok->sisa }}</td>
                             <td class="text-start" style="width: 10%;">
                                 <div class="d-flex gap-4">
-                                    <button type="button" class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal{{ $stok->stok_id }}">
+                                    <button type="button" class="btn p-0 icon-default-button" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal{{ $stok->stok_id }}">
                                         <i class="bi bi-pencil-fill"></i>
                                     </button>
-                                    <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $stok->stok_id }}" class="btn p-0" style="color: red; border: none">
+                                    <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $stok->stok_id }}" class="btn p-0 delete-button" style="border: none">
                                         <i class="bi bi-trash3-fill"></i>
                                     </button>
                                 </div>

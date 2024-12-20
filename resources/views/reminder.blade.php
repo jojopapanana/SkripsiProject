@@ -57,8 +57,8 @@
                         </div>
                     </div>
                     <div class="modal-footer mb-2">
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="btn p-0 me-5" style="color: red; border: none">
-                            <i class="bi bi-trash3-fill" style="font-size: 1.1rem"></i>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="btn p-0 me-5 delete-button" style="border: none; font-size: 1.2rem">
+                            <i class="bi bi-trash3-fill"></i>
                         </button>
                         <button type="button" class="btn btn-primary custom-btn ms-3 mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
                         @method('PUT')

@@ -27,7 +27,7 @@
         <tr>
             <td valign="bottom">
                 <div class="d-flex gap-3 pb-5 profile-bottom" id="profile" style="color: white">
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#logoutModal" class="btn p-0 me-5" style="color: white; border: none">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#logoutModal" class="btn p-0 me-5 selected-part" style="color: white; border: none; margin-left: 1px">
                         <div class="d-flex gap-3 fs-5">
                             <i class="bi bi-box-arrow-right"></i>
                             <a class="p-0 m-0" href="#">
