@@ -276,7 +276,6 @@
                 modal.find('#batasWaktu').val(originalBatasWaktuValue);
             });
 
-            $(document).on('keydown', '.nominal', preventBackspace);
             $(document).on('input', '.nominal', enforceNumericInput);
             $(document).on('blur', '.nominal', addCurrencySuffix);
 
@@ -310,13 +309,6 @@
                 }
             }
 
-            // Function to prevent deleting the "Rp. " prefix
-            function preventBackspace(input, event) {
-                // Prevent user from deleting the "Rp. " prefix using backspace or delete key
-                if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
-                    event.preventDefault();
-                }
-            }
         });
     </script>
 </x-layout>

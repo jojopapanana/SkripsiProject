@@ -122,6 +122,7 @@
                         </div>
                     </div>
                     <div class="modal-footer mb-2">
+                        <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
                     </div>
                 </form>
@@ -196,6 +197,7 @@
                         </div>
                     </div>
                     <div class="modal-footer mb-2">
+                        <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
                     </div>
                 </form>
@@ -923,7 +925,7 @@
                         return;
                     }
                 }
-                if (form.find('#nominalPengeluaran').val() === '') {
+                if (form.find('#nominalPengeluaran').val() === '' || form.find('#hargaJualSatuan').val() === '') {
                     e.preventDefault();
                     alert('Silahkan isi nominal terlebih dahulu!');
                     return;
@@ -1109,9 +1111,10 @@
                     return;
                 }
 
-                if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
-                    event.preventDefault();
-                }
+                // Below is needed if you want to enable key not to be deleted
+                // if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
+                //     event.preventDefault();
+                // }
             }
 
             function addCurrencySuffix(input) {

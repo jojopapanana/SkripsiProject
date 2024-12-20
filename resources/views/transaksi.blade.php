@@ -91,7 +91,7 @@
                                             <form id="editTransaction" method="POST" action="{{ route('transaksi.update', $transaction->id) }}" enctype="multipart/form-data">
                                                 @csrf
                                                 @method('UPDATE')
-                                                
+
                                                 <div class="modal-body">
                                                     <div class="form-group position-relative mb-2">
                                                         <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
@@ -99,7 +99,7 @@
                                                     </div>
 
                                                     <div class="form-group position-relative mb-2">
-                                                        <label for="tanggalTransaksi" class="col-form-label" id="inputModalLabel">Tanggal Transaksi</label>
+                                                        <label for="tanggalTransaksi" class="col-form-label" id="inputModalLabel">Tanggal</label>
                                                         <input type="date" class="form-control disabled border-style" name="tanggalTransaksi" value="{{ date('Y-m-d', strtotime($transaction->created_at)) }}" disabled>
                                                     </div>
 
@@ -124,7 +124,7 @@
                                                     </div>
 
                                                     <div class="form-group position-relative mb-2">
-                                                        <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis Transaksi</label>
+                                                        <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis</label>
                                                         <select class="form-select border-style" id="jenisTransaksi" name="jenisTransaksi" value="{{ $transaction->type }}">
                                                             <option value="Pemasukan" {{ $transaction->type == 'Pemasukan' ? 'selected' : '' }}>Pemasukan</option>
                                                             <option value="Pengeluaran" {{ $transaction->type == 'Pengeluaran' ? 'selected' : '' }}>Pengeluaran</option>
@@ -151,7 +151,7 @@
                                                     </div>
 
                                                     <div class="form-group position-relative mb-2">
-                                                        <label for="deskripsiTransaksi" class="col-form-label" id="inputModalLabel">Deskripsi Transaksi</label>
+                                                        <label for="deskripsiTransaksi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
                                                         <textarea class="form-control border-style" id="transactionDesc" name="deskripsiTransaksi" rows="3" required>{{ $transaction->description }}</textarea>
                                                     </div>
                                                 </div>
@@ -287,9 +287,6 @@
                 modal.find('#transactionDesc').val(originalDeskripsiValue);
             });
 
-            $(document).on('keydown', '#nominalTransaksi', function(event) {
-                preventBackspace(this, event);
-            });
             $(document).on('input', '#nominalTransaksi', function(event) {
                 enforceNumericInput(this);
             });
@@ -325,13 +322,6 @@
                 }
             }
 
-            // Function to prevent deleting the "Rp. " prefix
-            function preventBackspace(input, event) {
-                // Prevent user from deleting the "Rp. " prefix using backspace or delete key
-                if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
-                    event.preventDefault();
-                }
-            }
         });
     </script>
 

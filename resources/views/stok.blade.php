@@ -9,8 +9,8 @@
                 <thead>
                     <tr>
                         <th class="text-start" style="width: 20%;">Kode Stok</th>
-                        <th class="text-start" style="width: 30%;">Nama</th>
-                        <th class="text-start" style="width: 25%;">Nominal</th>
+                        <th class="text-start" style="width: 30%;">Nama Produk</th>
+                        <th class="text-start" style="width: 25%;">Harga Jual Satuan</th>
                         <th class="text-start" style="width: 15%;">Sisa</th>
                         <th class="text-start" style="width: 10%;"></th>
                     </tr>
@@ -63,11 +63,11 @@
                                 <input type="text" class="form-control border-style" id="nama" name="nama" value="{{ $stok->nama }}" required>
                             </div>
                             <div class="form-group position-relative mb-2">
-                                <label for="nominal" class="col-form-label" id="inputModalLabel">Nominal</label>
+                                <label for="nominal" class="col-form-label" id="inputModalLabel">Harga Jual Satuan</label>
                                 <input type="text" class="form-control border-style nominal" id="nominal" name="nominal" value="Rp. {{ number_format($stok->nominal, 0, ',', '.') }},-" required>
                             </div>
                             <div class="form-group position-relative mb-2">
-                                <label for="sisa" class="col-form-label" id="inputModalLabel">Sisa Stok</label>
+                                <label for="sisa" class="col-form-label" id="inputModalLabel">Sisa</label>
                                 <div class="input-group input-group-outline border-style">
                                     <button class="btn decrement" type="button">
                                         <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
@@ -169,7 +169,6 @@
                 modal.find('#sisa').val(originalSisaStokValue);
             });
 
-            $(document).on('keydown', '.nominal', preventBackspace);
             $(document).on('input', '.nominal', enforceNumericInput);
             $(document).on('blur', '.nominal', addCurrencySuffix);
 
@@ -223,14 +222,6 @@
                 // Ensure the value ends with ",-"
                 if (value.length > 4 && !value.endsWith(',-')) {
                     input.value = value + ',-';
-                }
-            }
-
-            // Function to prevent deleting the "Rp. " prefix
-            function preventBackspace(input, event) {
-                // Prevent user from deleting the "Rp. " prefix using backspace or delete key
-                if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
-                    event.preventDefault();
                 }
             }
 
