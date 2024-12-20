@@ -48,7 +48,7 @@
             <div class="modal-dialog modal-dialog-centered custom-modal-width">
                 <div class="modal-content pl-3 pr-3">
                     <div class="modal-header justify-content-center">
-                        <p class="modal-title" id="exampleModalLabel">Ubah Stok</p>
+                        <p class="modal-title" id="exampleModalLabel">Detail Stok Barang</p>
                     </div>
                     <form action="{{ route('stok.update', $stok->stok_id) }}" method="POST">
                         @csrf
