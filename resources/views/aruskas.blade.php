@@ -8,7 +8,7 @@
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ strtoupper(\Carbon\Carbon::now()->translatedFormat('F')) }}
             </button>
-            <ul class="dropdown-menu" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
+            <ul class="dropdown-menu w-100" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
                 <li><a class="dropdown-item" href="#" data-value="1">JANUARI</a></li>
                 <li><a class="dropdown-item" href="#" data-value="2">FEBRUARI</a></li>
                 <li><a class="dropdown-item" href="#" data-value="3">MARET</a></li>
@@ -28,7 +28,7 @@
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
               {{ now()->year }}
             </button>
-            <ul class="dropdown-menu" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
+            <ul class="dropdown-menu w-100" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
                 <li><a class="dropdown-item" href="#" data-value="2022">2022</a></li>
                 <li><a class="dropdown-item" href="#" data-value="2023">2023</a></li>
                 <li><a class="dropdown-item" href="#" data-value="2024">2024</a></li>
