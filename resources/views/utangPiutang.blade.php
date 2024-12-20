@@ -28,7 +28,7 @@
                 <thead>
                     <tr>
                         <th class="text-start" style="width: 15%;">Kode Transaksi</th>
-                        <th class="text-start" style="width: 25%;">Deskripsi</th>
+                        <th class="text-start" style="width: 25%;">Judul</th>
                         <th class="text-start" style="width: 16%;">Batas Waktu</th>
                         <th class="text-start" style="width: 15%;">Nominal</th>
                         <th class="text-start" style="width: 19%;">Jenis</th>
@@ -147,7 +147,7 @@
                                 <input type="text" class="form-control border-style" id="kodeTransaksi" placeholder="{{$utang->utang_id}}" disabled>
                             </div>
                             <div class="form-group position-relative mb-2">
-                                <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
+                                <label for="deskripsi" class="col-form-label" id="inputModalLabel">Judul</label>
                                 <input type="text" class="form-control border-style" id="deskripsi" name="deskripsi" value="{{ $utang->deskripsi }}" required>
                             </div>
                             <div class="form-group position-relative mb-2">
@@ -189,8 +189,8 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group position-relative mb-2">
-                            <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
-                            <input type="text" class="form-control border-style" id="deskripsi" name="deskripsi" required>
+                            <label for="deskripsi" class="col-form-label" id="inputModalLabel">Judul</label>
+                            <input type="text" class="form-control border-style" id="deskripsi" name="deskripsi" placeholder="Masukkan judul utang atau piutang" required>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="batasWaktu" class="col-form-label" id="inputModalLabel">Batas Waktu</label>

@@ -11,16 +11,16 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group position-relative mb-2">
-                            <label for="judul" class="col-form-label" id="inputModalLabel">Judul Pengingat</label>
-                            <input type="text" class="form-control border-style" id="judul" name="judul" placeholder="Menerima barang, Membayar sewa, ..." required>
+                            <label for="judul" class="col-form-label" id="inputModalLabel">Judul</label>
+                            <input type="text" class="form-control border-style" id="judul" name="judul" placeholder="Masukkan judul pengingat" required>
                         </div>
                         <div class="form-group position-relative mb-2">
-                            <label for="deadline" class="col-form-label" id="inputModalLabel">Tanggal Pengingat</label>
+                            <label for="deadline" class="col-form-label" id="inputModalLabel">Tanggal</label>
                             <input type="date" class="form-control border-style" id="deadline" name="deadline" required>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
-                            <input type="text" class="form-control border-style" id="deskripsi" name="deskripsi" placeholder="Barang masuk 30 buah, ..." required>
+                            <textarea class="form-control border-style" id="deskripsi" name="deskripsi" rows="3" placeholder="Masukkan detail deskripsi pengingat" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer mb-2">
@@ -44,16 +44,16 @@
                     <div class="modal-body">
                         <input type="hidden" id="reminderId" name="reminderId">
                         <div class="form-group position-relative mb-2">
-                            <label for="judul" class="col-form-label" id="inputModalLabel">Judul Pengingat</label>
+                            <label for="judul" class="col-form-label" id="inputModalLabel">Judul</label>
                             <input type="text" class="form-control border-style" id="editReminderName" name="judul" required>
                         </div>
                         <div class="form-group position-relative mb-2">
-                            <label for="deadline" class="col-form-label" id="inputModalLabel">Tanggal Pengingat</label>
+                            <label for="deadline" class="col-form-label" id="inputModalLabel">Tanggal</label>
                             <input type="date" class="form-control border-style" id="editReminderDeadline" name="deadline" required>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
-                            <input type="text" class="form-control border-style" id="editReminderDescription" name="deskripsi" required>
+                            <textarea class="form-control border-style" id="editReminderDescription" name="deskripsi" rows="3" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer mb-2">

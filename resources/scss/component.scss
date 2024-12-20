@@ -791,3 +791,10 @@ main{
     margin-left: 7rem;
     overflow: hidden;
 }
+
+table th,
+table td {
+    word-wrap: break-word; /* Allows text to wrap onto the next line */
+    word-break: break-word; /* Break long words to avoid overflow */
+    white-space: normal; /* Allows wrapping instead of forcing a single line */
+}
