@@ -20,7 +20,7 @@
                 <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="timeRangeButton" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ ucfirst($rangeWaktu) }}
                 </button>
-                <ul class="dropdown-menu" id="time-range-items" aria-labelledby="timeRangeButton">
+                <ul class="dropdown-menu w-100" id="time-range-items" aria-labelledby="timeRangeButton">
                     <li><a class="dropdown-item" data-value="mingguan" href="{{ route('analisisTrend', ['rangeWaktu' => 'mingguan']) }}">Mingguan</a></li>
                     <li><a class="dropdown-item" data-value="bulanan" href="{{ route('analisisTrend', ['rangeWaktu' => 'bulanan']) }}">Bulanan</a></li>
                     <li><a class="dropdown-item" data-value="tahunan" href="{{ route('analisisTrend', ['rangeWaktu' => 'tahunan']) }}">Tahunan</a></li>

@@ -8,7 +8,7 @@
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ strtoupper(\Carbon\Carbon::now()->translatedFormat('F')) }}
             </button>
-            <ul class="dropdown-menu" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
+            <ul class="dropdown-menu w-100" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
                 <li><a class="dropdown-item" href="#" data-value="1">JANUARI</a></li>
                 <li><a class="dropdown-item" href="#" data-value="2">FEBRUARI</a></li>
                 <li><a class="dropdown-item" href="#" data-value="3">MARET</a></li>
@@ -28,7 +28,7 @@
             <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ now()->year }}
             </button>
-            <ul class="dropdown-menu" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
+            <ul class="dropdown-menu w-100" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
                 <li><a class="dropdown-item" href="#" data-value="2022">2022</a></li>
                 <li><a class="dropdown-item" href="#" data-value="2023">2023</a></li>
                 <li><a class="dropdown-item" href="#" data-value="2024">2024</a></li>
@@ -197,31 +197,16 @@
     @endforeach
 
     @if ($transactions->count() > 0)
-      <div class="d-flex justify-content-end mt-5">
-        <div class="dropdown">
-          <button class="btn dropdown-toggle fw-semibold" type="button" id="exportDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-              Ekspor
-          </button>
-          <ul class="dropdown-menu" id="export-dropdown-menu" aria-labelledby="exportDropdownButton">
-              <li><a class="dropdown-item" id="export-link-excel">xlsx</a></li>
-              <li><a class="dropdown-item" id="export-link-csv">csv</a></li>
-              <li><a class="dropdown-item" id="export-link-pdf">pdf</a></li>
-          </ul>
-          
-        <!-- Alert Modal Component -->
-        <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <center>
-                            <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
-                        </center>
-                        <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
-                        <div class="d-flex justify-content-center gap-4 mt-4">
-                            <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-dismiss="modal">Oke</button>
-                        </div>
-                    </div>
-                </div>
+        <div class="d-flex justify-content-end mt-5">
+            <div class="dropdown">
+                <button class="btn dropdown-toggle fw-semibold" type="button" id="exportDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Ekspor
+                </button>
+                <ul class="dropdown-menu" id="export-dropdown-menu" aria-labelledby="exportDropdownButton">
+                    <li><a class="dropdown-item" id="export-link-excel">xlsx</a></li>
+                    <li><a class="dropdown-item" id="export-link-csv">csv</a></li>
+                    <li><a class="dropdown-item" id="export-link-pdf">pdf</a></li>
+                </ul>
             </div>
         </div>
     @endif
@@ -324,6 +309,23 @@
 
         });
     </script>
+
+    <!-- Alert Modal Component -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <center>
+                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                    </center>
+                    <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
+                    <div class="d-flex justify-content-center gap-4 mt-4">
+                        <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-dismiss="modal">Oke</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Function to change modal text and show the modal -->
     <script>
