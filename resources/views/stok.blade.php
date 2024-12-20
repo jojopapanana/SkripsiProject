@@ -216,6 +216,10 @@
                     numberValue = '0';
                 }
 
+                if (numberValue.length > 5) {
+                    numberValue = numberValue.slice(0, 5);
+                }
+
                 // Update the input value
                 input.value = numberValue;
             }
@@ -234,7 +238,9 @@
             $(document).on('click', '.increment', function () {
                 var input = $(this).closest('.input-group').find('input#sisa');
                 var currentVal = parseInt(input.val()) || 0;
-                input.val(currentVal + 1);
+                if (currentVal < 99999) {
+                    input.val(currentVal + 1);
+                }
             });
 
             $(document).on('click', '.decrement', function () {

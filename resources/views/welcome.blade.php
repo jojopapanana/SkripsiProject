@@ -165,7 +165,7 @@
                                 <select class="form-control border-style" id="jenisBarangPengeluaran" name="jenisBarangPengeluaran">
                                     <option value="None">None</option>
                                     @foreach($products as $product)
-                                        <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                        <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -485,11 +485,17 @@
                 return true;
             }
 
-            function preventNullInput(event) {
+            function preventNullAndMaxInput(event) {
                 var input = event.target;
+                var value = input.value
 
                 if (input.value === '') {
                     input.value = 1
+                }
+
+                if (value.length > 5) {
+                    value = value.slice(0, 5);
+                    input.value = value
                 }
             }
 
@@ -538,7 +544,10 @@
 
                 var input = $(this).closest('tr').find('input[name="jumlahBarangOnboarding[]"]');
                 var currentVal = parseInt(input.val()) || 1;
-                input.val(currentVal + 1);
+
+                if (currentVal < 99999) {
+                    input.val(currentVal + 1);
+                }
             });
 
             $(document).on('click', '.decrement', function (event) {
@@ -575,7 +584,7 @@
             // Prevent operations on jumlahBarangOnboarding[] if namaBarangOnboarding[] is empty or "None"
             $(document).on('keydown', 'input[name="jumlahBarangOnboarding[]"]', preventInvalidOperations);
 
-            $(document).on('input', 'input[name="jumlahBarangOnboarding[]"]', preventNullInput);
+            $(document).on('input', 'input[name="jumlahBarangOnboarding[]"]', preventNullAndMaxInput);
         });
     </script>
 
@@ -996,6 +1005,23 @@
             function handleJumlahBarangPengeluaranInput(event) {
                 var input = event.target;
                 var value = input.value;
+                var deskripsiValue = $('#deskripsi').val();
+
+                if (deskripsiValue === 'Tambah Stok') {
+                    var jenisBarang = document.getElementById('jenisBarangPengeluaran');
+                    var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
+                    var productStock = parseInt(selectedOption.dataset.stock) || 1;
+                    var maxProductToBeAdded = 99999 - productStock;
+
+                    if (value > maxProductToBeAdded) {
+                        alert('Jumlah stok maksimal yang dapat ditambahkan adalah ' + maxProductToBeAdded);
+                        value = String(globalInputValue);
+                    }
+                }
+
+                if (value.length > 5) {
+                    value = value.slice(0, 5);
+                }
 
                 // If the input becomes empty, default back to '0'
                 if (value === '') {
@@ -1004,6 +1030,7 @@
 
                 // Update the input value
                 input.value = value;
+                globalInputValue = value;
             }
 
             function preventInvalidOperationsPengeluaran() {
@@ -1045,8 +1072,12 @@
                         var jenisBarang = document.getElementById('stokBaru')
 
                         if (jenisBarang.value === '') {
-                            alert('Silahkan masukkan nama stok barang terlebih dahulu!')
+                            alert('Silahkan masukkan nama stok barang terlebih dahulu!');
                             return;
+                        }
+
+                        if (parseInt(jumlahBarang.val()) < 99999) {
+                            jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
                         }
                     } else {
                         var jenisBarang = document.getElementById('jenisBarangPengeluaran');
@@ -1055,10 +1086,23 @@
                             alert('Silahkan pilih Jenis Barang terlebih dahulu!');
                             return;
                         }
+
+                        // pake if === Tambah Stok cuman buat make sure aja yang valuenya si Tambah Stok
+                        if (deskripsiValue === 'Tambah Stok') {
+                            var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
+                            var productStock = parseInt(selectedOption.dataset.stock) || 1;
+                            var maxProductToBeAdded = 99999 - productStock;
+
+                            if (parseInt(jumlahBarang.val()) >= maxProductToBeAdded) {
+                                alert('Jumlah stok maksimal yang dapat ditambahkan adalah ' + maxProductToBeAdded);
+                                return;
+                            } else {
+                                jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
+                            }
+                        }
                     }
 
-                    jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
-                    globalInputValue = parseInt(jumlahBarang.val())
+                    globalInputValue = parseInt(jumlahBarang.val());
                 });
 
                 $('#decrementPengeluaran').on('click', function() {
@@ -1066,7 +1110,7 @@
                         var jenisBarang = document.getElementById('stokBaru')
 
                         if (jenisBarang.value === '') {
-                            alert('Silahkan masukkan nama stok barang terlebih dahulu!')
+                            alert('Silahkan masukkan nama stok barang terlebih dahulu!');
                             return;
                         }
                     } else {
@@ -1080,7 +1124,7 @@
 
                     if (parseInt(jumlahBarang.val()) > 1) {
                         jumlahBarang.val(parseInt(jumlahBarang.val()) - 1);
-                        globalInputValue = parseInt(jumlahBarang.val())
+                        globalInputValue = parseInt(jumlahBarang.val());
                     }
                 });
             }
@@ -1215,7 +1259,7 @@
                                 <select class="form-control border-style" id="jenisBarangPengeluaran" name="jenisBarangPengeluaran">
                                     <option value="None">None</option>
                                     @foreach($products as $product)
-                                        <option value="{{ $product->id }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                        <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
                                     @endforeach
                                 </select>
                             </div>
