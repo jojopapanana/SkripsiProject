@@ -99,7 +99,7 @@
                                             </button>
                                         </div>
                                         <div class="overlay-button">
-                                            <button type="button" class="btn delete-button">
+                                            <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
                                                 <i class="bi bi-trash3-fill"></i>
                                             </button>
                                         </div>
@@ -337,7 +337,7 @@
                                         <input type="text" class="form-control border-style-jenisBarang-onboarding" name="nominalHargaBarangOnboarding[]" id="nominalHargaBarangOnboarding" value="Rp. " required>
                                     </td>
                                     <td class="text-center">
-                                        <button type="button" class="btn delete-button">
+                                        <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
                                             <i class="bi bi-trash3-fill"></i>
                                         </button>
                                     </td>
@@ -506,7 +506,7 @@
                             <input type="text" class="form-control border-style-jenisBarang-onboarding" name="nominalHargaBarangOnboarding[]" value="Rp. " required>
                         </td>
                         <td class="text-center">
-                            <button type="button" class="btn delete-button">
+                            <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
                                 <i class="bi bi-trash3-fill"></i>
                             </button>
                         </td>
@@ -841,7 +841,7 @@
                                 </button>
                             </div>
                             <div class="overlay-button">
-                                <button type="button" class="btn delete-button">
+                                <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
                                     <i class="bi bi-trash3-fill"></i>
                                 </button>
                             </div>

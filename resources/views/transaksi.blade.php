@@ -73,11 +73,11 @@
                             <td class="text-start" style="width: 10%;">
 
                                 <div class="d-flex gap-4">
-                                <button class="btn p-0" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal-{{ $transaction->id }}">
+                                <button class="btn p-0 icon-default-button" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal-{{ $transaction->id }}">
                                     <i class="bi bi-pencil-fill"></i>
                                 </button>
                 
-                                <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $transaction->id }}" class="btn p-0" style="color: red; border: none">
+                                <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $transaction->id }}" class="btn p-0 delete-button" style="border: none">
                                     <i class="bi bi-trash3-fill"></i>
                                 </button>
                                 </div>

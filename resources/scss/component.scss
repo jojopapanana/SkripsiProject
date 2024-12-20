@@ -49,6 +49,26 @@ td a:hover {
     color: gray;
 }
 
+.selected-part:focus {
+    outline: none; /* Remove the default outline */
+    box-shadow: none; /* Remove any focus-related shadow */
+    border: none; /* Ensure no border appears */
+}
+
+td .selected-part:hover {
+    text-decoration: none;
+    color: gray; /* Apply the hover color to all children */
+}
+
+td .selected-part a {
+    text-decoration: none; /* Remove underline by default */
+}
+
+td .selected-part:hover i,
+td .selected-part:hover a {
+    color: gray; /* Change the color of both the icon and text */
+}
+
 body{
     background-color: rgba(225, 247, 245, 1);
 }
@@ -65,7 +85,7 @@ main{
 #addDaftarBarang, 
 #addDaftarBarangOnboarding {
     font-weight: 600;
-    border: none;
+    border: 2px solid #1E0342;
     border-radius: 0.6rem;
     background-color: #1E0342;
     color: #ffffff;
@@ -76,8 +96,9 @@ main{
 
 #addDaftarBarang:hover, 
 #addDaftarBarangOnboarding:hover {
-    background-color: #E0E0E0;
+    background-color: #ffffff;
     color: #1E0342;
+    border: 2px solid #1E0342;
 }
 
 #exampleModalLabel {
@@ -217,21 +238,34 @@ main{
     background-color: #ffffff;
 }
 
-.custom-btn:hover,
-.custom-btn-modal-onboarding:hover {
+.custom-btn:focus,
+.custom-btn:active,
+.custom-btn:visited,
+.custom-btn-modal-onboarding:focus,
+.custom-btn-modal-onboarding:active,
+.custom-btn-modal-onboarding:visited {
     background-color: #1E0342; /* Change background color when hovered or active */
+    border-color: #1E0342;
     color: #ffffff; /* Change text color to the original background color for contrast */
     outline: none; /* Ensure no outline appears on hover or active */
     box-shadow: none; /* Ensure no box shadow appears on hover or active */
 }
 
-.btn-closed:hover {
-    background-color: #ffffff;
-    color: #1E0342;
+.custom-btn:hover,
+.custom-btn-modal-onboarding:hover {
+    background-color: #ffffff; /* Change background color when hovered or active */
+    border-color: #1E0342;
+    color: #1E0342; /* Change text color to the original background color for contrast */
+    outline: none; /* Ensure no outline appears on hover or active */
+    box-shadow: none; /* Ensure no box shadow appears on hover or active */
 }
 
-.custom-btn:focus,
-.custom-btn:active,
+.btn-closed:hover {
+    color: #FF0505;
+    background-color: #ffffff;
+    border: 2px solid #FF0505;
+}
+
 .btn-closed:focus,
 .btn-closed:active {
     outline: none; /* Completely remove focus outline */
@@ -249,7 +283,7 @@ main{
     font-weight: 600;
     background-color: #1E0342; /* Set the background color */
     color: #ffffff; /* Set the text color to white */
-    border: none; /* Remove any default border */
+    border: 2px solid #1E0342; /* Remove any default border */
     font-size: 1.563rem; /* Adjust the font size */
     display: flex;
     align-items: center;
@@ -260,17 +294,22 @@ main{
     box-shadow: none; /* Remove any default box shadow */
 }
 
-.custom-modal-btn:hover {
-    background-color: #E0E0E0; /* Change background color when hovered or active */
-    color: #1E0342; /* Change text color to the original background color for contrast */
+.custom-modal-btn:focus,
+.custom-modal-btn:active,
+.custom-modal-btn:visited {
+    border: 2px solid #1E0342;
+    background-color: #1E0342; /* Change background color when hovered or active */
+    color: #ffffff; /* Change text color to the original background color for contrast */
     outline: none; /* Ensure no outline appears on hover or active */
     box-shadow: none; /* Ensure no box shadow appears on hover or active */
 }
 
-.custom-modal-btn:focus,
-.custom-modal-btn:active {
-    outline: none; /* Completely remove focus outline */
-    box-shadow: none; /* Remove any focus-related box shadow */
+.custom-modal-btn:hover {
+    border: 2px solid #1E0342;
+    background-color: #ffffff; /* Change background color when hovered or active */
+    color: #1E0342; /* Change text color to the original background color for contrast */
+    outline: none; /* Ensure no outline appears on hover or active */
+    box-shadow: none; /* Ensure no box shadow appears on hover or active */
 }
 
 .left-side,
@@ -431,7 +470,6 @@ main{
     padding: 0; /* Remove padding */
     cursor: pointer; /* Change cursor to pointer for better UX */
     color: red; /* Set the color of the icon to red */
-    font-size: 1.2rem;
 }
 
 .delete-button:hover {
@@ -441,6 +479,25 @@ main{
 .delete-button:focus {
     outline: none; /* Remove focus outline */
     box-shadow: none;
+    border: none;
+}
+
+.icon-default-button {
+    background-color: transparent; /* Make the button background transparent */
+    border: none; /* Remove the border */
+    padding: 0; /* Remove padding */
+    cursor: pointer; /* Change cursor to pointer for better UX */
+    color: #1E0342; /* Set the color of the icon to red */
+}
+
+.icon-default-button:hover {
+    color: #9AC8CD; /* Change color on hover for better feedback */
+}
+
+.icon-default-button:focus {
+    outline: none; /* Remove focus outline */
+    box-shadow: none;
+    border: none;
 }
 
 .table td {
