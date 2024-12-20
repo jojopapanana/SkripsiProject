@@ -11,16 +11,16 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group position-relative mb-2">
-                            <label for="judul" class="col-form-label" id="inputModalLabel">Judul Pengingat</label>
-                            <input type="text" class="form-control border-style" id="judul" name="judul" placeholder="Menerima barang, Membayar sewa, ..." required>
+                            <label for="judul" class="col-form-label" id="inputModalLabel">Judul</label>
+                            <input type="text" class="form-control border-style" id="judul" name="judul" placeholder="Masukkan judul pengingat" required>
                         </div>
                         <div class="form-group position-relative mb-2">
-                            <label for="deadline" class="col-form-label" id="inputModalLabel">Tanggal Pengingat</label>
+                            <label for="deadline" class="col-form-label" id="inputModalLabel">Tanggal</label>
                             <input type="date" class="form-control border-style" id="deadline" name="deadline" required>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
-                            <input type="text" class="form-control border-style" id="deskripsi" name="deskripsi" placeholder="Barang masuk 30 buah, ..." required>
+                            <textarea class="form-control border-style" id="deskripsi" name="deskripsi" rows="3" placeholder="Masukkan detail deskripsi pengingat" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer mb-2">
@@ -44,16 +44,16 @@
                     <div class="modal-body">
                         <input type="hidden" id="reminderId" name="reminderId">
                         <div class="form-group position-relative mb-2">
-                            <label for="judul" class="col-form-label" id="inputModalLabel">Judul Pengingat</label>
+                            <label for="judul" class="col-form-label" id="inputModalLabel">Judul</label>
                             <input type="text" class="form-control border-style" id="editReminderName" name="judul" required>
                         </div>
                         <div class="form-group position-relative mb-2">
-                            <label for="deadline" class="col-form-label" id="inputModalLabel">Tanggal Pengingat</label>
+                            <label for="deadline" class="col-form-label" id="inputModalLabel">Tanggal</label>
                             <input type="date" class="form-control border-style" id="editReminderDeadline" name="deadline" required>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
-                            <input type="text" class="form-control border-style" id="editReminderDescription" name="deskripsi" required>
+                            <textarea class="form-control border-style" id="editReminderDescription" name="deskripsi" rows="3" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer mb-2">
@@ -121,6 +121,42 @@
             });
         });
     </script>
+
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Alert Modal Component -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <center>
+                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                    </center>
+                    <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
+                    <div class="d-flex justify-content-center gap-4 mt-4">
+                        <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-dismiss="modal">Oke</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Function to change modal text and show the modal -->
+    <script>
+        var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+
+        function showAlert(text) {
+            document.getElementById('modalText').innerText = text;
+            alertModal.show();
+        }
+    </script>
+
+    @if (session('success'))
+        <script>
+            showAlert('{{ session('success') }}');
+        </script>
+    @endif
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

@@ -28,7 +28,7 @@
                 <thead>
                     <tr>
                         <th class="text-start" style="width: 15%;">Kode Transaksi</th>
-                        <th class="text-start" style="width: 25%;">Deskripsi</th>
+                        <th class="text-start" style="width: 25%;">Judul</th>
                         <th class="text-start" style="width: 16%;">Batas Waktu</th>
                         <th class="text-start" style="width: 15%;">Nominal</th>
                         <th class="text-start" style="width: 19%;">Jenis</th>
@@ -147,7 +147,7 @@
                                 <input type="text" class="form-control border-style" id="kodeTransaksi" placeholder="{{$utang->utang_id}}" disabled>
                             </div>
                             <div class="form-group position-relative mb-2">
-                                <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
+                                <label for="deskripsi" class="col-form-label" id="inputModalLabel">Judul</label>
                                 <input type="text" class="form-control border-style" id="deskripsi" name="deskripsi" value="{{ $utang->deskripsi }}" required>
                             </div>
                             <div class="form-group position-relative mb-2">
@@ -189,8 +189,8 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group position-relative mb-2">
-                            <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
-                            <input type="text" class="form-control border-style" id="deskripsi" name="deskripsi" required>
+                            <label for="deskripsi" class="col-form-label" id="inputModalLabel">Judul</label>
+                            <input type="text" class="form-control border-style" id="deskripsi" name="deskripsi" placeholder="Masukkan judul utang atau piutang" required>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="batasWaktu" class="col-form-label" id="inputModalLabel">Batas Waktu</label>
@@ -276,7 +276,6 @@
                 modal.find('#batasWaktu').val(originalBatasWaktuValue);
             });
 
-            $(document).on('keydown', '.nominal', preventBackspace);
             $(document).on('input', '.nominal', enforceNumericInput);
             $(document).on('blur', '.nominal', addCurrencySuffix);
 
@@ -310,13 +309,39 @@
                 }
             }
 
-            // Function to prevent deleting the "Rp. " prefix
-            function preventBackspace(input, event) {
-                // Prevent user from deleting the "Rp. " prefix using backspace or delete key
-                if (input.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
-                    event.preventDefault();
-                }
-            }
         });
     </script>
+
+    <!-- Alert Modal Component -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <center>
+                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                    </center>
+                    <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
+                    <div class="d-flex justify-content-center gap-4 mt-4">
+                        <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-dismiss="modal">Oke</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Function to change modal text and show the modal -->
+    <script>
+        var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+
+        function showAlert(text) {
+            document.getElementById('modalText').innerText = text;
+            alertModal.show();
+        }
+    </script>
+
+    @if (session('success'))
+        <script>
+            showAlert('{{ session('success') }}');
+        </script>
+    @endif
 </x-layout>

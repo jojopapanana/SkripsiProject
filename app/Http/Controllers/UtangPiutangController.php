@@ -71,7 +71,7 @@ class UtangPiutangController extends Controller
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('utangPiutang')->with('success', 'Transaksi berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Utang/piutang berhasil ditambahkan!');
     }
 
     /**
@@ -95,36 +95,36 @@ class UtangPiutangController extends Controller
      */
     public function update(Request $request, string $id)
     {
-            $utang = UtangPiutang::find($id);
-            $reminder = Reminder::find($utang->reminderID);
-    
-            if ($utang) {
-                $request->validate([
-                    'deskripsi' => 'required|string|max:255',
-                    'batasWaktu' => 'required|date',
-                    'nominal' => 'required|numeric',
-                    'jenis' => 'required|string|max:255'
-                ]);
-                
-                $utang->update([
-                    'deskripsi' => $request->deskripsi,
-                    'batasWaktu' => $request->batasWaktu,
-                    'nominal' => $request->nominal,
-                    'jenis' => $request->jenis
-                ]);
+        $utang = UtangPiutang::find($id);
+        $reminder = Reminder::find($utang->reminderID);
 
-                if ($reminder) {
-                    $reminder->update([
-                        'reminderName' => $request->deskripsi,
-                        'reminderDeadline' => $request->batasWaktu,
-                        'reminderDescription' => $request->nominal
-                    ]);
-                }
-    
-                return redirect()->back()->with('success', 'Utang/Piutang berhasil diperbarui!');
+        if ($utang) {
+            $request->validate([
+                'deskripsi' => 'required|string|max:255',
+                'batasWaktu' => 'required|date',
+                'nominal' => 'required|numeric',
+                'jenis' => 'required|string|max:255'
+            ]);
+            
+            $utang->update([
+                'deskripsi' => $request->deskripsi,
+                'batasWaktu' => $request->batasWaktu,
+                'nominal' => $request->nominal,
+                'jenis' => $request->jenis
+            ]);
+
+            if ($reminder) {
+                $reminder->update([
+                    'reminderName' => $request->deskripsi,
+                    'reminderDeadline' => $request->batasWaktu,
+                    'reminderDescription' => $request->nominal
+                ]);
             }
-    
-            return redirect()->back()->with('error', 'Utang/Piutang tidak ditemukan!');
+
+            return redirect()->back()->with('success', 'Utang/piutang berhasil diperbarui!');
+        }
+
+        return redirect()->back()->with('error', 'Utang/piutang tidak ditemukan!');
     }
 
     /**
@@ -132,21 +132,19 @@ class UtangPiutangController extends Controller
      */
     public function destroy(string $id)
     {
-        {
-            $utangPiutang = UtangPiutang::find($id);
-            $reminder = Reminder::find($utangPiutang->reminderID);
-    
-            if ($utangPiutang) {
-                if ($reminder) {
-                    $reminder->delete();
-                }
-                
-                $utangPiutang->delete();
+        $utangPiutang = UtangPiutang::find($id);
+        $reminder = Reminder::find($utangPiutang->reminderID);
 
-                return redirect()->back()->with('success', 'SUCCESS : Berhasil Dihapus');
+        if ($utangPiutang) {
+            if ($reminder) {
+                $reminder->delete();
             }
-    
-            return redirect()->back()->with('error', 'ERROR : Utang/Piutang Tidak Ditemukan');
+            
+            $utangPiutang->delete();
+
+            return redirect()->back()->with('success', 'Utang/piutang berhasil di hapus!');
         }
+
+        return redirect()->back()->with('error', 'Utang/piutang tidak ditemukan!');
     }
 }

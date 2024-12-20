@@ -19,7 +19,7 @@ class ReminderController extends Controller
         $utangPiutang = UtangPiutang::find($id);
 
         if (!$utangPiutang) {
-            return redirect()->back()->with('error', 'Utang/Piutang not found.');
+            return redirect()->back()->with('error', 'Utang/Piutang tidak ditemukan!');
         }
 
         $userid = Auth::check() ? Auth::id() : null;
@@ -34,7 +34,7 @@ class ReminderController extends Controller
         $utangPiutang->reminderID = $reminder->id;
         $utangPiutang->save();
 
-        return redirect()->route('reminder');
+        return redirect()->route('reminder')->with('success', 'Pengingat utang/piutang berhasil ditambahkan!');
     }
 
     public function index()
@@ -73,7 +73,7 @@ class ReminderController extends Controller
 
         $reminder->save();
 
-        return redirect()->route('reminder');
+        return redirect()->route('reminder')->with('success', 'Pengingat berhasil ditambahkan!');
     }
 
     /**
@@ -105,7 +105,7 @@ class ReminderController extends Controller
 
         $reminder = Reminder::find($id);
         if (!$reminder) {
-            return redirect()->route('reminder')->with('error', 'Reminder not found.');
+            return redirect()->route('reminder')->with('error', 'Pengingat tidak ditemukan!');
         }
 
         $reminder->reminderName = $request->judul;
@@ -123,7 +123,7 @@ class ReminderController extends Controller
             ]);
         }
 
-        return redirect()->route('reminder');
+        return redirect()->route('reminder')->with('success', 'Pengingat berhasil diperbarui!');
     }
 
     /**
@@ -139,6 +139,7 @@ class ReminderController extends Controller
         }
 
         Reminder::find($id)->delete();
-        return redirect()->route('reminder');
+        
+        return redirect()->route('reminder')->with('success', 'Pengingat berhasil di hapus!');
     }
 }
