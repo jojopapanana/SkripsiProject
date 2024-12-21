@@ -62,11 +62,15 @@
                         <tr>
                             <td class="text-start" style="width: 15%;">{{ $transaction->id }}</td>
                             <td class="text-start" style="width: 16%;">{{ date('Y-m-d', strtotime($transaction->created_at)) }}</td>
-                            @forEach($totals as $total)
-                                @if ($transaction->id == $total->id)
-                                    <td class="text-start" style="width: 16%;">Rp. {{ number_format($total->totalNominal, 0, ',', '.') }}</td>
-                                @endif
-                            @endforeach
+                            @if ($totals->contains('id', $transaction->id))
+                                @forEach($totals as $total)
+                                    @if ($transaction->id == $total->id)
+                                        <td class="text-start" style="width: 16%;">Rp. {{ number_format($total->totalNominal, 0, ',', '.') }}</td>
+                                    @endif
+                                @endforeach
+                            @else 
+                                <td class="text-start" style="width: 16%;">Rp. 0</td>
+                            @endif
                             <td class="text-start" style="width: 16%;">{{ $transaction->type }}</td>
                             <td class="text-start" style="width: 16%;">{{ $transaction->category }}</td>
                             <td class="text-start" style="width: 16%;">{{ $transaction->methodName }}</td>
@@ -105,22 +109,30 @@
 
                                                     <div class="form-group position-relative mb-2">
                                                         <label for="nominalTransaksi" class="col-form-label" id="inputModalLabel">Nominal</label>
-                                                        @forEach($totals as $total)
-                                                            @if ($transaction->id == $total->id)
-                                                                @if ($transaction->type == 'Pemasukan')
-                                                                <input type="text" class="form-control border-style" 
-                                                                    id="nominalTransaksi"
-                                                                    name="nominalTransaksi" 
-                                                                    value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-" 
-                                                                    disabled>
-                                                                @else
-                                                                <input type="text" class="form-control border-style"
-                                                                    id="nominalTransaksi"
-                                                                    name="nominalTransaksi" 
-                                                                    value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-">
+                                                        @if ($totals->contains('id', $transaction->id))
+                                                            @forEach($totals as $total)
+                                                                @if ($transaction->id == $total->id)
+                                                                    @if ($transaction->type == 'Pemasukan')
+                                                                    <input type="text" class="form-control border-style" 
+                                                                        id="nominalTransaksi"
+                                                                        name="nominalTransaksi" 
+                                                                        value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-" 
+                                                                        disabled>
+                                                                    @else
+                                                                    <input type="text" class="form-control border-style"
+                                                                        id="nominalTransaksi"
+                                                                        name="nominalTransaksi" 
+                                                                        value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-">
+                                                                    @endif
                                                                 @endif
-                                                            @endif
-                                                        @endforeach
+                                                            @endforeach
+                                                        @else
+                                                            <input type="text" class="form-control border-style" 
+                                                                id="nominalTransaksi"
+                                                                name="nominalTransaksi" 
+                                                                value="Rp. 0,-" 
+                                                                disabled>
+                                                        @endif
                                                     </div>
 
                                                     <div class="form-group position-relative mb-2">
@@ -168,7 +180,7 @@
                                 <div class="modal fade" id="deleteModal{{ $transaction->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
-                                            <div class="modal-body">
+                                            <div class="modal-body ps-4 pe-4 pb-4">
                                                 <center>
                                                     <i class="bi bi-exclamation-triangle-fill" style="font-size: 5rem; color: red"></i>
                                                 </center>
@@ -176,11 +188,11 @@
                                                 <h4 class="fw-bold text-center">Apakah Anda yakin ingin menghapus transaksi ini?</h4>
 
                                                 <div class="d-flex justify-content-center gap-4 mt-4">
-                                                    <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-bs-dismiss="modal">Tidak</button>
+                                                    <button class="btn fw-semibold cancel-btn" data-bs-dismiss="modal">Tidak</button>
 
                                                     <form method="POST" action="{{ route('transaksi.delete', $transaction->id) }}">
                                                         <input type="hidden" name="_method" value="DELETE">
-                                                        <button class="btn fw-semibold" style="background-color: rgba(210, 0, 0, 1); width: 5vw; color: white">Ya</button>
+                                                        <button class="btn fw-semibold confirm-btn">Ya</button>
                                                         @csrf
                                                     </form>
                                                 </div>
@@ -319,13 +331,13 @@
     <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-body ps-4 pe-4 pb-4">
                     <center>
                         <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
                     </center>
                     <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
                     <div class="d-flex justify-content-center gap-4 mt-4">
-                        <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-dismiss="modal">Oke</button>
+                        <button class="btn fw-semibold cancel-btn" data-dismiss="modal">Oke</button>
                     </div>
                 </div>
             </div>

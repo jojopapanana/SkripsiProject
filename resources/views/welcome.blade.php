@@ -220,13 +220,13 @@
     <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-body ps-4 pe-4 pb-4">
                     <center>
                         <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
                     </center>
                     <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
                     <div class="d-flex justify-content-center gap-4 mt-4">
-                        <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-dismiss="modal">Oke</button>
+                        <button class="btn fw-semibold cancel-btn" data-dismiss="modal">Oke</button>
                     </div>
                 </div>
             </div>
@@ -258,12 +258,12 @@
     <div class="modal fade" id="onboarding-modal-1" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
             <div class="modal-content">
-                <div class="modal-body custom-modal-body">
+                <div class="modal-body ps-4 pe-4 pb-4">
                     <div class="icon-container">
                         <img src="/assets/dark icon.png" alt="LOGO" class="icon-size">
                     </div>
                     <h4 class="fw-bold text-center" id="modalText">Selamat Datang di BukuKasUMKM</h4>
-                    <div class="d-flex justify-content-end gap-4 custom-button-container">
+                    <div class="d-flex justify-content-center gap-4 custom-button-container">
                         <button class="btn btn-primary custom-btn-modal-onboarding" id="nextModalButton">Lanjut</button>
                     </div>
                 </div>
@@ -274,13 +274,13 @@
     <div class="modal fade" id="onboarding-modal-2" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
             <div class="modal-content">
-                <div class="modal-body custom-modal-body">
+                <div class="modal-body ps-4 pe-4 pb-4">
                     <h3 class="fw-bold text-center" id="modalText">Hampir Selesai</h3>
                     <center class="custom-lottie-container">
                         <dotlottie-player src="https://lottie.host/7901cec0-c27f-418f-bb0f-04ea92357c73/Ns0p3a4GrY.json" background="transparent" speed="1.5" style="width: 150px; height: 150px;" loop autoplay></dotlottie-player>
                     </center>
                     <h5 class="fw-bold text-center" id="modalText">Silahkan lengkapi 'Data Stok Barang' untuk melanjutkan!</h5>
-                    <div class="d-flex justify-content-end gap-4 custom-button-container">
+                    <div class="d-flex justify-content-center gap-4 custom-button-container">
                         <button class="btn btn-primary custom-btn-modal-onboarding" id="nextModalButton-1">Lengkapi</button>
                     </div>
                 </div>
@@ -373,6 +373,29 @@
                     localStorage.setItem('onboardingCompleted', 'true');
                 });
             @endif
+        });
+    </script>
+
+    <!-- check for auto open modal pengeluaran untuk tambah stok-->
+    <script>
+        $(document).ready(function () {
+            // Check for the "status" parameter in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status');
+
+            if (status === '1') {
+                // Show the modal if "status=1" is in the URL
+                $('#modalityPengeluaran').modal('show');
+
+                // Remove the "status" parameter from the URL to prevent reopening on refresh
+                const newUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+            }
+
+            // Close the modal when "Tutup" is clicked
+            $('#modalityPengeluaran .btn-closed').on('click', function () {
+                $('#modalityPengeluaran').modal('hide');
+            });
         });
     </script>
 
