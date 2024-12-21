@@ -475,6 +475,7 @@
                 // Limit the input to the first 9 digits
                 if (numberValue.length > 9) {
                     numberValue = numberValue.slice(0, 9); // Keep only the first 9 characters
+                    alert('Batas maksimum input harga jual barang adalah 9 digit angka!');
                 }
 
                 // Format the number with dots as thousand separators
@@ -528,6 +529,8 @@
 
                 if (value.length > 5) {
                     value = value.slice(0, 5);
+                    alert('Batas maksimum input jumlah barang adalah 5 digit angka!');
+                    
                     input.value = value
                 }
             }
@@ -580,6 +583,8 @@
 
                 if (currentVal < 99999) {
                     input.val(currentVal + 1);
+                } else {
+                    alert('Batas maksimum input jumlah barang adalah 5 digit angka!');
                 }
             });
 
@@ -1054,6 +1059,7 @@
 
                 if (value.length > 5) {
                     value = value.slice(0, 5);
+                    alert('Batas maksimum input jumlah barang adalah 5 digit angka!');
                 }
 
                 // If the input becomes empty, default back to '0'
@@ -1111,6 +1117,8 @@
 
                         if (parseInt(jumlahBarang.val()) < 99999) {
                             jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
+                        } else {
+                            alert('Batas maksimum input jumlah barang adalah 5 digit angka!');
                         }
                     } else {
                         var jenisBarang = document.getElementById('jenisBarangPengeluaran');
@@ -1186,6 +1194,7 @@
 
             function enforceNumericInput(input) {
                 var value = input.value;
+                var deskripsiValue = $('#deskripsi').val();
 
                 // Remove any non-digit characters except the prefix
                 var numberValue = value.slice(4).replace(/\D/g, '');
@@ -1200,6 +1209,16 @@
 
                 if (numberValue.length > maxLength) {
                     numberValue = numberValue.slice(0, maxLength);
+                    
+                    if (maxLength === 9) {
+                        alert('Batas maksimum input harga jual barang adalah 9 digit angka!');
+                    } else {
+                        if (deskripsiValue === 'Lainnya') {
+                            alert('Batas maksimum input total pengeluaran adalah 12 digit angka!');
+                        } else {
+                            alert('Batas maksimum input total harga beli barang adalah 12 digit angka!');
+                        }
+                    }
                 }
 
                 // Format the number with dots as thousand separators

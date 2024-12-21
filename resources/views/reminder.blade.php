@@ -3,7 +3,7 @@
         <h1 class="fw-bold">PENGINGAT</h1>
     </div>
 
-    <div id="calendar" class="p-5 mt-3 mb-3" style="color: black"></div>
+    <div id="calendar" class="p-5 mt-3 mb-5" style="color: black"></div>
 
     <div class="modal fade" id="addReminderModal" tabindex="-1" aria-labelledby="addReminderModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">

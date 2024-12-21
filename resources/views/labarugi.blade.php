@@ -131,7 +131,7 @@
     </div>
 
     @if ($laba->count() != 0 || $rugi->count() != 0)
-        <div class="d-flex justify-content-end mt-5">
+        <div class="d-flex justify-content-end mt-5 mb-5">
             <button class="btn fw-semibold" type="button" id="exportLabaRugiButton">
             Ekspor
             </button>

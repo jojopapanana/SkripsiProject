@@ -30,8 +30,8 @@
                         <th class="text-start" style="width: 15%;">Kode Transaksi</th>
                         <th class="text-start" style="width: 25%;">Judul</th>
                         <th class="text-start" style="width: 16%;">Batas Waktu</th>
-                        <th class="text-start" style="width: 15%;">Nominal</th>
-                        <th class="text-start" style="width: 19%;">Jenis</th>
+                        <th class="text-start" style="width: 20%;">Nominal</th>
+                        <th class="text-start" style="width: 14%;">Jenis</th>
                         <th class="text-start" style="width: 10%;"></th>
                     </tr>
                 </thead>
@@ -49,8 +49,8 @@
                                 <td class="text-start" style="widd: 15%;">{{ $utang->utang_id }}</td>
                                 <td class="text-start" style="width: 25%;">{{ $utang->deskripsi }}</td>
                                 <td class="text-start" style="width: 16%;">{{ $utang->batasWaktu }}</td>
-                                <td class="text-start" style="width: 15%;">Rp. {{ number_format($utang->nominal, 0, ',', '.') }}</td>
-                                <td class="text-start" style="width: 19%;">{{ $utang->jenis }}</td>
+                                <td class="text-start" style="width: 20%;">Rp. {{ number_format($utang->nominal, 0, ',', '.') }}</td>
+                                <td class="text-start" style="width: 14%;">{{ $utang->jenis }}</td>
                                 <td class="text-start" style="width: 10%;">
                                 <div class="d-flex gap-4">
                                     @php
@@ -178,7 +178,7 @@
             </div>
         @endforeach
 
-        <button type="submit" class="btn btn-primary custom-btn mt-5 float-end" data-bs-toggle="modal" data-bs-target="#addModal">Tambah</button>
+        <button type="submit" class="btn btn-primary custom-btn mt-5 mb-5 float-end" data-bs-toggle="modal" data-bs-target="#addModal">Tambah</button>
     @else
         <div class="card mt-3">
             <div class="card-body py-2 m-3">
@@ -316,6 +316,7 @@
                 // Limit the input to the first 12 digits
                 if (numberValue.length > 12) {
                     numberValue = numberValue.slice(0, 12); // Keep only the first 12 characters
+                    alert('Batas maksimum input nominal utang/piutang adalah 12 digit angka!');
                 }
 
                 // Format the number with dots as thousand separators

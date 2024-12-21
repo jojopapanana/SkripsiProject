@@ -42,12 +42,12 @@
                 <thead>
                     <tr>
                         <th class="text-start" style="width: 15%;">Kode Transaksi</th>
-                        <th class="text-start" style="width: 16%;">Tanggal</th>
-                        <th class="text-start" style="width: 16%;">Nominal</th>
-                        <th class="text-start" style="width: 16%;">Kategori</th>
-                        <th class="text-start" style="width: 16%;">Jenis</th>
-                        <th class="text-start" style="width: 16%;">Metode</th>
-                        <th class="text-start" style="width: 10%;"></th>
+                        <th class="text-start" style="width: 15%;">Tanggal</th>
+                        <th class="text-start" style="width: 19%;">Nominal</th>
+                        <th class="text-start" style="width: 15%;">Kategori</th>
+                        <th class="text-start" style="width: 15%;">Jenis</th>
+                        <th class="text-start" style="width: 15%;">Metode</th>
+                        <th class="text-start" style="width: 6%;"></th>
                     </tr>
                 </thead>
             </table>
@@ -62,20 +62,20 @@
                         <tbody>
                             <tr>
                                 <td class="text-start" style="width: 15%;">{{ $transaction->id }}</td>
-                                <td class="text-start" style="width: 16%;">{{ date('Y-m-d', strtotime($transaction->created_at)) }}</td>
+                                <td class="text-start" style="width: 15%;">{{ date('Y-m-d', strtotime($transaction->created_at)) }}</td>
                                 @if ($totals->contains('id', $transaction->id))
                                     @forEach($totals as $total)
                                         @if ($transaction->id == $total->id)
-                                            <td class="text-start" style="width: 16%;">Rp. {{ number_format($total->totalNominal, 0, ',', '.') }}</td>
+                                            <td class="text-start" style="width: 19%;">Rp. {{ number_format($total->totalNominal, 0, ',', '.') }}</td>
                                         @endif
                                     @endforeach
                                 @else 
-                                    <td class="text-start" style="width: 16%;">Rp. 0</td>
+                                    <td class="text-start" style="width: 19%;">Rp. 0</td>
                                 @endif
-                                <td class="text-start" style="width: 16%;">{{ $transaction->type }}</td>
-                                <td class="text-start" style="width: 16%;">{{ $transaction->category }}</td>
-                                <td class="text-start" style="width: 16%;">{{ $transaction->methodName }}</td>
-                                <td class="text-start" style="width: 10%;">
+                                <td class="text-start" style="width: 15%;">{{ $transaction->type }}</td>
+                                <td class="text-start" style="width: 15%;">{{ $transaction->category }}</td>
+                                <td class="text-start" style="width: 15%;">{{ $transaction->methodName }}</td>
+                                <td class="text-start" style="width: 6%;">
 
                                     <div class="d-flex gap-4">
                                     <button class="btn p-0 icon-default-button" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal-{{ $transaction->id }}">
@@ -209,7 +209,7 @@
             </div>
         @endforeach
 
-        <div class="d-flex justify-content-end mt-5">
+        <div class="d-flex justify-content-end mt-5 mb-5">
             <div class="dropdown">
                 <button class="btn dropdown-toggle fw-semibold" type="button" id="exportDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                     Ekspor
@@ -317,6 +317,7 @@
                 // Limit the input to the first 12 digits
                 if (numberValue.length > 12) {
                     numberValue = numberValue.slice(0, 12); // Keep only the first 12 characters
+                    alert('Batas maksimum input nominal transaksi adalah 12 digit angka!');
                 }
 
                 // Format the number with dots as thousand separators

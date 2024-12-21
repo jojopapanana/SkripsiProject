@@ -8,11 +8,11 @@
             <table class="w-100">
                 <thead>
                     <tr>
-                        <th class="text-start" style="width: 20%;">Kode Stok</th>
-                        <th class="text-start" style="width: 30%;">Nama Produk</th>
-                        <th class="text-start" style="width: 25%;">Harga Jual Satuan</th>
-                        <th class="text-start" style="width: 15%;">Sisa</th>
-                        <th class="text-start" style="width: 10%;"></th>
+                        <th class="text-start" style="width: 21%;">Kode Stok</th>
+                        <th class="text-start" style="width: 31%;">Nama Produk</th>
+                        <th class="text-start" style="width: 26%;">Harga Jual Satuan</th>
+                        <th class="text-start" style="width: 16%;">Sisa</th>
+                        <th class="text-start" style="width: 6%;"></th>
                     </tr>
                 </thead>
             </table>
@@ -26,11 +26,11 @@
                     <table class="w-100">
                         <tbody>
                             <tr>
-                                <td class="text-start" style="width: 20%;">{{ $stok->stok_id }}</td>
-                                <td class="text-start" style="width: 30%;">{{ $stok->nama }}</td>
-                                <td class="text-start" style="width: 25%;">Rp. {{ number_format($stok->nominal, 0, ',', '.') }}</td>
-                                <td class="text-start" style="width: 15%;">{{ $stok->sisa }}</td>
-                                <td class="text-start" style="width: 10%;">
+                                <td class="text-start" style="width: 21%;">{{ $stok->stok_id }}</td>
+                                <td class="text-start" style="width: 31%;">{{ $stok->nama }}</td>
+                                <td class="text-start" style="width: 26%;">Rp. {{ number_format($stok->nominal, 0, ',', '.') }}</td>
+                                <td class="text-start" style="width: 16%;">{{ $stok->sisa }}</td>
+                                <td class="text-start" style="width: 6%;">
                                     <div class="d-flex gap-4">
                                         <button type="button" class="btn p-0 icon-default-button" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal{{ $stok->stok_id }}">
                                             <i class="bi bi-pencil-fill"></i>
@@ -114,7 +114,7 @@
             </div>
         @endforeach
 
-        <button type="submit" class="btn btn-primary custom-btn mt-5 float-end" data-bs-toggle="modal" data-bs-target="#addStok">Tambah</button>
+        <button type="submit" class="btn btn-primary custom-btn mt-5 mb-5 float-end" data-bs-toggle="modal" data-bs-target="#addStok">Tambah</button>
     @else
         <div class="card mt-3">
             <div class="card-body py-2 m-3">
@@ -224,6 +224,7 @@
                 // Limit the input to the first 9 digits
                 if (numberValue.length > 9) {
                     numberValue = numberValue.slice(0, 9); // Keep only the first 9 characters
+                    alert('Batas maksimum input harga jual barang adalah 9 digit angka!');
                 }
 
                 // Format the number with dots as thousand separators
@@ -252,6 +253,7 @@
 
                 if (numberValue.length > 5) {
                     numberValue = numberValue.slice(0, 5);
+                    alert('Batas maksimum input jumlah stok barang adalah 5 digit angka!');
                 }
 
                 // Update the input value
@@ -274,6 +276,8 @@
                 var currentVal = parseInt(input.val()) || 0;
                 if (currentVal < 99999) {
                     input.val(currentVal + 1);
+                } else {
+                    alert('Batas maksimum input jumlah stok barang adalah 5 digit angka!');
                 }
             });
 
