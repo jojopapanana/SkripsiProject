@@ -64,7 +64,7 @@
                                     <div class="modal fade" id="deleteReminderModal{{ $reminder->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
-                                                <div class="modal-body">
+                                                <div class="modal-body ps-4 pe-4 pb-4">
                                                     <center>
                                                         <i class="bi bi-exclamation-triangle-fill" style="font-size: 5rem; color: red"></i>
                                                     </center>
@@ -104,7 +104,7 @@
                             <div class="modal fade" id="deleteModal{{ $utang->utang_id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
-                                        <div class="modal-body">
+                                        <div class="modal-body ps-4 pe-4 pb-4">
                                             <center>
                                                 <i class="bi bi-exclamation-triangle-fill" style="font-size: 5rem; color: red"></i>
                                             </center>
@@ -321,7 +321,7 @@
     <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-body ps-4 pe-4 pb-4">
                     <center>
                         <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
                     </center>

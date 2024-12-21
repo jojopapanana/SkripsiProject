@@ -327,7 +327,7 @@ main{
 }
 
 .icon-size {
-    width: 10vw;
+    width: 150px;
 }
 
 .login-section h2,
@@ -339,7 +339,7 @@ main{
 .logo-size, .icon-size {
     position: absolute;
     top: 1.25rem;
-    left: 1.25rem;
+    left: 2.4rem;
     z-index: 5;
 }
 
@@ -631,10 +631,6 @@ main{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-
-.custom-modal-body {
-    padding: 40px 40px; /* Larger padding on top/bottom, smaller on sides */
 }
 
 .custom-button-container {

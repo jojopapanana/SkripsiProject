@@ -91,7 +91,7 @@
         <div class="modal fade" id="deleteModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-body">
+                    <div class="modal-body ps-4 pe-4 pb-4">
                         <center>
                             <i class="bi bi-exclamation-triangle-fill" style="font-size: 5rem; color: red"></i>
                         </center>
@@ -113,9 +113,27 @@
         </div>
     @endforeach
 
+    <button type="submit" class="btn btn-primary custom-btn mt-5 float-end" data-bs-toggle="modal" data-bs-target="#addStok">Tambah</button>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <div class="modal fade" id="addStok" tabindex="-1" aria-labelledby="addStokModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body ps-4 pe-4 pb-4">
+                    <center>
+                        <i class="bi bi-info-circle-fill" style="font-size: 5rem; color: #1E0342;"></i>
+                    </center>
+                    <p class="fw-normal text-center pb-3 pt-3" style="background-color: #E1F7F5; border-radius: 10px">Tambah stok dapat dilakukan di Halaman Utama dengan menekan tombol <strong>Tambah Pengeluaran</strong></p>
+                    <div class="d-flex justify-content-center gap-4 mt-4">
+                        <button class="btn btn-primary custom-btn-modal-onboarding">Lanjut</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.querySelectorAll('form').forEach(function(form) {
@@ -257,7 +275,7 @@
     <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-body ps-4 pe-4 pb-4">
                     <center>
                         <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
                     </center>
