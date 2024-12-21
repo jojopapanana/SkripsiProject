@@ -128,7 +128,10 @@
                     </center>
                     <p class="fw-normal text-center pb-3 pt-3" style="background-color: #E1F7F5; border-radius: 10px">Tambah stok dapat dilakukan di Halaman Utama dengan menekan tombol <strong>Tambah Pengeluaran</strong></p>
                     <div class="d-flex justify-content-center gap-4 mt-4">
-                        <button class="btn btn-primary custom-btn-modal-onboarding">Lanjut</button>
+                        <form action="{{ route('Dashboard') }}" method="GET">
+                            <input type="hidden" name="status" value="1">
+                            <button type="submit" class="btn btn-primary custom-btn-modal-onboarding">Lanjut</button>
+                        </form>
                     </div>
                 </div>
             </div>

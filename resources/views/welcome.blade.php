@@ -376,6 +376,29 @@
         });
     </script>
 
+    <!-- check for auto open modal pengeluaran untuk tambah stok-->
+    <script>
+        $(document).ready(function () {
+            // Check for the "status" parameter in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status');
+
+            if (status === '1') {
+                // Show the modal if "status=1" is in the URL
+                $('#modalityPengeluaran').modal('show');
+
+                // Remove the "status" parameter from the URL to prevent reopening on refresh
+                const newUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+            }
+
+            // Close the modal when "Tutup" is clicked
+            $('#modalityPengeluaran .btn-closed').on('click', function () {
+                $('#modalityPengeluaran').modal('hide');
+            });
+        });
+    </script>
+
     <script>
         $(document).ready(function() {
             // Enforce minimum value of 1 for dynamically added input fields
