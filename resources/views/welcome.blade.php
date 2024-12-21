@@ -226,7 +226,7 @@
                     </center>
                     <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
                     <div class="d-flex justify-content-center gap-4 mt-4">
-                        <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-dismiss="modal">Oke</button>
+                        <button class="btn fw-semibold cancel-btn" data-dismiss="modal">Oke</button>
                     </div>
                 </div>
             </div>

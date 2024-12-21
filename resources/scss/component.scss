@@ -261,9 +261,9 @@ main{
 }
 
 .btn-closed:hover {
-    color: #FF0505;
+    color: gray;
     background-color: #ffffff;
-    border: 2px solid #FF0505;
+    border: 2px solid gray;
 }
 
 .btn-closed:focus,
@@ -854,4 +854,27 @@ table td {
     word-wrap: break-word; /* Allows text to wrap onto the next line */
     word-break: break-word; /* Break long words to avoid overflow */
     white-space: normal; /* Allows wrapping instead of forcing a single line */
+}
+
+// confirm and cancel modality button
+.confirm-btn {
+    color: white;
+    background-color: red;
+    width: 80px;
+}
+
+.confirm-btn:hover {
+    color: white;
+    background-color: rgba(210, 0, 0, 1);
+}
+
+.cancel-btn {
+    color: black;
+    border: 2px solid black;
+    width: 80px;
+}
+
+.cancel-btn:hover {
+    color: gray;
+    border: 2px solid gray;
 }

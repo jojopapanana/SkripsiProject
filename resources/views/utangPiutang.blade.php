@@ -72,11 +72,11 @@
                                                     <h4 class="fw-bold text-center">Apakah Anda yakin ingin menghapus pengingat ini?</h4>
                                 
                                                     <div class="d-flex justify-content-center gap-4 mt-4">
-                                                        <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-bs-dismiss="modal">Tidak</button>
+                                                        <button class="btn fw-semibold cancel-btn" data-bs-dismiss="modal">Tidak</button>
                                 
                                                         <form id="deleteReminderForm" method="POST" action="{{ route('reminder.delete', $reminder->id) }}">
                                                             <input type="hidden" name="_method" value="DELETE">
-                                                            <button class="btn fw-semibold" style="background-color: rgba(210, 0, 0, 1); width: 5vw; color: white">Ya</button>
+                                                            <button class="btn fw-semibold confirm-btn">Ya</button>
                                                             @csrf
                                                         </form>
                                                     </div>
@@ -112,11 +112,11 @@
                                             <h4 class="fw-bold text-center">Apakah Anda yakin ingin menghapus utang/piutang ini?</h4>
 
                                             <div class="d-flex justify-content-center gap-4 mt-4">
-                                                <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-bs-dismiss="modal">Tidak</button>
+                                                <button class="btn fw-semibold cancel-btn" data-bs-dismiss="modal">Tidak</button>
 
                                                 <form method="POST" action="{{ route('utang.delete', $utang->utang_id) }}">
                                                     <input type="hidden" name="_method" value="DELETE">
-                                                    <button class="btn fw-semibold" style="background-color: rgba(210, 0, 0, 1); width: 5vw; color: white">Ya</button>
+                                                    <button class="btn fw-semibold confirm-btn">Ya</button>
                                                     @csrf
                                                 </form>
                                             </div>
@@ -327,7 +327,7 @@
                     </center>
                     <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
                     <div class="d-flex justify-content-center gap-4 mt-4">
-                        <button class="btn fw-semibold" style="border: 2px solid black; width: 5vw" data-dismiss="modal">Oke</button>
+                        <button class="btn fw-semibold cancel-btn" data-dismiss="modal">Oke</button>
                     </div>
                 </div>
             </div>
