@@ -317,6 +317,7 @@
                 // Limit the input to the first 12 digits
                 if (numberValue.length > 12) {
                     numberValue = numberValue.slice(0, 12); // Keep only the first 12 characters
+                    alert('Batas maksimum input nominal transaksi adalah 12 digit angka!');
                 }
 
                 // Format the number with dots as thousand separators

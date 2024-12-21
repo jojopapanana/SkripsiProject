@@ -224,6 +224,7 @@
                 // Limit the input to the first 9 digits
                 if (numberValue.length > 9) {
                     numberValue = numberValue.slice(0, 9); // Keep only the first 9 characters
+                    alert('Batas maksimum input harga jual barang adalah 9 digit angka!');
                 }
 
                 // Format the number with dots as thousand separators
@@ -252,6 +253,7 @@
 
                 if (numberValue.length > 5) {
                     numberValue = numberValue.slice(0, 5);
+                    alert('Batas maksimum input jumlah stok barang adalah 5 digit angka!');
                 }
 
                 // Update the input value
@@ -274,6 +276,8 @@
                 var currentVal = parseInt(input.val()) || 0;
                 if (currentVal < 99999) {
                     input.val(currentVal + 1);
+                } else {
+                    alert('Batas maksimum input jumlah stok barang adalah 5 digit angka!');
                 }
             });
 
