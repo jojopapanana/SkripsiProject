@@ -19,101 +19,114 @@
         </div>
     </div>
 
-    @foreach($stokData as $index => $stok)
-        <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }}">
-            <div class="card-body py-2">
-                <table class="w-100">
-                    <tbody>
-                        <tr>
-                            <td class="text-start" style="width: 20%;">{{ $stok->stok_id }}</td>
-                            <td class="text-start" style="width: 30%;">{{ $stok->nama }}</td>
-                            <td class="text-start" style="width: 25%;">Rp. {{ number_format($stok->nominal, 0, ',', '.') }}</td>
-                            <td class="text-start" style="width: 15%;">{{ $stok->sisa }}</td>
-                            <td class="text-start" style="width: 10%;">
-                                <div class="d-flex gap-4">
-                                    <button type="button" class="btn p-0 icon-default-button" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal{{ $stok->stok_id }}">
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </button>
-                                    <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $stok->stok_id }}" class="btn p-0 delete-button" style="border: none">
-                                        <i class="bi bi-trash3-fill"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="modal fade" id="editModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered custom-modal-width">
-                <div class="modal-content pl-3 pr-3">
-                    <div class="modal-header justify-content-center">
-                        <p class="modal-title" id="exampleModalLabel">Detail Stok Barang</p>
-                    </div>
-                    <form action="{{ route('stok.update', $stok->stok_id) }}" method="POST">
-                        @csrf
-                        @method('POST')
-                        <div class="modal-body">
-                            <div class="form-group position-relative mb-2">
-                                <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
-                                <input type="text" class="form-control border-style" id="kodeTransaksi" placeholder="{{$stok->stok_id}}" disabled>
-                            </div>
-                            <div class="form-group position-relative mb-2">
-                                <label for="nama" class="col-form-label" id="inputModalLabel">Nama Produk</label>
-                                <input type="text" class="form-control border-style" id="nama" name="nama" value="{{ $stok->nama }}" required>
-                            </div>
-                            <div class="form-group position-relative mb-2">
-                                <label for="nominal" class="col-form-label" id="inputModalLabel">Harga Jual Satuan</label>
-                                <input type="text" class="form-control border-style nominal" id="nominal" name="nominal" value="Rp. {{ number_format($stok->nominal, 0, ',', '.') }},-" required>
-                            </div>
-                            <div class="form-group position-relative mb-2">
-                                <label for="sisa" class="col-form-label" id="inputModalLabel">Sisa</label>
-                                <div class="input-group input-group-outline border-style">
-                                    <button class="btn decrement" type="button">
-                                        <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
-                                    </button>
-                                    <input type="text" class="form-control border-style text-center sisa" id="sisa" name="sisa" value="{{ $stok->sisa }}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="0">
-                                    <button class="btn increment" type="button">
-                                        <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer mb-2">
-                            <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
-                            <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
-                        </div>
-                    </form>
+    @if($stokData->count() > 0)
+        @foreach($stokData as $index => $stok)
+            <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }}">
+                <div class="card-body py-2">
+                    <table class="w-100">
+                        <tbody>
+                            <tr>
+                                <td class="text-start" style="width: 20%;">{{ $stok->stok_id }}</td>
+                                <td class="text-start" style="width: 30%;">{{ $stok->nama }}</td>
+                                <td class="text-start" style="width: 25%;">Rp. {{ number_format($stok->nominal, 0, ',', '.') }}</td>
+                                <td class="text-start" style="width: 15%;">{{ $stok->sisa }}</td>
+                                <td class="text-start" style="width: 10%;">
+                                    <div class="d-flex gap-4">
+                                        <button type="button" class="btn p-0 icon-default-button" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal{{ $stok->stok_id }}">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </button>
+                                        <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $stok->stok_id }}" class="btn p-0 delete-button" style="border: none">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
-
-        <div class="modal fade" id="deleteModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body ps-4 pe-4 pb-4">
-                        <center>
-                            <i class="bi bi-exclamation-triangle-fill" style="font-size: 5rem; color: red"></i>
-                        </center>
-
-                        <h4 class="fw-bold text-center">Apakah Anda yakin ingin menghapus stok ini?</h4>
-
-                        <div class="d-flex justify-content-center gap-4 mt-4">
-                            <button class="btn fw-semibold cancel-btn" data-bs-dismiss="modal">Tidak</button>
-
-                            <form method="POST" action="{{ route('stok.delete', $stok->stok_id) }}">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button class="btn fw-semibold confirm-btn">Ya</button>
+            <div class="modal fade" id="editModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered custom-modal-width">
+                    <div class="modal-content pl-3 pr-3">
+                        <div class="modal-header justify-content-center">
+                            <p class="modal-title" id="exampleModalLabel">Detail Stok Barang</p>
+                        </div>
+                        <form action="{{ route('stok.update', $stok->stok_id) }}" method="POST">
                             @csrf
-                            </form>
+                            @method('POST')
+                            <div class="modal-body">
+                                <div class="form-group position-relative mb-2">
+                                    <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
+                                    <input type="text" class="form-control border-style" id="kodeTransaksi" placeholder="{{$stok->stok_id}}" disabled>
+                                </div>
+                                <div class="form-group position-relative mb-2">
+                                    <label for="nama" class="col-form-label" id="inputModalLabel">Nama Produk</label>
+                                    <input type="text" class="form-control border-style" id="nama" name="nama" value="{{ $stok->nama }}" required>
+                                </div>
+                                <div class="form-group position-relative mb-2">
+                                    <label for="nominal" class="col-form-label" id="inputModalLabel">Harga Jual Satuan</label>
+                                    <input type="text" class="form-control border-style nominal" id="nominal" name="nominal" value="Rp. {{ number_format($stok->nominal, 0, ',', '.') }},-" required>
+                                </div>
+                                <div class="form-group position-relative mb-2">
+                                    <label for="sisa" class="col-form-label" id="inputModalLabel">Sisa</label>
+                                    <div class="input-group input-group-outline border-style">
+                                        <button class="btn decrement" type="button">
+                                            <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
+                                        </button>
+                                        <input type="text" class="form-control border-style text-center sisa" id="sisa" name="sisa" value="{{ $stok->sisa }}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="0">
+                                        <button class="btn increment" type="button">
+                                            <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer mb-2">
+                                <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
+                                <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="deleteModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body ps-4 pe-4 pb-4">
+                            <center>
+                                <i class="bi bi-exclamation-triangle-fill" style="font-size: 5rem; color: red"></i>
+                            </center>
+
+                            <h4 class="fw-bold text-center">Apakah Anda yakin ingin menghapus stok ini?</h4>
+
+                            <div class="d-flex justify-content-center gap-4 mt-4">
+                                <button class="btn fw-semibold cancel-btn" data-bs-dismiss="modal">Tidak</button>
+
+                                <form method="POST" action="{{ route('stok.delete', $stok->stok_id) }}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button class="btn fw-semibold confirm-btn">Ya</button>
+                                @csrf
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    @endforeach
+        @endforeach
 
-    <button type="submit" class="btn btn-primary custom-btn mt-5 float-end" data-bs-toggle="modal" data-bs-target="#addStok">Tambah</button>
+        <button type="submit" class="btn btn-primary custom-btn mt-5 float-end" data-bs-toggle="modal" data-bs-target="#addStok">Tambah</button>
+    @else
+        <div class="card mt-3">
+            <div class="card-body py-2 m-3">
+                <center>
+                    <div class="mb-1"><img src="/assets/no-data.png" alt="NO-DATA" style="width:100px"></div>
+                    <p class="fw-bold mb-2" style="font-size: 1.5rem">Oops..!</p>
+                    <p class="fw-semibold mb-5">Saat ini belum ada data stok barang nih. Yuk, tambahkan stok barangmu untuk mulai mencatat!</p>
+                    <button type="submit" class="btn btn-primary custom-btn" data-bs-toggle="modal" data-bs-target="#addStok">Tambah</button>
+                </center>
+            </div>
+        </div>
+    @endif
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>

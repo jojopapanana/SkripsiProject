@@ -6,29 +6,40 @@
         <div class="dashboard-card">
             <div class="d-flex justify-content-between align-items-top">
                 <div>
-                    <h4 class="fw-normal">Pendapatan bersihmu per hari ini</h4>
+                    <h4 class="fw-semibold">Pendapatan bersihmu per hari ini</h4>
                     <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1)">Rp. {{ number_format($pendapatan_bersih_bulanan, 0, ',', '.') }}</h4>
                 </div>
 
-                <i class="bi bi-file-bar-graph-fill fs-1"></i>
+                <img src="/assets/profits.png" alt="MONEY-PROFIT" style="width: 60px; height: 60px">
             </div>
         </div>
 
         <div class="dashboard-card">
             <div class="d-flex justify-content-between align-items-top">
                 <div>
-                    <h4 class="fw-normal">Kasmu per hari ini</h4>
+                    <h4 class="fw-semibold">Kasmu per hari ini</h4>
                     <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1)">Rp. {{ number_format($kas_bulanan, 0, ',', '.') }}</h4>
                 </div>
 
-                <i class="bi bi-cash fs-1"></i>
+                <img src="/assets/wallet.png" alt="WALLET" style="width: 60px; height: 60px">
             </div>
         </div>
     </div>
 
     <div class="dashboard-trenkeuntungan">
         <h3 class="fw-bold" style="font-size: 25px; margin-bottom: 20px;">Tren Pendapatan-mu Bulan Ini!</h3>
-        <canvas id="myChart" style="width: 60vw; height: 30vh"></canvas>
+        @if($data->isNotEmpty())
+            <canvas id="myChart" style="width: 60vw; height: 30vh"></canvas>
+        @else
+            <div class="card mt-3">
+                <div class="card-body py-2 m-3">
+                    <center>
+                        <div class="mb-1" style="margin-top: 13.5px"><img src="/assets/bar-graph.png" alt="BAR-GRAPH" style="width:150px"></div>
+                        <p class="fw-semibold mb-2" style="font-size: 25px; padding-bottom: 13.5px">Belum ada data analisis nih!</p>
+                    </center>
+                </div>
+            </div>
+        @endif
     </div>
 
     <div class="d-flex justify-content-between" style="margin-top: 70px">
