@@ -62,11 +62,15 @@
                         <tr>
                             <td class="text-start" style="width: 15%;">{{ $transaction->id }}</td>
                             <td class="text-start" style="width: 16%;">{{ date('Y-m-d', strtotime($transaction->created_at)) }}</td>
-                            @forEach($totals as $total)
-                                @if ($transaction->id == $total->id)
-                                    <td class="text-start" style="width: 16%;">Rp. {{ number_format($total->totalNominal, 0, ',', '.') }}</td>
-                                @endif
-                            @endforeach
+                            @if ($totals->contains('id', $transaction->id))
+                                @forEach($totals as $total)
+                                    @if ($transaction->id == $total->id)
+                                        <td class="text-start" style="width: 16%;">Rp. {{ number_format($total->totalNominal, 0, ',', '.') }}</td>
+                                    @endif
+                                @endforeach
+                            @else 
+                                <td class="text-start" style="width: 16%;">Rp. 0</td>
+                            @endif
                             <td class="text-start" style="width: 16%;">{{ $transaction->type }}</td>
                             <td class="text-start" style="width: 16%;">{{ $transaction->category }}</td>
                             <td class="text-start" style="width: 16%;">{{ $transaction->methodName }}</td>
@@ -105,22 +109,30 @@
 
                                                     <div class="form-group position-relative mb-2">
                                                         <label for="nominalTransaksi" class="col-form-label" id="inputModalLabel">Nominal</label>
-                                                        @forEach($totals as $total)
-                                                            @if ($transaction->id == $total->id)
-                                                                @if ($transaction->type == 'Pemasukan')
-                                                                <input type="text" class="form-control border-style" 
-                                                                    id="nominalTransaksi"
-                                                                    name="nominalTransaksi" 
-                                                                    value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-" 
-                                                                    disabled>
-                                                                @else
-                                                                <input type="text" class="form-control border-style"
-                                                                    id="nominalTransaksi"
-                                                                    name="nominalTransaksi" 
-                                                                    value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-">
+                                                        @if ($totals->contains('id', $transaction->id))
+                                                            @forEach($totals as $total)
+                                                                @if ($transaction->id == $total->id)
+                                                                    @if ($transaction->type == 'Pemasukan')
+                                                                    <input type="text" class="form-control border-style" 
+                                                                        id="nominalTransaksi"
+                                                                        name="nominalTransaksi" 
+                                                                        value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-" 
+                                                                        disabled>
+                                                                    @else
+                                                                    <input type="text" class="form-control border-style"
+                                                                        id="nominalTransaksi"
+                                                                        name="nominalTransaksi" 
+                                                                        value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-">
+                                                                    @endif
                                                                 @endif
-                                                            @endif
-                                                        @endforeach
+                                                            @endforeach
+                                                        @else
+                                                            <input type="text" class="form-control border-style" 
+                                                                id="nominalTransaksi"
+                                                                name="nominalTransaksi" 
+                                                                value="Rp. 0,-" 
+                                                                disabled>
+                                                        @endif
                                                     </div>
 
                                                     <div class="form-group position-relative mb-2">
