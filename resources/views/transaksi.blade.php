@@ -209,7 +209,7 @@
             </div>
         @endforeach
 
-        <div class="d-flex justify-content-end mt-5">
+        <div class="d-flex justify-content-end mt-5 mb-5">
             <div class="dropdown">
                 <button class="btn dropdown-toggle fw-semibold" type="button" id="exportDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                     Ekspor

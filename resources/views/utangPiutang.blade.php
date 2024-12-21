@@ -178,7 +178,7 @@
             </div>
         @endforeach
 
-        <button type="submit" class="btn btn-primary custom-btn mt-5 float-end" data-bs-toggle="modal" data-bs-target="#addModal">Tambah</button>
+        <button type="submit" class="btn btn-primary custom-btn mt-5 mb-5 float-end" data-bs-toggle="modal" data-bs-target="#addModal">Tambah</button>
     @else
         <div class="card mt-3">
             <div class="card-body py-2 m-3">

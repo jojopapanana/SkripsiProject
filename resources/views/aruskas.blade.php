@@ -175,7 +175,7 @@
     </div>
 
     @if ($pendapatan_operasional->count() != 0 || $pengeluaran_operasional->count() != 0 || $pengeluaran_investasi->count() != 0)
-      <div class="d-flex justify-content-end mt-5">
+      <div class="d-flex justify-content-end mt-5 mb-5">
           <button class="btn fw-semibold" type="button" id="exportButton">
             Ekspor
           </button>
