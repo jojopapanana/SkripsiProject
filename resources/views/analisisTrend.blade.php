@@ -5,12 +5,34 @@
 
     <div class="dashboard-trenkeuntungan">
         <h3 class="fw-bold text-center" style="font-size: 25px; margin-bottom: 20px;">Pendapatan dan Pengeluaran Selama 6 Bulan Terakhir!</h3>
-        <canvas id="myChart" style="width: 60vw; height: 30vh"></canvas>
+        @if($data->isNotEmpty())
+            <canvas id="myChart" style="width: 60vw; height: 30vh"></canvas>
+        @else
+            <div class="card mt-3">
+                <div class="card-body py-2 m-3">
+                    <center>
+                        <div class="mb-1" style="margin-top: 13.5px"><img src="/assets/bar-graph.png" alt="BAR-GRAPH" style="width:150px"></div>
+                        <p class="fw-semibold mb-2" style="font-size: 25px; padding-bottom: 13.5px">Belum ada data analisis nih!</p>
+                    </center>
+                </div>
+            </div>
+        @endif
     </div>
 
     <div class="dashboard-trenkeuntungan">
         <h3 class="fw-bold text-center" style="font-size: 25px; margin-bottom: 20px;">Pendapatan dan Pengeluaran Selama 7 Hari Terakhir!</h3>
-        <canvas id="dailyChart" style="width: 60vw; height: 30vh"></canvas>
+        @if($data->isNotEmpty())
+            <canvas id="dailyChart" style="width: 60vw; height: 30vh"></canvas>
+        @else
+            <div class="card mt-3">
+                <div class="card-body py-2 m-3">
+                    <center>
+                        <div class="mb-1" style="margin-top: 13.5px"><img src="/assets/bar-graph.png" alt="BAR-GRAPH" style="width:150px"></div>
+                        <p class="fw-semibold mb-2" style="font-size: 25px; padding-bottom: 13.5px">Belum ada data analisis nih!</p>
+                    </center>
+                </div>
+            </div>
+        @endif
     </div>
 
     <div class="analisis-stok mt-5">

@@ -54,161 +54,161 @@
         </div>
     </div>
 
-    @foreach($transactions as $index => $transaction)
-        <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }}">
-            <div class="card-body py-2">
-                <table class="w-100">
-                    <tbody>
-                        <tr>
-                            <td class="text-start" style="width: 15%;">{{ $transaction->id }}</td>
-                            <td class="text-start" style="width: 16%;">{{ date('Y-m-d', strtotime($transaction->created_at)) }}</td>
-                            @if ($totals->contains('id', $transaction->id))
-                                @forEach($totals as $total)
-                                    @if ($transaction->id == $total->id)
-                                        <td class="text-start" style="width: 16%;">Rp. {{ number_format($total->totalNominal, 0, ',', '.') }}</td>
-                                    @endif
-                                @endforeach
-                            @else 
-                                <td class="text-start" style="width: 16%;">Rp. 0</td>
-                            @endif
-                            <td class="text-start" style="width: 16%;">{{ $transaction->type }}</td>
-                            <td class="text-start" style="width: 16%;">{{ $transaction->category }}</td>
-                            <td class="text-start" style="width: 16%;">{{ $transaction->methodName }}</td>
-                            <td class="text-start" style="width: 10%;">
+    @if($transactions->count() > 0)
+        @foreach($transactions as $index => $transaction)
+            <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }}">
+                <div class="card-body py-2">
+                    <table class="w-100">
+                        <tbody>
+                            <tr>
+                                <td class="text-start" style="width: 15%;">{{ $transaction->id }}</td>
+                                <td class="text-start" style="width: 16%;">{{ date('Y-m-d', strtotime($transaction->created_at)) }}</td>
+                                @if ($totals->contains('id', $transaction->id))
+                                    @forEach($totals as $total)
+                                        @if ($transaction->id == $total->id)
+                                            <td class="text-start" style="width: 16%;">Rp. {{ number_format($total->totalNominal, 0, ',', '.') }}</td>
+                                        @endif
+                                    @endforeach
+                                @else 
+                                    <td class="text-start" style="width: 16%;">Rp. 0</td>
+                                @endif
+                                <td class="text-start" style="width: 16%;">{{ $transaction->type }}</td>
+                                <td class="text-start" style="width: 16%;">{{ $transaction->category }}</td>
+                                <td class="text-start" style="width: 16%;">{{ $transaction->methodName }}</td>
+                                <td class="text-start" style="width: 10%;">
 
-                                <div class="d-flex gap-4">
-                                <button class="btn p-0 icon-default-button" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal-{{ $transaction->id }}">
-                                    <i class="bi bi-pencil-fill"></i>
-                                </button>
-                
-                                <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $transaction->id }}" class="btn p-0 delete-button" style="border: none">
-                                    <i class="bi bi-trash3-fill"></i>
-                                </button>
-                                </div>
-                
-                                <div class="modal fade" id="editModal-{{ $transaction->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered custom-modal-width">
-                                        <div class="modal-content pl-3 pr-3">
-                                            <div class="modal-header justify-content-center">
-                                                <p class="modal-title" id="exampleModalLabel">Detail Transaksi</p>
-                                            </div>
-                                            <form id="editTransaction" method="POST" action="{{ route('transaksi.update', $transaction->id) }}" enctype="multipart/form-data">
-                                                @csrf
-                                                @method('UPDATE')
+                                    <div class="d-flex gap-4">
+                                    <button class="btn p-0 icon-default-button" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal-{{ $transaction->id }}">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </button>
+                    
+                                    <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $transaction->id }}" class="btn p-0 delete-button" style="border: none">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                    </div>
+                    
+                                    <div class="modal fade" id="editModal-{{ $transaction->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered custom-modal-width">
+                                            <div class="modal-content pl-3 pr-3">
+                                                <div class="modal-header justify-content-center">
+                                                    <p class="modal-title" id="exampleModalLabel">Detail Transaksi</p>
+                                                </div>
+                                                <form id="editTransaction" method="POST" action="{{ route('transaksi.update', $transaction->id) }}" enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('UPDATE')
 
-                                                <div class="modal-body">
-                                                    <div class="form-group position-relative mb-2">
-                                                        <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
-                                                        <input type="text" class="form-control border-style" name="kodeTransaksi" placeholder="{{ $transaction->id }}" disabled>
-                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group position-relative mb-2">
+                                                            <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
+                                                            <input type="text" class="form-control border-style" name="kodeTransaksi" placeholder="{{ $transaction->id }}" disabled>
+                                                        </div>
 
-                                                    <div class="form-group position-relative mb-2">
-                                                        <label for="tanggalTransaksi" class="col-form-label" id="inputModalLabel">Tanggal</label>
-                                                        <input type="date" class="form-control disabled border-style" name="tanggalTransaksi" value="{{ date('Y-m-d', strtotime($transaction->created_at)) }}" disabled>
-                                                    </div>
+                                                        <div class="form-group position-relative mb-2">
+                                                            <label for="tanggalTransaksi" class="col-form-label" id="inputModalLabel">Tanggal</label>
+                                                            <input type="date" class="form-control disabled border-style" name="tanggalTransaksi" value="{{ date('Y-m-d', strtotime($transaction->created_at)) }}" disabled>
+                                                        </div>
 
-                                                    <div class="form-group position-relative mb-2">
-                                                        <label for="nominalTransaksi" class="col-form-label" id="inputModalLabel">Nominal</label>
-                                                        @if ($totals->contains('id', $transaction->id))
-                                                            @forEach($totals as $total)
-                                                                @if ($transaction->id == $total->id)
-                                                                    @if ($transaction->type == 'Pemasukan')
-                                                                    <input type="text" class="form-control border-style" 
-                                                                        id="nominalTransaksi"
-                                                                        name="nominalTransaksi" 
-                                                                        value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-" 
-                                                                        disabled>
-                                                                    @else
-                                                                    <input type="text" class="form-control border-style"
-                                                                        id="nominalTransaksi"
-                                                                        name="nominalTransaksi" 
-                                                                        value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-">
+                                                        <div class="form-group position-relative mb-2">
+                                                            <label for="nominalTransaksi" class="col-form-label" id="inputModalLabel">Nominal</label>
+                                                            @if ($totals->contains('id', $transaction->id))
+                                                                @forEach($totals as $total)
+                                                                    @if ($transaction->id == $total->id)
+                                                                        @if ($transaction->type == 'Pemasukan')
+                                                                        <input type="text" class="form-control border-style" 
+                                                                            id="nominalTransaksi"
+                                                                            name="nominalTransaksi" 
+                                                                            value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-" 
+                                                                            disabled>
+                                                                        @else
+                                                                        <input type="text" class="form-control border-style"
+                                                                            id="nominalTransaksi"
+                                                                            name="nominalTransaksi" 
+                                                                            value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-">
+                                                                        @endif
                                                                     @endif
-                                                                @endif
-                                                            @endforeach
-                                                        @else
-                                                            <input type="text" class="form-control border-style" 
-                                                                id="nominalTransaksi"
-                                                                name="nominalTransaksi" 
-                                                                value="Rp. 0,-" 
-                                                                disabled>
-                                                        @endif
-                                                    </div>
+                                                                @endforeach
+                                                            @else
+                                                                <input type="text" class="form-control border-style" 
+                                                                    id="nominalTransaksi"
+                                                                    name="nominalTransaksi" 
+                                                                    value="Rp. 0,-" 
+                                                                    disabled>
+                                                            @endif
+                                                        </div>
 
-                                                    <div class="form-group position-relative mb-2">
-                                                        <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis</label>
-                                                        <select class="form-select border-style" id="jenisTransaksi" name="jenisTransaksi" value="{{ $transaction->type }}">
-                                                            <option value="Pemasukan" {{ $transaction->type == 'Pemasukan' ? 'selected' : '' }}>Pemasukan</option>
-                                                            <option value="Pengeluaran" {{ $transaction->type == 'Pengeluaran' ? 'selected' : '' }}>Pengeluaran</option>
-                                                        </select>
-                                                    </div>
+                                                        <div class="form-group position-relative mb-2">
+                                                            <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis</label>
+                                                            <select class="form-select border-style" id="jenisTransaksi" name="jenisTransaksi" value="{{ $transaction->type }}">
+                                                                <option value="Pemasukan" {{ $transaction->type == 'Pemasukan' ? 'selected' : '' }}>Pemasukan</option>
+                                                                <option value="Pengeluaran" {{ $transaction->type == 'Pengeluaran' ? 'selected' : '' }}>Pengeluaran</option>
+                                                            </select>
+                                                        </div>
 
-                                                    <div class="form-group position-relative mb-2">
-                                                        <label for="kategoriTransaksi" class="col-form-label" id="inputModalLabel">Kategori</label>
-                                                        <select class="form-select border-style" id="kategoriTransaksi" name="kategoriTransaksi" value="{{ $transaction->category }}">
-                                                            <option value="Operasional" {{ $transaction->category == 'Operasional' ? 'selected' : '' }}>Operasional</option>
-                                                            <option value="Investasi" {{ $transaction->category == 'Investasi' ? 'selected' : '' }}>Investasi</option>
-                                                        </select>
-                                                    </div>
+                                                        <div class="form-group position-relative mb-2">
+                                                            <label for="kategoriTransaksi" class="col-form-label" id="inputModalLabel">Kategori</label>
+                                                            <select class="form-select border-style" id="kategoriTransaksi" name="kategoriTransaksi" value="{{ $transaction->category }}">
+                                                                <option value="Operasional" {{ $transaction->category == 'Operasional' ? 'selected' : '' }}>Operasional</option>
+                                                                <option value="Investasi" {{ $transaction->category == 'Investasi' ? 'selected' : '' }}>Investasi</option>
+                                                            </select>
+                                                        </div>
 
-                                                    <div class="form-group position-relative mb-2">
-                                                        <label for="metodeTransaksi" class="col-form-label" id="inputModalLabel">Metode</label>
-                                                        <select class="form-select border-style" id="metodeTransaksi" name="metodeTransaksi" value="{{ $transaction->methodName }}">
-                                                            @foreach($payment_methods as $method)
-                                                                <option value="{{ $method->name }}" {{ $transaction->methodName == $method->name ? 'selected' : '' }}>
-                                                                    {{ $method->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
+                                                        <div class="form-group position-relative mb-2">
+                                                            <label for="metodeTransaksi" class="col-form-label" id="inputModalLabel">Metode</label>
+                                                            <select class="form-select border-style" id="metodeTransaksi" name="metodeTransaksi" value="{{ $transaction->methodName }}">
+                                                                @foreach($payment_methods as $method)
+                                                                    <option value="{{ $method->name }}" {{ $transaction->methodName == $method->name ? 'selected' : '' }}>
+                                                                        {{ $method->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
 
-                                                    <div class="form-group position-relative mb-2">
-                                                        <label for="deskripsiTransaksi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
-                                                        <textarea class="form-control border-style" id="transactionDesc" name="deskripsiTransaksi" rows="3" required>{{ $transaction->description }}</textarea>
+                                                        <div class="form-group position-relative mb-2">
+                                                            <label for="deskripsiTransaksi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
+                                                            <textarea class="form-control border-style" id="transactionDesc" name="deskripsiTransaksi" rows="3" required>{{ $transaction->description }}</textarea>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer mb-2">
-                                                    <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
-                                                    @method('PUT')
-                                                    <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
-                                                </div>
-                                            </form>
+                                                    <div class="modal-footer mb-2">
+                                                        <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
+                                                        @method('PUT')
+                                                        <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="modal fade" id="deleteModal{{ $transaction->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-body ps-4 pe-4 pb-4">
-                                                <center>
-                                                    <i class="bi bi-exclamation-triangle-fill" style="font-size: 5rem; color: red"></i>
-                                                </center>
+                                    <div class="modal fade" id="deleteModal{{ $transaction->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-body ps-4 pe-4 pb-4">
+                                                    <center>
+                                                        <i class="bi bi-exclamation-triangle-fill" style="font-size: 5rem; color: red"></i>
+                                                    </center>
 
-                                                <h4 class="fw-bold text-center">Apakah Anda yakin ingin menghapus transaksi ini?</h4>
+                                                    <h4 class="fw-bold text-center">Apakah Anda yakin ingin menghapus transaksi ini?</h4>
 
-                                                <div class="d-flex justify-content-center gap-4 mt-4">
-                                                    <button class="btn fw-semibold cancel-btn" data-bs-dismiss="modal">Tidak</button>
+                                                    <div class="d-flex justify-content-center gap-4 mt-4">
+                                                        <button class="btn fw-semibold cancel-btn" data-bs-dismiss="modal">Tidak</button>
 
-                                                    <form method="POST" action="{{ route('transaksi.delete', $transaction->id) }}">
-                                                        <input type="hidden" name="_method" value="DELETE">
-                                                        <button class="btn fw-semibold confirm-btn">Ya</button>
-                                                        @csrf
-                                                    </form>
+                                                        <form method="POST" action="{{ route('transaksi.delete', $transaction->id) }}">
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            <button class="btn fw-semibold confirm-btn">Ya</button>
+                                                            @csrf
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    @endforeach
+        @endforeach
 
-    @if ($transactions->count() > 0)
         <div class="d-flex justify-content-end mt-5">
             <div class="dropdown">
                 <button class="btn dropdown-toggle fw-semibold" type="button" id="exportDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -219,6 +219,17 @@
                     <li><a class="dropdown-item" id="export-link-csv">csv</a></li>
                     <li><a class="dropdown-item" id="export-link-pdf">pdf</a></li>
                 </ul>
+            </div>
+        </div>
+    @else 
+        <div class="card mt-3">
+            <div class="card-body py-2 m-3">
+                <center>
+                    <div class="mb-1"><img src="/assets/no-data.png" alt="NO-DATA" style="width:100px"></div>
+                    <p class="fw-bold mb-2" style="font-size: 1.5rem">Oops..!</p>
+                    <p class="fw-semibold mb-5">Saat ini belum ada data transaksi nih. Yuk, tambahkan pemasukan atau pengeluaranmu untuk mulai melihat data!</p>
+                    <a href="{{ route('Dashboard') }}" style="text-decoration: none"><button type="submit" class="btn btn-primary custom-btn">Tambah</button></a>
+                </center>
             </div>
         </div>
     @endif

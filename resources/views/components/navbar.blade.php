@@ -1,7 +1,7 @@
 <div class="container ms-0" id="navbar-container">
     <table id="navbar-container">
         <tr>
-            <td valign="top" class="pt-5"><a href="{{ route('Dashboard') }}"><img src="/assets/logo skripsi1.PNG" alt="LOGO" style="width: 10vw"></a></td>
+            <td valign="top" class="pt-5"><a href="{{ route('Dashboard') }}"><img src="/assets/logo skripsi1.PNG" alt="LOGO" style="width: 150px"></a></td>
         </tr>
         <tr class="{{ Route::is('transaksi') ? 'active-row' : '' }}">
             <td><a href="{{ route('transaksi') }}" style="text-decoration: none">Transaksi</a></td>
