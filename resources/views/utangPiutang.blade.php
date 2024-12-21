@@ -30,8 +30,8 @@
                         <th class="text-start" style="width: 15%;">Kode Transaksi</th>
                         <th class="text-start" style="width: 25%;">Judul</th>
                         <th class="text-start" style="width: 16%;">Batas Waktu</th>
-                        <th class="text-start" style="width: 15%;">Nominal</th>
-                        <th class="text-start" style="width: 19%;">Jenis</th>
+                        <th class="text-start" style="width: 20%;">Nominal</th>
+                        <th class="text-start" style="width: 14%;">Jenis</th>
                         <th class="text-start" style="width: 10%;"></th>
                     </tr>
                 </thead>
@@ -49,8 +49,8 @@
                                 <td class="text-start" style="widd: 15%;">{{ $utang->utang_id }}</td>
                                 <td class="text-start" style="width: 25%;">{{ $utang->deskripsi }}</td>
                                 <td class="text-start" style="width: 16%;">{{ $utang->batasWaktu }}</td>
-                                <td class="text-start" style="width: 15%;">Rp. {{ number_format($utang->nominal, 0, ',', '.') }}</td>
-                                <td class="text-start" style="width: 19%;">{{ $utang->jenis }}</td>
+                                <td class="text-start" style="width: 20%;">Rp. {{ number_format($utang->nominal, 0, ',', '.') }}</td>
+                                <td class="text-start" style="width: 14%;">{{ $utang->jenis }}</td>
                                 <td class="text-start" style="width: 10%;">
                                 <div class="d-flex gap-4">
                                     @php

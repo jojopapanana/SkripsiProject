@@ -8,11 +8,11 @@
             <table class="w-100">
                 <thead>
                     <tr>
-                        <th class="text-start" style="width: 20%;">Kode Stok</th>
-                        <th class="text-start" style="width: 30%;">Nama Produk</th>
-                        <th class="text-start" style="width: 25%;">Harga Jual Satuan</th>
-                        <th class="text-start" style="width: 15%;">Sisa</th>
-                        <th class="text-start" style="width: 10%;"></th>
+                        <th class="text-start" style="width: 21%;">Kode Stok</th>
+                        <th class="text-start" style="width: 31%;">Nama Produk</th>
+                        <th class="text-start" style="width: 26%;">Harga Jual Satuan</th>
+                        <th class="text-start" style="width: 16%;">Sisa</th>
+                        <th class="text-start" style="width: 6%;"></th>
                     </tr>
                 </thead>
             </table>
@@ -26,11 +26,11 @@
                     <table class="w-100">
                         <tbody>
                             <tr>
-                                <td class="text-start" style="width: 20%;">{{ $stok->stok_id }}</td>
-                                <td class="text-start" style="width: 30%;">{{ $stok->nama }}</td>
-                                <td class="text-start" style="width: 25%;">Rp. {{ number_format($stok->nominal, 0, ',', '.') }}</td>
-                                <td class="text-start" style="width: 15%;">{{ $stok->sisa }}</td>
-                                <td class="text-start" style="width: 10%;">
+                                <td class="text-start" style="width: 21%;">{{ $stok->stok_id }}</td>
+                                <td class="text-start" style="width: 31%;">{{ $stok->nama }}</td>
+                                <td class="text-start" style="width: 26%;">Rp. {{ number_format($stok->nominal, 0, ',', '.') }}</td>
+                                <td class="text-start" style="width: 16%;">{{ $stok->sisa }}</td>
+                                <td class="text-start" style="width: 6%;">
                                     <div class="d-flex gap-4">
                                         <button type="button" class="btn p-0 icon-default-button" style="border: none" data-bs-toggle="modal" data-bs-target="#editModal{{ $stok->stok_id }}">
                                             <i class="bi bi-pencil-fill"></i>
