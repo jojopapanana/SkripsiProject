@@ -241,12 +241,14 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
+        $userid = Auth::check() ? Auth::id() : null;
         if ($request->input('modalType') === 'onboarding') {
             $this->tambahStokBaruOnboarding($request);
-
+            DB::table('users')
+            ->where('id', '=', $userid)
+            ->update(['isOnboarded' => 1]);
         } else if ($request->input('modalType') === 'pemasukan') {
             $this->tambahPemasukan($request);
-
         } else if ($request->input('modalType') === 'pengeluaran') {
             if ($request->input('modalType1') === 'tambahStok') {
                 $this->tambahStokPengeluaran($request);

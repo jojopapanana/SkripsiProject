@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -127,9 +128,12 @@ class DashboardController extends Controller
 
         $products = DB::table('products')->select('*')->where('userID', '=', $userid)->get();
         $payment_methods = DB::table('payment_methods')->select('*')->get();
+
+        $isOnboarded = DB::table('users')->where('users.id', '=', $userid)->value('isOnboarded');
         
         return view('welcome', [
             'products' => $products,
+            'isOnboarded' => $isOnboarded,
             'payment_methods' => $payment_methods,
             'data' => $data,
             'pendapatan_bersih_bulanan' => $pendapatan_bersih_bulanan,

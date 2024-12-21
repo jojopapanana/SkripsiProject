@@ -354,10 +354,9 @@
         </div>
     </div>
 
-    <!-- three steps onboarding-->
     <script>
         $(document).ready(function() {
-            @if ($products->isEmpty()) 
+            @if ($isOnboarded == 0) 
                 $('#onboarding-modal-1').modal('show');
 
                 $('#nextModalButton').on('click', function() {
