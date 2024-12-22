@@ -41,12 +41,12 @@
 
     @if($utangPiutang->count() > 0)
         @foreach($utangPiutang as $index => $utang)
-        <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }}">
+            <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }}">
                 <div class="card-body py-2">
                     <table class="w-100">
                         <tbody>
                             <tr>
-                                <td class="text-start" style="widd: 15%;">{{ $utang->utang_id }}</td>
+                                <td class="text-start" style="widd: 15%;">{{ $index + 1 }}</td>
                                 <td class="text-start" style="width: 25%;">{{ $utang->deskripsi }}</td>
                                 <td class="text-start" style="width: 16%;">{{ $utang->batasWaktu }}</td>
                                 <td class="text-start" style="width: 20%;">Rp. {{ number_format($utang->nominal, 0, ',', '.') }}</td>
@@ -145,7 +145,7 @@
                             <div class="modal-body">
                                 <div class="form-group position-relative mb-2">
                                     <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
-                                    <input type="text" class="form-control border-style" id="kodeTransaksi" placeholder="{{$utang->utang_id}}" disabled>
+                                    <input type="text" class="form-control border-style" id="kodeTransaksi" placeholder="{{ $index + 1 }}" disabled>
                                 </div>
                                 <div class="form-group position-relative mb-2">
                                     <label for="deskripsi" class="col-form-label" id="inputModalLabel">Judul</label>
