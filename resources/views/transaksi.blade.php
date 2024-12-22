@@ -61,7 +61,7 @@
                     <table class="w-100">
                         <tbody>
                             <tr>
-                                <td class="text-start" style="width: 15%;">{{ $transaction->id }}</td>
+                                <td class="text-start" style="width: 15%;">{{ $index + 1 }}</td>
                                 <td class="text-start" style="width: 15%;">{{ date('Y-m-d', strtotime($transaction->created_at)) }}</td>
                                 @if ($totals->contains('id', $transaction->id))
                                     @forEach($totals as $total)
@@ -100,7 +100,7 @@
                                                     <div class="modal-body">
                                                         <div class="form-group position-relative mb-2">
                                                             <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
-                                                            <input type="text" class="form-control border-style" name="kodeTransaksi" placeholder="{{ $transaction->id }}" disabled>
+                                                            <input type="text" class="form-control border-style" name="kodeTransaksi" placeholder="{{ $index + 1 }}" disabled>
                                                         </div>
 
                                                         <div class="form-group position-relative mb-2">

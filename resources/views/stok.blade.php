@@ -26,7 +26,7 @@
                     <table class="w-100">
                         <tbody>
                             <tr>
-                                <td class="text-start" style="width: 21%;">{{ $stok->stok_id }}</td>
+                                <td class="text-start" style="width: 21%;">{{ $index + 1 }}</td>
                                 <td class="text-start" style="width: 31%;">{{ $stok->nama }}</td>
                                 <td class="text-start" style="width: 26%;">Rp. {{ number_format($stok->nominal, 0, ',', '.') }}</td>
                                 <td class="text-start" style="width: 16%;">{{ $stok->sisa }}</td>
@@ -45,6 +45,7 @@
                     </table>
                 </div>
             </div>
+            
             <div class="modal fade" id="editModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered custom-modal-width">
                     <div class="modal-content pl-3 pr-3">
@@ -57,7 +58,7 @@
                             <div class="modal-body">
                                 <div class="form-group position-relative mb-2">
                                     <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
-                                    <input type="text" class="form-control border-style" id="kodeTransaksi" placeholder="{{$stok->stok_id}}" disabled>
+                                    <input type="text" class="form-control border-style" id="kodeTransaksi" placeholder="{{ $index + 1 }}" disabled>
                                 </div>
                                 <div class="form-group position-relative mb-2">
                                     <label for="nama" class="col-form-label" id="inputModalLabel">Nama Produk</label>
