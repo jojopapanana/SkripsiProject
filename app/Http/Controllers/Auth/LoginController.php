@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -52,12 +53,20 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        Auth::attempt(['email' => $request->email, 'password' => $request->password]);
-        
-        if (Auth::check()) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->route('Dashboard');
         } else {
-            return back()->withErrors(['email' => 'Invalid credentials']);
+            $userExists = User::where('email', $request->email)->exists();
+        
+            if (!$userExists) {
+                return back()->withErrors([
+                    'email' => 'Email tidak terdaftar.',
+                ]);
+            } else {
+                return back()->withErrors([
+                    'password' => 'Kata sandi tidak cocok.'
+                ]);
+            }
         }
     }
 }
