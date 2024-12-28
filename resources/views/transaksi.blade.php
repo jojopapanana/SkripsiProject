@@ -100,13 +100,17 @@
                                                     <div class="modal-body">
                                                         <div class="form-group position-relative mb-2">
                                                             <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
-                                                            <input type="text" class="form-control border-style" name="kodeTransaksi" placeholder="{{ $index + 1 }}" disabled>
+                                                            <input type="text" class="form-control border-style" id="kodeTransaksi" name="kodeTransaksi" value="{{ $index + 1 }}" disabled>
                                                         </div>
+
+                                                        <input type="hidden" id="kodeTransaksi" name="kodeTransaksi" value="{{ $index + 1 }}">
 
                                                         <div class="form-group position-relative mb-2">
                                                             <label for="tanggalTransaksi" class="col-form-label" id="inputModalLabel">Tanggal</label>
-                                                            <input type="date" class="form-control disabled border-style" name="tanggalTransaksi" value="{{ date('Y-m-d', strtotime($transaction->created_at)) }}" disabled>
+                                                            <input type="date" class="form-control border-style" id="tanggalTransaksi" name="tanggalTransaksi" value="{{ date('Y-m-d', strtotime($transaction->created_at)) }}" disabled>
                                                         </div>
+
+                                                        <input type="hidden" id="tanggalTransaksi" name="tanggalTransaksi" value="{{ date('Y-m-d', strtotime($transaction->created_at)) }}">
 
                                                         <div class="form-group position-relative mb-2">
                                                             <label for="nominalTransaksi" class="col-form-label" id="inputModalLabel">Nominal</label>
@@ -119,6 +123,8 @@
                                                                             name="nominalTransaksi" 
                                                                             value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-" 
                                                                             disabled>
+
+                                                                        <input type="hidden" id="nominalTransaksi" name="nominalTransaksi" value="Rp. {{ number_format($total->totalNominal, 0, ',', '.') }},-">
                                                                         @else
                                                                         <input type="text" class="form-control border-style"
                                                                             id="nominalTransaksi"
@@ -138,11 +144,10 @@
 
                                                         <div class="form-group position-relative mb-2">
                                                             <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis</label>
-                                                            <select class="form-select border-style" id="jenisTransaksi" name="jenisTransaksi" value="{{ $transaction->type }}">
-                                                                <option value="Pemasukan" {{ $transaction->type == 'Pemasukan' ? 'selected' : '' }}>Pemasukan</option>
-                                                                <option value="Pengeluaran" {{ $transaction->type == 'Pengeluaran' ? 'selected' : '' }}>Pengeluaran</option>
-                                                            </select>
+                                                            <input type="text" class="form-control border-style" id="jenisTransaksi" name="jenisTransaksi" value="{{ $transaction->type }}" disabled>
                                                         </div>
+
+                                                        <input type="hidden" id="jenisTransaksi" name="jenisTransaksi" value="{{ $transaction->type }}">
 
                                                         <div class="form-group position-relative mb-2">
                                                             <label for="kategoriTransaksi" class="col-form-label" id="inputModalLabel">Kategori</label>
@@ -270,7 +275,6 @@
     <script>
         $(document).ready(function() {
             var originalNominalValue = ''; // Variable to store the original value
-            var originalJenisTransaksiValue = '';
             var originalKategoriValue = '';
             var originalMetodeValue = '';
             var originalDeskripsiValue = '';
@@ -279,7 +283,6 @@
             $(document).on('show.bs.modal', '[id^="editModal-"]', function() {
                 var modal = $(this);
                 originalNominalValue = modal.find('#nominalTransaksi').val(); // Capture the original value
-                originalJenisTransaksiValue = modal.find('#jenisTransaksi').val();
                 originalKategoriValue = modal.find('#kategoriTransaksi').val();
                 originalMetodeValue = modal.find('#metodeTransaksi').val();
                 originalDeskripsiValue = modal.find('#transactionDesc').val();
@@ -289,7 +292,6 @@
             $(document).on('hidden.bs.modal', '[id^="editModal-"]', function() {
                 var modal = $(this);
                 modal.find('#nominalTransaksi').val(originalNominalValue); // Restore the original value
-                modal.find('#jenisTransaksi').val(originalJenisTransaksiValue);
                 modal.find('#kategoriTransaksi').val(originalKategoriValue);
                 modal.find('#metodeTransaksi').val(originalMetodeValue);
                 modal.find('#transactionDesc').val(originalDeskripsiValue);
@@ -301,6 +303,20 @@
             $(document).on('blur', '#nominalTransaksi', function(event) {
                 addCurrencySuffix(this);
             });
+            $(document).on('input', '#transactionDesc', enforceInputDeskripsi);
+
+            // Fun ction to enforce numeric input
+            function enforceInputDeskripsi(event) {
+                var input = event.target;
+                var value = input.value;
+
+                if (value.length > 255) {
+                    value = value.slice(0, 255);
+                    alert('Jumlah input karakter maksimal adalah 255 huruf!');
+                }
+
+                input.value = value;
+            }
 
             // Function to enforce numeric input
             function enforceNumericInput(input) {
@@ -308,6 +324,10 @@
 
                 // Remove any non-digit characters except the prefix
                 var numberValue = value.slice(4).replace(/\D/g, '');
+
+                if (numberValue.startsWith('0') && numberValue.length > 1) {
+                    numberValue = numberValue.replace(/^0+/, '');
+                }
 
                 // Restrict the input to prevent entering numbers starting with 0 (except 0 itself)
                 if (numberValue.startsWith('0')) {
@@ -335,7 +355,26 @@
                     input.value = value + ',-';
                 }
             }
+        });
+    </script>
 
+    <script>
+        $(document).ready(function() {
+            // handle for when error happens in the backend
+            $('#alertModal').on('hidden.bs.modal', function() {
+                @if (session('errorDataUpdate'))
+                    const errorData = @json(session('errorDataUpdate'));
+                    $('#editModal-' + errorData.id).modal('show'); 
+                    $('#editModal-' + errorData.id).attr('action', `{{ url('/transaksi/update') }}/${errorData.id}`);
+                    $('#kodeTransaksi').val(errorData.id);
+                    $('#tanggalTransaksi').val(errorData.tanggalTransaksi);
+                    $('#nominalTransaksi').val(errorData.nominalTransaksi);
+                    $('#jenisTransaksi').val(errorData.jenisTransaksi);
+                    $('#kategoriTransaksi').val(errorData.kategoriTransaksi);
+                    $('#metodeTransaksi').val(errorData.metodeTransaksi);
+                    $('#transactionDesc').val(errorData.transactionDesc);
+                @endif
+            });
         });
     </script>
 
@@ -345,7 +384,7 @@
             <div class="modal-content">
                 <div class="modal-body ps-4 pe-4 pb-4">
                     <center>
-                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                        <i id="modalIcon" class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
                     </center>
                     <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
                     <div class="d-flex justify-content-center gap-4 mt-4">
@@ -356,121 +395,136 @@
         </div>
     </div>
 
-    <!-- Function to change modal text and show the modal -->
+    <!-- Function to change modal text, icon, and show the modal -->
     <script>
         var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
 
-        function showAlert(text) {
+        function showAlert(text, iconClass, iconColor) {
             document.getElementById('modalText').innerText = text;
+            const modalIcon = document.getElementById('modalIcon');
+            modalIcon.className = iconClass;
+            modalIcon.style.color = iconColor;
             alertModal.show();
         }
     </script>
 
     @if (session('success'))
         <script>
-            showAlert('{{ session('success') }}');
+            showAlert(
+                '{{ session('success') }}',
+                'bi bi-check-circle-fill',
+                'rgb(0, 205, 0)' // Green for success
+            );
         </script>
     @endif
 
-  </div>
+    @if (session('error'))
+        <script>
+            showAlert(
+                '{{ session('error') }}',
+                'bi bi-exclamation-triangle-fill',
+                'red' // Red for error
+            );
+        </script>
+    @endif
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const monthDropdownButton = document.getElementById('monthDropdownButton');
-      const monthDropdownItems = document.querySelectorAll('#month-dropdown-menu .dropdown-item');
-      const yearDropdownButton = document.getElementById('yearDropdownButton');
-      const yearDropdownItems = document.querySelectorAll('#year-dropdown-menu .dropdown-item');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const monthDropdownButton = document.getElementById('monthDropdownButton');
+            const monthDropdownItems = document.querySelectorAll('#month-dropdown-menu .dropdown-item');
+            const yearDropdownButton = document.getElementById('yearDropdownButton');
+            const yearDropdownItems = document.querySelectorAll('#year-dropdown-menu .dropdown-item');
 
-      let selectedMonthValue = new URLSearchParams(window.location.search).get('month') || (new Date().getMonth() + 1);
-      let selectedYearValue = new URLSearchParams(window.location.search).get('year') || new Date().getFullYear();
+            let selectedMonthValue = new URLSearchParams(window.location.search).get('month') || (new Date().getMonth() + 1);
+            let selectedYearValue = new URLSearchParams(window.location.search).get('year') || new Date().getFullYear();
 
-      function updateUrl() {
-          window.location.href = `{{ route('transaksi') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
-      }
+            function updateUrl() {
+                window.location.href = `{{ route('transaksi') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+            }
 
-      monthDropdownItems.forEach(function(item) {
-          item.addEventListener('click', function(event) {
-              event.preventDefault();
-              const selectedMonthText = this.textContent;
-              selectedMonthValue = this.getAttribute('data-value');
-              
-              monthDropdownButton.textContent = selectedMonthText;
-              updateUrl();
-          });
-      });
+            monthDropdownItems.forEach(function(item) {
+                item.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const selectedMonthText = this.textContent;
+                    selectedMonthValue = this.getAttribute('data-value');
+                    
+                    monthDropdownButton.textContent = selectedMonthText;
+                    updateUrl();
+                });
+            });
 
-      yearDropdownItems.forEach(function(item) {
-          item.addEventListener('click', function(event) {
-              event.preventDefault();
-              const selectedYearText = this.textContent;
-              selectedYearValue = this.getAttribute('data-value');
-              
-              yearDropdownButton.textContent = selectedYearText;
-              updateUrl();
-          });
-      });
+            yearDropdownItems.forEach(function(item) {
+                item.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const selectedYearText = this.textContent;
+                    selectedYearValue = this.getAttribute('data-value');
+                    
+                    yearDropdownButton.textContent = selectedYearText;
+                    updateUrl();
+                });
+            });
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const month = urlParams.get('month');
-      if (month) {
-          const selectedItem = [...monthDropdownItems].find(item => item.getAttribute('data-value') === month);
-          if (selectedItem) {
-              monthDropdownButton.textContent = selectedItem.textContent;
-          }
-      }
+            const urlParams = new URLSearchParams(window.location.search);
+            const month = urlParams.get('month');
+            if (month) {
+                const selectedItem = [...monthDropdownItems].find(item => item.getAttribute('data-value') === month);
+                if (selectedItem) {
+                    monthDropdownButton.textContent = selectedItem.textContent;
+                }
+            }
 
-      const year = urlParams.get('year');
-      if (year) {
-          const selectedItem = [...yearDropdownItems].find(item => item.getAttribute('data-value') === year);
-          if (selectedItem) {
-              yearDropdownButton.textContent = selectedItem.textContent;
-          }
-      }
+            const year = urlParams.get('year');
+            if (year) {
+                const selectedItem = [...yearDropdownItems].find(item => item.getAttribute('data-value') === year);
+                if (selectedItem) {
+                    yearDropdownButton.textContent = selectedItem.textContent;
+                }
+            }
 
-      function exportUrlExcel() {
-          const exportRoute = `{{ route('transaksi_export_excel') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+            function exportUrlExcel() {
+                const exportRoute = `{{ route('transaksi_export_excel') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
 
-          window.location.href = exportRoute;
-      }
+                window.location.href = exportRoute;
+            }
 
-      const exportButtonExcel = document.getElementById('export-link-excel');
-      exportButtonExcel.addEventListener('click', function(event) {
-          event.preventDefault();
-          exportUrlExcel();
-      });
+            const exportButtonExcel = document.getElementById('export-link-excel');
+            exportButtonExcel.addEventListener('click', function(event) {
+                event.preventDefault();
+                exportUrlExcel();
+            });
 
-      function exportUrlCSV() {
-          const exportRoute = `{{ route('transaksi_export_csv') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+            function exportUrlCSV() {
+                const exportRoute = `{{ route('transaksi_export_csv') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
 
-          window.location.href = exportRoute;
-      }
+                window.location.href = exportRoute;
+            }
 
-      const exportButtonCSV = document.getElementById('export-link-csv');
-      exportButtonCSV.addEventListener('click', function(event) {
-          event.preventDefault();
-          exportUrlCSV();
-      });
+            const exportButtonCSV = document.getElementById('export-link-csv');
+            exportButtonCSV.addEventListener('click', function(event) {
+                event.preventDefault();
+                exportUrlCSV();
+            });
 
-      function exportUrlPDF() {
-          const exportRoute = `{{ route('transaksi_export_pdf') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
+            function exportUrlPDF() {
+                const exportRoute = `{{ route('transaksi_export_pdf') }}?month=${selectedMonthValue}&year=${selectedYearValue}`;
 
-          window.location.href = exportRoute;
-      }
+                window.location.href = exportRoute;
+            }
 
-      const exportButtonPDF = document.getElementById('export-link-pdf');
-      exportButtonPDF.addEventListener('click', function(event) {
-          event.preventDefault();
-          exportUrlPDF();
-      });
-    });
+            const exportButtonPDF = document.getElementById('export-link-pdf');
+            exportButtonPDF.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    exportUrlPDF();
+            });
+        });
 
 
-    $(document).ready(function () {
-      $("#deleteModal").on("show.bs.modal", function (e) {
-        var id = $(e.relatedTarget).data('target-id');
-         $('#pass_id').val(id);
-      });
-    });
-</script>
+        $(document).ready(function () {
+            $("#deleteModal").on("show.bs.modal", function (e) {
+                var id = $(e.relatedTarget).data('target-id');
+                $('#pass_id').val(id);
+            });
+        });
+    </script>
 
 </x-layout>

@@ -45,7 +45,7 @@
                     </table>
                 </div>
             </div>
-            
+
             <div class="modal fade" id="editModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered custom-modal-width">
                     <div class="modal-content pl-3 pr-3">
@@ -58,11 +58,12 @@
                             <div class="modal-body">
                                 <div class="form-group position-relative mb-2">
                                     <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
-                                    <input type="text" class="form-control border-style" id="kodeTransaksi" placeholder="{{ $index + 1 }}" disabled>
+                                    <input type="text" class="form-control border-style" id="kodeTransaksi" name="kodeTransaksi" value="{{ $index + 1 }}" disabled>
                                 </div>
                                 <div class="form-group position-relative mb-2">
                                     <label for="nama" class="col-form-label" id="inputModalLabel">Nama Produk</label>
                                     <input type="text" class="form-control border-style" id="nama" name="nama" value="{{ $stok->nama }}" required>
+                                    <div class="mt-1" id="product-check-message" style="color: red;"></div>
                                 </div>
                                 <div class="form-group position-relative mb-2">
                                     <label for="nominal" class="col-form-label" id="inputModalLabel">Harga Jual Satuan</label>
@@ -153,6 +154,50 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            $('[id^="editModal"]').on('show.bs.modal', function () {
+                const modal = $(this);
+                modal.find('#product-check-message').text('');
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const stockData = @json($stokData->map(fn($stok) => ['stok_id' => $stok->stok_id, 'nama' => $stok->nama]));
+
+            // Function to check for duplicate names
+            function checkDuplicateName(inputField, currentStockId) {
+                // Use querySelector within the modal to get the correct message element
+                const modal = inputField.closest('.modal');
+                const message = modal.querySelector('#product-check-message'); 
+                const inputName = inputField.value.toLowerCase();
+
+                // Check if the name already exists in other stocks
+                const duplicate = stockData.some(stock =>
+                    stock.nama.toLowerCase() === inputName && stock.stok_id !== currentStockId
+                );
+
+                if (duplicate) {
+                    message.textContent = "Stok dengan nama ini sudah tersedia!";
+                } else {
+                    message.textContent = ""; // Clear the message
+                }
+            }
+
+            // Attach listeners to all edit modals
+            stockData.forEach(stock => {
+                const modal = document.querySelector(`#editModal${stock.stok_id}`);
+                const nameInput = modal.querySelector('#nama');
+
+                nameInput.addEventListener('input', function () {
+                    checkDuplicateName(nameInput, stock.stok_id);
+                });
+            });
+        });
+    </script>
+
+    <script>
         document.querySelectorAll('form').forEach(function(form) {
             form.addEventListener('submit', function(event) {
                 let nominalFields = form.querySelectorAll('#nominal');  // Select nominal and nominalPengeluaran within the current form
@@ -174,9 +219,18 @@
         $('[id^="editModal"]').on('submit', function(e) {
             var form = $(this);
 
+            // Check if the nominal field is empty
             if (form.find('#nominal').val() === '') {
                 e.preventDefault();
                 alert('Silahkan isi nominal terlebih dahulu!');
+                return;
+            }
+
+            // Check if the product-check-message has any content
+            var message = form.find('#product-check-message').text().trim();
+            if (message !== '') {
+                e.preventDefault();
+                alert('Stok dengan nama ini sudah tersedia! Silahkan masukkan nama lain.');
                 return;
             }
         });
@@ -206,8 +260,20 @@
 
             $(document).on('input', '.nominal', enforceNumericInput);
             $(document).on('blur', '.nominal', addCurrencySuffix);
-
             $(document).on('input', '.sisa', handleSisaInput);
+            $(document).on('input', '#nama', enforceInputDeskripsi);
+
+            function enforceInputDeskripsi(event) {
+                var input = event.target;
+                var value = input.value;
+
+                if (value.length > 255) {
+                    value = value.slice(0, 255);
+                    alert('Jumlah input karakter maksimal adalah 255 huruf!');
+                }
+
+                input.value = value;
+            }
 
             // Function to enforce numeric input
             function enforceNumericInput(event) {
@@ -216,6 +282,10 @@
 
                 // Remove any non-digit characters except the prefix
                 var numberValue = value.slice(4).replace(/\D/g, '');
+
+                if (numberValue.startsWith('0') && numberValue.length > 1) {
+                    numberValue = numberValue.replace(/^0+/, '');
+                }
 
                 // Restrict the input to prevent entering numbers starting with 0 (except 0 itself)
                 if (numberValue.startsWith('0')) {
@@ -292,13 +362,30 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function() {
+            // handle for when error happens in the backend
+            $('#alertModal').on('hidden.bs.modal', function() {
+                @if (session('errorDataUpdate'))
+                    const errorData = @json(session('errorDataUpdate'));
+                    $('#editModal' + errorData.id).modal('show'); 
+                    $('#editModal' + errorData.id).attr('action', `{{ url('/stok/update') }}/${errorData.id}`);
+                    $('#kodeTransaksi').val(errorData.id);
+                    $('#nama').val(errorData.nama);
+                    $('#nominal').val(errorData.nominal);
+                    $('#sisa').val(errorData.sisa);
+                @endif
+            });
+        });
+    </script>
+
     <!-- Alert Modal Component -->
     <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body ps-4 pe-4 pb-4">
                     <center>
-                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                        <i id="modalIcon" class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
                     </center>
                     <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
                     <div class="d-flex justify-content-center gap-4 mt-4">
@@ -309,19 +396,36 @@
         </div>
     </div>
 
-    <!-- Function to change modal text and show the modal -->
+    <!-- Function to change modal text, icon, and show the modal -->
     <script>
         var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
 
-        function showAlert(text) {
+        function showAlert(text, iconClass, iconColor) {
             document.getElementById('modalText').innerText = text;
+            const modalIcon = document.getElementById('modalIcon');
+            modalIcon.className = iconClass;
+            modalIcon.style.color = iconColor;
             alertModal.show();
         }
     </script>
 
     @if (session('success'))
         <script>
-            showAlert('{{ session('success') }}');
+            showAlert(
+                '{{ session('success') }}',
+                'bi bi-check-circle-fill',
+                'rgb(0, 205, 0)' // Green for success
+            );
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            showAlert(
+                '{{ session('error') }}',
+                'bi bi-exclamation-triangle-fill',
+                'red' // Red for error
+            );
         </script>
     @endif
 

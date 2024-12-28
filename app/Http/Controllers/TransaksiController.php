@@ -91,7 +91,7 @@ class TransaksiController extends Controller
     private function tambahPemasukan(Request $request) {
         $userid = Auth::check() ? Auth::id() : null;
 
-        $validatedData = $request->validate([
+        $validator = \Validator::make($request->all(), [
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
             'nominal' => 'required|numeric',
@@ -102,24 +102,31 @@ class TransaksiController extends Controller
             'jumlahBarang.*' => 'required|integer|min:1',
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->with([
+                'error' => 'Input tidak valid! Harap periksa kembali.',
+                'errorDataPemasukan' => $request->all()
+            ]);
+        }
+
         $transactionID = DB::table('transaksis')->insertGetId([
-            'created_at' => $validatedData['tanggal'],
+            'created_at' => $request->tanggal,
             'userID' => $userid,
-            'type' => $validatedData['jenisTransaksi'],
+            'type' => $request->jenisTransaksi,
             'category' => 'Operasional',
-            'methodID' => $this->getMethodIdByName($validatedData['metode']),
+            'methodID' => $this->getMethodIdByName($request->metode),
             'description' => 'Hasil penjualan'
         ]);
 
-        foreach ($validatedData['jenisBarang'] as $index => $productID) {
+        foreach ($request['jenisBarang'] as $index => $productID) {
             DB::table('products')
                 ->where('id', $productID)
-                ->decrement('productStock', $validatedData['jumlahBarang'][$index]);
+                ->decrement('productStock', $request['jumlahBarang'][$index]);
 
             TransactionDetail::insert([
                 'transactionID' => $transactionID,
                 'productID' => $productID,
-                'productQuantity' => $validatedData['jumlahBarang'][$index]
+                'productQuantity' => $request['jumlahBarang'][$index]
             ]);
         }
     }
@@ -127,7 +134,7 @@ class TransaksiController extends Controller
     private function tambahStokPengeluaran(Request $request) {
         $userid = Auth::check() ? Auth::id() : null;
 
-        $validatedData = $request->validate([
+        $validator = \Validator::make($request->all(), [
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
             'deskripsi' => 'required|string',
@@ -137,19 +144,26 @@ class TransaksiController extends Controller
             'nominalPengeluaran' => 'required|numeric'
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->with([
+                'error' => 'Input tidak valid! Harap periksa kembali.',
+                'errorDataTambahStok' => $request->all()
+            ]);
+        }
+
         DB::table('products')
-            ->where('id', $validatedData['jenisBarangPengeluaran'])
-            ->increment('productStock', $validatedData['jumlahBarangPengeluaran']);
+            ->where('id', $request->jenisBarangPengeluaran)
+            ->increment('productStock', $request->jumlahBarangPengeluaran);
 
         Transaksi::insert([
             [
-                'created_at' => $validatedData['tanggal'],
+                'created_at' => $request->tanggal,
                 'userID' => $userid,
-                'nominal' => $validatedData['nominalPengeluaran'],
-                'type' => $validatedData['jenisTransaksi'],
+                'nominal' => $request->nominalPengeluaran,
+                'type' => $request->jenisTransaksi,
                 'category' => 'Operasional',
-                'methodID' => $this->getMethodIdByName($validatedData['metode']),
-                'description' => $validatedData['deskripsi']
+                'methodID' => $this->getMethodIdByName($request->metode),
+                'description' => $request->deskripsi
             ]
         ]);
     }
@@ -157,24 +171,31 @@ class TransaksiController extends Controller
     private function tambahLainnyaPengeluaran(Request $request) {
         $userid = Auth::check() ? Auth::id() : null;
 
-        $validatedData = $request->validate([
+        $validator = \Validator::make($request->all(), [
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
-            'deskripsiTransaksi' => 'required|string',
+            'deskripsiTransaksi' => 'required|string|max:255',
             'metode' => 'required|exists:payment_methods,name',
             'kategori' => 'required|string',
             'nominalPengeluaran' => 'required|numeric'
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->with([
+                'error' => 'Input tidak valid! Harap periksa kembali.',
+                'errorDataTambahLainnya' => $request->all()
+            ]);
+        }
+
         Transaksi::insert([
             [
-                'created_at' => $validatedData['tanggal'],
+                'created_at' => $request->tanggal,
                 'userID' => $userid,
-                'nominal' => $validatedData['nominalPengeluaran'],
-                'type' => $validatedData['jenisTransaksi'],
-                'category' => $validatedData['kategori'],
-                'methodID' => $this->getMethodIdByName($validatedData['metode']),
-                'description' => $validatedData['deskripsiTransaksi']
+                'nominal' => $request->nominalPengeluaran,
+                'type' => $request->jenisTransaksi,
+                'category' => $request->kategori,
+                'methodID' => $this->getMethodIdByName($request->metode),
+                'description' => $request->deskripsiTransaksi
             ]
         ]);
     }
@@ -182,58 +203,40 @@ class TransaksiController extends Controller
     private function tambahStokBaruPengeluaran(Request $request) {
         $userid = Auth::check() ? Auth::id() : null;
 
-        $validatedData = $request->validate([
+        $validator = \Validator::make($request->all(), [
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
             'deskripsi' => 'required|string',
-            'stokBaru' => 'required|string',
+            'stokBaru' => 'required|string|max:255',
             'metode' => 'required|exists:payment_methods,name',
             'hargaJualSatuan' => 'required|numeric',
             'jumlahBarangPengeluaran' => 'required|integer',
             'nominalPengeluaran' => 'required|numeric'
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->with([
+                'error' => 'Input tidak valid! Harap periksa kembali.',
+                'errorDataTambahStokBaru' => $request->all()
+            ]);
+        }
+
         Product::insert([
             'userID' => $userid,
-            'productName' => $validatedData['stokBaru'],
-            'productStock' => $validatedData['jumlahBarangPengeluaran'],
-            'productPrice' => $validatedData['hargaJualSatuan']
+            'productName' => $request->stokBaru,
+            'productStock' => $request->jumlahBarangPengeluaran,
+            'productPrice' => $request->hargaJualSatuan
         ]);
 
         Transaksi::insert([
-            'created_at' => $validatedData['tanggal'],
+            'created_at' => $request->tanggal,
             'userID' => $userid,
-            'nominal' => $validatedData['nominalPengeluaran'],
-            'type' => $validatedData['jenisTransaksi'],
+            'nominal' => $request->nominalPengeluaran,
+            'type' => $request->jenisTransaksi,
             'category' => 'Operasional',
-            'methodID' => $this->getMethodIdByName($validatedData['metode']),
-            'description' => $validatedData['deskripsi']
+            'methodID' => $this->getMethodIdByName($request->metode),
+            'description' => $request->deskripsi
         ]);
-    }
-
-    private function tambahStokBaruOnboarding(Request $request) {
-        $userid = Auth::check() ? Auth::id() : null;
-
-        $validatedData = $request->validate([
-            'namaBarangOnboarding' => 'required|array',
-            'namaBarangOnboarding.*' => 'required|string',
-            'jumlahBarangOnboarding' => 'required|array',
-            'jumlahBarangOnboarding.*' => 'required|integer|min:1',
-            'nominalHargaBarangOnboarding' => 'required|array',
-            'nominalHargaBarangOnboarding.*' => 'required|integer|min:1',
-        ]);
-
-        foreach ($validatedData['namaBarangOnboarding'] as $index => $productName) {
-            $productStock = $validatedData['jumlahBarangOnboarding'][$index];
-            $productPrice = $validatedData['nominalHargaBarangOnboarding'][$index];
-
-            Product::insert([
-                'userID' => $userid,
-                'productName' => $productName,
-                'productStock' => $productStock,
-                'productPrice' => $productPrice,
-            ]);
-        }
     }
 
     /**
@@ -241,13 +244,7 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
-        $userid = Auth::check() ? Auth::id() : null;
-        if ($request->input('modalType') === 'onboarding') {
-            $this->tambahStokBaruOnboarding($request);
-            DB::table('users')
-            ->where('id', '=', $userid)
-            ->update(['isOnboarded' => 1]);
-        } else if ($request->input('modalType') === 'pemasukan') {
+        if ($request->input('modalType') === 'pemasukan') {
             $this->tambahPemasukan($request);
         } else if ($request->input('modalType') === 'pengeluaran') {
             if ($request->input('modalType1') === 'tambahStok') {
@@ -283,40 +280,29 @@ class TransaksiController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $transaction = Transaksi::find($id);
+        $validator = \Validator::make($request->all(), [
+            'nominalTransaksi' => 'required|numeric',
+            'kategoriTransaksi' => 'required|string|max:255',
+            'metodeTransaksi' => 'required|string|exists:payment_methods,name',
+            'deskripsiTransaksi' => 'required|string|max:255'
+        ]);
 
-        $transaction->update([
+        if ($validator->fails()) {
+            return redirect()->back()->with([
+                'error' => 'Input tidak valid! Harap periksa kembali.',
+                'errorDataUpdate' => array_merge($request->all(), ['id' => $id])
+            ]);
+        }
+
+        $transaksi = Transaksi::find($id);
+        $transaksi->update([
             'nominal' => $request->nominalTransaksi,
-            'type' => $request->jenisTransaksi,
             'category' => $request->kategoriTransaksi,
             'methodID' => $this->getMethodIdByName($request->metodeTransaksi),
             'description' => $request->deskripsiTransaksi
         ]);
 
-        $selectedMonth = $request->get('month', date('n'));
-        $transactions = DB::table('transaksis')->select('*')
-                                                    ->where(DB::raw('month(transaksis.created_at)'), '=', $selectedMonth)
-                                                    ->orderBy('id')
-                                                    ->get();
-        $income_totals = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
-                                        ->join('products', 'transaction_details.productID', '=', 'products.id')
-                                        ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalNominal'))
-                                        ->whereNull('transaksis.nominal')
-                                        ->groupBy('transaksis.id');
-
-        $expense_total = DB::table('transaksis')->select('transaksis.id as id', 'transaksis.nominal as totalNominal')
-                                                ->whereNotNull('transaksis.nominal')
-                                                ->union($income_totals)
-                                                ->orderBy('id')
-                                                ->get();
-
-        $totals = $expense_total;
-
-        return redirect()->route('transaksi')->with([
-            'transactions' => $transactions,
-            'totals' => $totals,
-            'success' => 'Detail transaksi berhasil diperbarui!'
-        ]);
+        return redirect()->route('transaksi')->with('success', 'Detail transaksi berhasil diperbarui!');
     }
 
     /**
@@ -324,32 +310,8 @@ class TransaksiController extends Controller
      */
     public function destroy(int $id, Request $request)
     {
-        $transaksi = Transaksi::find(id: $id);
-        $transaksi->delete();
+        Transaksi::find($id)->delete();
 
-        $selectedMonth = $request->get('month', date('n'));
-        $transactions = DB::table('transaksis')->select('*')
-                                                    ->where(DB::raw('month(transaksis.created_at)'), '=', $selectedMonth)
-                                                    ->orderBy('id')
-                                                    ->get();
-        $income_totals = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
-                                        ->join('products', 'transaction_details.productID', '=', 'products.id')
-                                        ->select('transaksis.id as id', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as totalNominal'))
-                                        ->whereNull('transaksis.nominal')
-                                        ->groupBy('transaksis.id');
-
-        $expense_total = DB::table('transaksis')->select('transaksis.id as id', 'transaksis.nominal as totalNominal')
-                                                ->whereNotNull('transaksis.nominal')
-                                                ->union($income_totals)
-                                                ->orderBy('id')
-                                                ->get();
-
-        $totals = $expense_total;
-
-        return redirect()->route('transaksi')->with([
-            'transactions' => $transactions,
-            'totals' => $totals,
-            'success' => 'Transaksi berhasil di hapus!'
-        ]);
+        return redirect()->route('transaksi')->with('success', 'Transaksi berhasil di hapus!');
     }
 }
