@@ -64,11 +64,13 @@
                         <input type="hidden" name="modalType" value="pemasukan">
                         <div class="form-group position-relative mb-2">
                             <label for="tanggal" class="col-form-label" id="inputModalLabel">Tanggal</label>
-                            <input type="text" class="form-control border-style tanggal" name="tanggal" id="tanggal" value="" readonly>
+                            <input type="text" class="form-control border-style tanggal" name="tanggal" id="tanggal" value="" disabled>
+                            <input type="hidden" class="tanggal-submit" id="tanggal" name="tanggal" value="">
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis Transaksi</label>
-                            <input type="text" class="form-control border-style" id="jenisTransaksi" name="jenisTransaksi" value="Pemasukan" readonly>
+                            <input type="text" class="form-control border-style" id="jenisTransaksi" name="jenisTransaksi" value="Pemasukan" disabled>
+                            <input type="hidden" id="jenisTransaksi" name="jenisTransaksi" value="Pemasukan">
                         </div>
                         <div class="form-group-select position-relative mb-2 mt-4">
                             <div class=" d-flex justify-content-between align-items-center">
@@ -121,7 +123,8 @@
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="nominal" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
-                            <input type="text" class="form-control border-style" id="nominal" name="nominal" value="Rp. 0,-" readonly>
+                            <input type="text" class="form-control border-style" id="nominal" name="nominal" value="Rp. 0,-" disabled>
+                            <input type="hidden" id="nominal" name="nominal" value="Rp. 0,-">
                         </div>
                         <div class="form-group-select position-relative mb-2">
                             <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
@@ -154,11 +157,13 @@
                         <input type="hidden" name="modalType" value="pengeluaran">
                         <div class="form-group position-relative mb-2">
                             <label for="tanggal" class="col-form-label" id="inputModalLabel">Tanggal</label>
-                            <input type="text" class="form-control border-style tanggal" id="tanggal" name="tanggal" value="" readonly>
+                            <input type="text" class="form-control border-style tanggal" id="tanggal" name="tanggal" value="" disabled>
+                            <input type="hidden" class="tanggal-submit" id="tanggal" name="tanggal" value="">
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="jenisTransaksi" class="col-form-label" id="inputModalLabel">Jenis Transaksi</label>
-                            <input type="text" class="form-control border-style" id="jenisTransaksi" name="jenisTransaksi" value="Pengeluaran" readonly>
+                            <input type="text" class="form-control border-style" id="jenisTransaksi" name="jenisTransaksi" value="Pengeluaran" disabled>
+                            <input type="hidden" id="jenisTransaksi" name="jenisTransaksi" value="Pengeluaran">
                         </div>
                         <div class="form-group-select position-relative mb-2">
                             <label for="deskripsi" class="col-form-label" id="inputModalLabel">Deskripsi</label>
@@ -169,14 +174,16 @@
                             </select>
                         </div>
                         
-                        <input type="hidden" name="modalType1" value="tambahStok">
                         <div id="dynamicFields">
+                            <input type="hidden" name="modalType1" value="tambahStok">
                             <div class="form-group-select position-relative mb-2" id="jenisBarangField">
                                 <label for="jenisBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
                                 <select class="form-control border-style" id="jenisBarangPengeluaran" name="jenisBarangPengeluaran">
                                     <option value="None">None</option>
                                     @foreach($products as $product)
-                                        <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                        @if($product->productStock < 99999)
+                                            <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -227,13 +234,159 @@
     <!-- Lottie animation -->
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
 
+    <script>
+        $(document).ready(function() {
+            // handle for when error happens in the backend
+            $('#alertModal').on('hidden.bs.modal', function() {
+                @if (session('errorDataInput'))
+                    const errorData = @json(session('errorDataInput', [])); // Default to an empty array if session data is null
+
+                    if (Object.keys(errorData).length > 0) {
+                        // Open the onboarding modal
+                        $('#onboarding-modal-3').modal('show');
+
+                        // Clear existing rows in the table body
+                        $('#barangTableOnboarding tbody').empty();
+
+                        // Repopulate the table with the error data
+                        errorData.namaBarangOnboarding.forEach((item, index) => {
+                            const jumlahBarang = errorData.jumlahBarangOnboarding[index];
+                            const nominalHargaBarang = errorData.nominalHargaBarangOnboarding[index];
+
+                            const newRow = `
+                                <tr data-input-value="1">
+                                    <th scope="row">${index + 1}</th>
+                                    <td>
+                                        <input type="text" class="form-control border-style-jenisBarang-onboarding" 
+                                            name="namaBarangOnboarding[]" 
+                                            value="${item}" required>
+                                    </td>
+                                    <td>
+                                        <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
+                                            <button class="btn decrement" type="button">
+                                                <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
+                                            </button>
+                                            <input type="text" class="form-control border-style-jenisBarangJumlah text-center jumlahBarang" 
+                                                name="jumlahBarangOnboarding[]" 
+                                                value="${jumlahBarang}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
+                                            <button class="btn increment" type="button">
+                                                <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control border-style-jenisBarang-onboarding" 
+                                            name="nominalHargaBarangOnboarding[]" 
+                                            value="Rp. ${nominalHargaBarang}" required>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+
+                            // Append the new row to the table
+                            $('#barangTableOnboarding tbody').append(newRow);
+                        });
+                    }
+                @elseif (session('errorDataPemasukan'))
+                    const errorData = @json(session('errorDataPemasukan'));
+                    $('#modalityPemasukan').modal('show');
+                    $('#modalType').val("pemasukan");
+                    $('#tanggal').val(errorData.tanggal);
+                    $('#jenisTransaksi').val(errorData.jenisTransaksi);
+                    $('#metode').val(errorData.metode);
+
+                    // Clear and repopulate the barangTable with error data
+                    $('#barangTable tbody').empty();
+                    errorData.jenisBarang.forEach((item, index) => {
+                        const jumlahBarang = errorData.jumlahBarang[index];
+
+                        const newRow = `
+                            <tr data-input-value="${jumlahBarang}">
+                                <th scope="row">${index + 1}</th>
+                                <td>
+                                    <select class="form-control border-style-jenisBarang" name="jenisBarang[]">
+                                        <option value="None" ${item.id === 'None' ? 'selected' : ''}>None</option>
+                                        @foreach($products as $product)
+                                            <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}" ${item.id == {{ $product->id }} ? 'selected' : ''}>{{ $product->productName }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
+                                        <button class="btn" type="button" id="decrement">
+                                            <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
+                                        </button>
+                                        <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang[]" value="${jumlahBarang}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
+                                        <button class="btn" type="button" id="increment">
+                                            <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
+                                        </button>
+                                    </div>
+                                    <div class="overlay-button">
+                                        <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        $('#barangTable tbody').append(newRow);
+                    });
+
+                    // Update nominal field
+                    $('#nominal').val(`Rp. ${errorData.nominal}`);
+                @elseif (session('errorDataTambahStok'))
+                    const errorData = @json(session('errorDataTambahStok'));
+                    $('#modalityPengeluaran').modal('show');
+                    $('#modalType').val("pengeluaran");
+                    $('#tanggal').val(errorData.tanggal);
+                    $('#jenisTransaksi').val(errorData.jenisTransaksi);
+                    $('#deskripsi').val(errorData.deskripsi);
+                    $('#modalType1').val("tambahStok");
+                    $('#jenisBarangPengeluaran').val(errorData.jenisBarangPengeluaran);
+                    $('#jumlahBarangPengeluaran').val(errorData.jumlahBarangPengeluaran);
+                    $('#nominalPengeluaran').val(errorData.nominalPengeluaran);
+                    $('#metode').val(errorData.metode);
+                @elseif (session('errorDataTambahLainnya'))
+                    const errorData = @json(session('errorDataTambahLainnya'));
+                    $('#modalityPengeluaran').modal('show');
+                    $('#modalType').val("pengeluaran");
+                    $('#tanggal').val(errorData.tanggal);
+                    $('#jenisTransaksi').val(errorData.jenisTransaksi);
+                    $('#deskripsi').val(errorData.deskripsi);
+                    $('#modalType1').val("tambahLainnya");
+                    $('#deskripsiTransaksi').val(errorData.deskripsiTransaksi);
+                    $('#kategori').val(errorData.kategori);
+                    $('#nominalPengeluaran').val(errorData.nominalPengeluaran);
+                    $('#metode').val(errorData.metode);
+                @elseif (session('errorDataTambahStokBaru'))
+                    const errorData = @json(session('errorDataTambahStokBaru'));
+                    $('#modalityPengeluaran').modal('show');
+                    $('#modalType').val("pengeluaran");
+                    $('#tanggal').val(errorData.tanggal);
+                    $('#jenisTransaksi').val(errorData.jenisTransaksi);
+                    $('#deskripsi').val(errorData.deskripsi);
+                    $('#modalType1').val("tambahStokBaru");
+                    $('#stokBaru').val(errorData.stokBaru);
+                    $('#jumlahBarangPengeluaran').val(errorData.jumlahBarangPengeluaran);
+                    $('#nominalPengeluaran').val(errorData.nominalPengeluaran);
+                    $('#hargaJualSatuan').val(errorData.hargaJualSatuan);
+                    $('#metode').val(errorData.metode);
+                @endif
+            });
+        });
+    </script>
+
     <!-- Alert Modal Component -->
     <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body ps-4 pe-4 pb-4">
                     <center>
-                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                        <i id="modalIcon" class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
                     </center>
                     <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
                     <div class="d-flex justify-content-center gap-4 mt-4">
@@ -243,6 +396,39 @@
             </div>
         </div>
     </div>
+
+    <!-- Function to change modal text, icon, and show the modal -->
+    <script>
+        var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+
+        function showAlert(text, iconClass, iconColor) {
+            document.getElementById('modalText').innerText = text;
+            const modalIcon = document.getElementById('modalIcon');
+            modalIcon.className = iconClass;
+            modalIcon.style.color = iconColor;
+            alertModal.show();
+        }
+    </script>
+
+    @if (session('success'))
+        <script>
+            showAlert(
+                '{{ session('success') }}',
+                'bi bi-check-circle-fill',
+                'rgb(0, 205, 0)' // Green for success
+            );
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            showAlert(
+                '{{ session('error') }}',
+                'bi bi-exclamation-triangle-fill',
+                'red' // Red for error
+            );
+        </script>
+    @endif
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module">
@@ -305,10 +491,9 @@
                 <div class="modal-header justify-content-center">
                     <p class="modal-title" id="exampleModalLabel">Daftar Stok Barang</p>
                 </div>
-                <form id="formInputOnboarding" action="{{ route('transaksi.store') }}" method="POST" class="mb-2">
+                <form id="formInputOnboarding" action="{{ route('stok.store') }}" method="POST" class="mb-2">
                     @csrf
                     <div class="modal-body">
-                        <input type="hidden" name="modalType" value="onboarding">
                         <div class="form-group-select position-relative mb-2 mt-4">
                             <div class=" d-flex justify-content-between align-items-center">
                                 <label for="daftarBarang" class="col-form-label" id="inputModalLabel">Daftar Barang</label>
@@ -378,10 +563,6 @@
                 $('#nextModalButton-1').on('click', function() {
                     $('#onboarding-modal-2').modal('hide');
                     $('#onboarding-modal-3').modal('show');
-                });
-
-                $('#formInputOnboarding').on('submit', function() {
-                    localStorage.setItem('onboardingCompleted', 'true');
                 });
             @endif
         });
@@ -460,12 +641,28 @@
                 addCurrencySuffix(this);
             });
 
+            function enforceInputDeskripsi(event) {
+                var input = event.target;
+                var value = input.value;
+
+                if (value.length > 255) {
+                    value = value.slice(0, 255);
+                    alert('Jumlah input karakter maksimal adalah 255 huruf!');
+                }
+
+                input.value = value;
+            }
+
             // Function to enforce numeric input
             function enforceNumericInput(input) {
                 var value = input.value;
 
                 // Remove any non-digit characters except the prefix
                 var numberValue = value.slice(4).replace(/\D/g, '');
+
+                if (numberValue.startsWith('0') && numberValue.length > 1) {
+                    numberValue = numberValue.replace(/^0+/, '');
+                }
 
                 // Restrict the input to prevent entering numbers starting with 0 (except 0 itself)
                 if (numberValue.startsWith('0')) {
@@ -523,16 +720,20 @@
                 var input = event.target;
                 var value = input.value
 
-                if (input.value === '') {
-                    input.value = 1
+                if (value === '') {
+                    value = 1;
+                }
+
+                if (value.startsWith('0') && value.length > 1) {
+                    value = value.replace(/^0+/, '');
                 }
 
                 if (value.length > 5) {
                     value = value.slice(0, 5);
-                    alert('Batas maksimum input jumlah barang adalah 5 digit angka!');
-                    
-                    input.value = value
+                    alert('Batas maksimum input jumlah barang adalah 5 digit angka!');  
                 }
+
+                input.value = value
             }
 
             // Event to add a new row to the onboarding table
@@ -621,7 +822,7 @@
 
             // Prevent operations on jumlahBarangOnboarding[] if namaBarangOnboarding[] is empty or "None"
             $(document).on('keydown', 'input[name="jumlahBarangOnboarding[]"]', preventInvalidOperations);
-
+            $(document).on('input', 'input[name="namaBarangOnboarding[]"]', enforceInputDeskripsi);
             $(document).on('input', 'input[name="jumlahBarangOnboarding[]"]', preventNullAndMaxInput);
         });
     </script>
@@ -680,22 +881,6 @@
         });
     </script>
 
-    <!-- Function to change modal text and show the modal -->
-    <script>
-        var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
-
-        function showAlert(text) {
-            document.getElementById('modalText').innerText = text;
-            alertModal.show();
-        }
-    </script>
-
-    @if (session('success'))
-        <script>
-            showAlert('{{ session('success') }}');
-        </script>
-    @endif
-
     <script>
         document.querySelectorAll('form').forEach(function(form) {
             form.addEventListener('submit', function(event) {
@@ -737,8 +922,10 @@
             var month = String(today.getMonth() + 1).padStart(2, '0');
             var year = today.getFullYear();
 
-            today = year + '-' + month + '-' + day;
+            today = day + '/' + month + '/' + year;
+            todayForFormSubmit = year + '-' + month + '-' + day;
             $('.tanggal').val(today);
+            $('.tanggal-submit').val(todayForFormSubmit);
         });
     </script>
 
@@ -1039,6 +1226,20 @@
             $(document).on('blur', '#hargaJualSatuan', function(event) {
                 addCurrencySuffix(this);
             });
+            $(document).on('input', '#stokBaru', enforceInputDeskripsi);
+            $(document).on('input', '#deskripsiTransaksi', enforceInputDeskripsi);
+            
+            function enforceInputDeskripsi(event) {
+                var input = event.target;
+                var value = input.value;
+
+                if (value.length > 255) {
+                    value = value.slice(0, 255);
+                    alert('Jumlah input karakter maksimal adalah 255 huruf!');
+                }
+
+                input.value = value;
+            }
 
             function handleJumlahBarangPengeluaranInput(event) {
                 var input = event.target;
@@ -1057,14 +1258,17 @@
                     }
                 }
 
-                if (value.length > 5) {
-                    value = value.slice(0, 5);
-                    alert('Batas maksimum input jumlah barang adalah 5 digit angka!');
-                }
-
-                // If the input becomes empty, default back to '0'
                 if (value === '') {
                     value = '1';
+                }
+
+                if (value.startsWith('0') && value.length > 1) {
+                    value = value.replace(/^0+/, '');
+                }
+
+                if (value.length > 5) {
+                    value = value.slice(0, 5);
+                    alert('Batas maksimum input jumlah barang adalah 5 digit angka!');  
                 }
 
                 // Update the input value
@@ -1199,6 +1403,10 @@
                 // Remove any non-digit characters except the prefix
                 var numberValue = value.slice(4).replace(/\D/g, '');
 
+                if (numberValue.startsWith('0') && numberValue.length > 1) {
+                    numberValue = numberValue.replace(/^0+/, '');
+                }
+
                 // Restrict the input to prevent entering numbers starting with 0 (except 0 itself)
                 if (numberValue.startsWith('0')) {
                     numberValue = ''; // If first character is 0, restrict the rest of the input
@@ -1305,79 +1513,77 @@
                 } else if ($(this).val() === 'Tambah Stok') {
                     $('#dynamicFields').html(`
                         <input type="hidden" name="modalType1" value="tambahStok">
-                        <div id="dynamicFields">
-                            <div class="form-group-select position-relative mb-2" id="jenisBarangField">
-                                <label for="jenisBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
-                                <select class="form-control border-style" id="jenisBarangPengeluaran" name="jenisBarangPengeluaran">
-                                    <option value="None">None</option>
-                                    @foreach($products as $product)
+                        <div class="form-group-select position-relative mb-2" id="jenisBarangField">
+                            <label for="jenisBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
+                            <select class="form-control border-style" id="jenisBarangPengeluaran" name="jenisBarangPengeluaran">
+                                <option value="None">None</option>
+                                @foreach($products as $product)
+                                    @if($product->productStock < 99999)
                                         <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
-                                    @endforeach
-                                </select>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group position-relative mb-2" id="jumlahBarangField">
+                            <label for="jumlahBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jumlah Barang</label>
+                            <div class="input-group input-group-outline border-style">
+                                <button class="btn" type="button" id="decrementPengeluaran">
+                                    <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
+                                </button>
+                                <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
+                                <button class="btn" type="button" id="incrementPengeluaran">
+                                    <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
+                                </button>
                             </div>
-                            <div class="form-group position-relative mb-2" id="jumlahBarangField">
-                                <label for="jumlahBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jumlah Barang</label>
-                                <div class="input-group input-group-outline border-style">
-                                    <button class="btn" type="button" id="decrementPengeluaran">
-                                        <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
-                                    </button>
-                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
-                                    <button class="btn" type="button" id="incrementPengeluaran">
-                                        <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="form-group position-relative mb-2" id="nominalField">
-                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
-                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. " autocomplete="off">
-                            </div>
-                            <div class="form-group-select position-relative mb-2">
-                                <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
-                                <select class="form-control border-style" id="metode" name="metode">
-                                    @foreach($payment_methods as $method)
-                                        <option value="{{ $method->name }}">{{ $method->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        </div>
+                        <div class="form-group position-relative mb-2" id="nominalField">
+                            <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
+                            <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. " autocomplete="off">
+                        </div>
+                        <div class="form-group-select position-relative mb-2">
+                            <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
+                            <select class="form-control border-style" id="metode" name="metode">
+                                @foreach($payment_methods as $method)
+                                    <option value="{{ $method->name }}">{{ $method->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     `);
                 } else {
                     $('#dynamicFields').html(`
                         <input type="hidden" name="modalType1" value="tambahStokBaru">
-                        <div id="dynamicFields">
-                            <div class="form-group position-relative mb-2" id="stokBaruField">
-                                <label for="stokBaru" class="col-form-label" id="inputModalLabel">Nama Stok Baru</label>
-                                <input type="text" class="form-control border-style" id="stokBaru" name="stokBaru" placeholder="Masukkan nama stok baru" required>
-                                <div class="mt-1" id="product-check-message" style="color: red;"></div>
+                        <div class="form-group position-relative mb-2" id="stokBaruField">
+                            <label for="stokBaru" class="col-form-label" id="inputModalLabel">Nama Stok Baru</label>
+                            <input type="text" class="form-control border-style" id="stokBaru" name="stokBaru" placeholder="Masukkan nama stok baru" required>
+                            <div class="mt-1" id="product-check-message" style="color: red;"></div>
+                        </div>
+                        <div class="form-group position-relative mb-2" id="jumlahBarangField">
+                            <label for="jumlahBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jumlah Barang</label>
+                            <div class="input-group input-group-outline border-style">
+                                <button class="btn" type="button" id="decrementPengeluaran">
+                                    <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
+                                </button>
+                                <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
+                                <button class="btn" type="button" id="incrementPengeluaran">
+                                    <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
+                                </button>
                             </div>
-                            <div class="form-group position-relative mb-2" id="jumlahBarangField">
-                                <label for="jumlahBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jumlah Barang</label>
-                                <div class="input-group input-group-outline border-style">
-                                    <button class="btn" type="button" id="decrementPengeluaran">
-                                        <span class="iconify" data-icon="ph:minus-bold" data-width="24" data-height="24"></span>
-                                    </button>
-                                    <input type="text" class="form-control border-style text-center" id="jumlahBarangPengeluaran" name="jumlahBarangPengeluaran" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
-                                    <button class="btn" type="button" id="incrementPengeluaran">
-                                        <span class="iconify" data-icon="ic:round-plus" data-width="24" data-height="24"></span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="form-group position-relative mb-2" id="nominalField">
-                                <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
-                                <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. " autocomplete="off">
-                            </div>
-                            <div class="form-group position-relative mb-2" id="nominalField2">
-                                <label for="hargaJualSatuan" class="col-form-label" id="inputModalLabel">Harga Jual Barang Satuan</label>
-                                <input type="text" class="form-control border-style" id="hargaJualSatuan" name="hargaJualSatuan" value="Rp. ">
-                            </div>
-                            <div class="form-group-select position-relative mb-2">
-                                <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
-                                <select class="form-control border-style" id="metode" name="metode">
-                                    @foreach($payment_methods as $method)
-                                        <option value="{{ $method->name }}">{{ $method->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        </div>
+                        <div class="form-group position-relative mb-2" id="nominalField">
+                            <label for="nominalPengeluaran" class="col-form-label" id="inputModalLabel">Total Harga Beli Barang</label>
+                            <input type="text" class="form-control border-style" id="nominalPengeluaran" name="nominalPengeluaran" value="Rp. " autocomplete="off">
+                        </div>
+                        <div class="form-group position-relative mb-2" id="nominalField2">
+                            <label for="hargaJualSatuan" class="col-form-label" id="inputModalLabel">Harga Jual Barang Satuan</label>
+                            <input type="text" class="form-control border-style" id="hargaJualSatuan" name="hargaJualSatuan" value="Rp. ">
+                        </div>
+                        <div class="form-group-select position-relative mb-2">
+                            <label for="metode" class="col-form-label" id="inputModalLabel">Metode</label>
+                            <select class="form-control border-style" id="metode" name="metode">
+                                @foreach($payment_methods as $method)
+                                    <option value="{{ $method->name }}">{{ $method->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     `);
                     checkStockNameExist();

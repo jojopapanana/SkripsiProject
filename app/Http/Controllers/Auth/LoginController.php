@@ -48,23 +48,29 @@ class LoginController extends Controller
 
     public function userLogin(Request $request)
     {   
-        $request->validate([
+        $validator = \Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
         ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors([
+                'input' => 'Input tidak valid! Harap periksa kembali.',
+            ]);
+        }
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->route('Dashboard');
         } else {
             $userExists = User::where('email', $request->email)->exists();
         
-            if (!$userExists) {
+            if ($userExists) {
                 return back()->withErrors([
-                    'email' => 'Email tidak terdaftar.',
+                    'password' => 'Kata sandi tidak cocok.'
                 ]);
             } else {
                 return back()->withErrors([
-                    'password' => 'Kata sandi tidak cocok.'
+                    'email' => 'Email tidak terdaftar.'
                 ]);
             }
         }

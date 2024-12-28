@@ -16,13 +16,10 @@ class ReminderController extends Controller
      */
 
     public function addUtangtoReminder(string $id){
+        $userid = Auth::check() ? Auth::id() : null;
+
         $utangPiutang = UtangPiutang::find($id);
 
-        if (!$utangPiutang) {
-            return redirect()->back()->with('error', 'Utang/Piutang tidak ditemukan!');
-        }
-
-        $userid = Auth::check() ? Auth::id() : null;
         $reminder = new Reminder();
         $reminder->userID = $userid;
         $reminder->reminderName = $utangPiutang->deskripsi;
@@ -59,18 +56,24 @@ class ReminderController extends Controller
     {
         $userid = Auth::check() ? Auth::id() : null;
 
-        $request->validate([
+        $validator = \Validator::make($request->all(), [
             'judul' => 'required|string|max:255',
             'deadline' => 'required|date',
             'deskripsi' => 'required|string|max:255',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with([
+                'error' => 'Input tidak valid! Harap periksa kembali.',
+                'errorDataInput' => $request->all()
+            ]);
+        }
         
         $reminder = new Reminder();
         $reminder->userID = $userid;
         $reminder->reminderName = $request->judul;
         $reminder->reminderDeadline = $request->deadline;
         $reminder->reminderDescription = $request->deskripsi;
-
         $reminder->save();
 
         return redirect()->route('reminder')->with('success', 'Pengingat berhasil ditambahkan!');
@@ -97,31 +100,45 @@ class ReminderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
+        $validator = \Validator::make($request->all(), [
             'judul' => 'required|string|max:255',
             'deadline' => 'required|date',
             'deskripsi' => 'required|string|max:255',
         ]);
 
-        $reminder = Reminder::find($id);
-        if (!$reminder) {
-            return redirect()->route('reminder')->with('error', 'Pengingat tidak ditemukan!');
+        if ($validator->fails()) {
+            return redirect()->back()->with([
+                'error' => 'Input tidak valid! Harap periksa kembali.',
+                'errorDataUpdate' => array_merge($request->all(), ['id' => $id])
+            ]);
         }
-
-        $reminder->reminderName = $request->judul;
-        $reminder->reminderDeadline = $request->deadline;
-        $reminder->reminderDescription = $request->deskripsi;
-
-        $reminder->save();
 
         $utangPiutang = UtangPiutang::where('reminderID', $id)->first();
         if ($utangPiutang) {
+            $validator = \Validator::make($request->only('deskripsi'), [
+                'deskripsi' => 'required|numeric|max:999999999999',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->with([
+                    'error' => 'Input kolom Deskripsi harus berupa numeric dengan maks 12 digit angka untuk pengingat ini karena berkaitan dengan utang piutang!',
+                    'errorDataUpdate' => array_merge($request->all(), ['id' => $id])
+                ]);
+            }
+
             $utangPiutang->update([
                 'deskripsi' => $request->judul,
                 'batasWaktu' => $request->deadline,
                 'nominal' => $request->deskripsi
             ]);
         }
+
+        $reminder = Reminder::find($id);
+        $reminder->update([
+            'reminderName' => $request->judul,
+            'reminderDeadline' => $request->deadline,
+            'reminderDescription' => $request->deskripsi
+        ]);
 
         return redirect()->route('reminder')->with('success', 'Pengingat berhasil diperbarui!');
     }

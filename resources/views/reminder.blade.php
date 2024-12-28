@@ -113,6 +113,42 @@
             $('#deleteReminderForm').on('submit', function() {
                 $('#deleteModal').off('hidden.bs.modal'); // Remove the reopen behavior
             });
+
+            // handle for when error happens in the backend
+            $('#alertModal').on('hidden.bs.modal', function() {
+                @if (session('errorDataUpdate'))
+                    const errorData = @json(session('errorDataUpdate'));
+                    $('#editReminderModal').modal('show'); 
+                    $('#editReminderForm').attr('action', `{{ url('reminder/update') }}/${errorData.id}`);
+                    $('#reminderId').val(errorData.id);
+                    $('#editReminderName').val(errorData.judul);
+                    $('#editReminderDeadline').val(errorData.deadline);
+                    $('#editReminderDescription').val(errorData.deskripsi);
+                @elseif (session('errorDataInput'))
+                    const errorData = @json(session('errorDataInput'));
+                    $('#addReminderModal').modal('show'); 
+                    $('#judul').val(errorData.judul);
+                    $('#deadline').val(errorData.deadline);
+                    $('#deskripsi').val(errorData.deskripsi);
+                @endif
+            });
+
+            $(document).on('input', '#editReminderName', enforceInputDeskripsi);
+            $(document).on('input', '#judul', enforceInputDeskripsi);
+            $(document).on('input', '#editReminderDescription', enforceInputDeskripsi);
+            $(document).on('input', '#deskripsi', enforceInputDeskripsi);
+
+            function enforceInputDeskripsi(event) {
+                var input = event.target;
+                var value = input.value;
+
+                if (value.length > 255) {
+                    value = value.slice(0, 255);
+                    alert('Jumlah input karakter maksimal adalah 255 huruf!');
+                }
+
+                input.value = value;
+            }
         });
     </script>
 
@@ -135,7 +171,7 @@
             <div class="modal-content">
                 <div class="modal-body ps-4 pe-4 pb-4">
                     <center>
-                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                        <i id="modalIcon" class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
                     </center>
                     <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
                     <div class="d-flex justify-content-center gap-4 mt-4">
@@ -146,19 +182,36 @@
         </div>
     </div>
 
-    <!-- Function to change modal text and show the modal -->
+    <!-- Function to change modal text, icon, and show the modal -->
     <script>
         var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
 
-        function showAlert(text) {
+        function showAlert(text, iconClass, iconColor) {
             document.getElementById('modalText').innerText = text;
+            const modalIcon = document.getElementById('modalIcon');
+            modalIcon.className = iconClass;
+            modalIcon.style.color = iconColor;
             alertModal.show();
         }
     </script>
 
     @if (session('success'))
         <script>
-            showAlert('{{ session('success') }}');
+            showAlert(
+                '{{ session('success') }}',
+                'bi bi-check-circle-fill',
+                'rgb(0, 205, 0)' // Green for success
+            );
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            showAlert(
+                '{{ session('error') }}',
+                'bi bi-exclamation-triangle-fill',
+                'red' // Red for error
+            );
         </script>
     @endif
 

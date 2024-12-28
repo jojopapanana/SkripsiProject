@@ -145,11 +145,11 @@
                             <div class="modal-body">
                                 <div class="form-group position-relative mb-2">
                                     <label for="kodeTransaksi" class="col-form-label" id="inputModalLabel">Kode Transaksi</label>
-                                    <input type="text" class="form-control border-style" id="kodeTransaksi" placeholder="{{ $index + 1 }}" disabled>
+                                    <input type="text" class="form-control border-style" id="kodeTransaksi" value="{{ $index + 1 }}" disabled>
                                 </div>
                                 <div class="form-group position-relative mb-2">
                                     <label for="deskripsi" class="col-form-label" id="inputModalLabel">Judul</label>
-                                    <input type="text" class="form-control border-style" id="deskripsi" name="deskripsi" value="{{ $utang->deskripsi }}" required>
+                                    <input type="text" class="form-control border-style deskripsi" id="deskripsi" name="deskripsi" value="{{ $utang->deskripsi }}" required>
                                 </div>
                                 <div class="form-group position-relative mb-2">
                                     <label for="batasWaktu" class="col-form-label" id="inputModalLabel">Batas Waktu</label>
@@ -211,7 +211,7 @@
                     <div class="modal-body">
                         <div class="form-group position-relative mb-2">
                             <label for="deskripsi" class="col-form-label" id="inputModalLabel">Judul</label>
-                            <input type="text" class="form-control border-style" id="deskripsi" name="deskripsi" placeholder="Masukkan judul utang atau piutang" required>
+                            <input type="text" class="form-control border-style deskripsi" id="deskripsi" name="deskripsi" placeholder="Masukkan judul utang atau piutang" required>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="batasWaktu" class="col-form-label" id="inputModalLabel">Batas Waktu</label>
@@ -297,16 +297,33 @@
                 modal.find('#batasWaktu').val(originalBatasWaktuValue);
             });
 
+            $(document).on('input', '.deskripsi', enforceInputDeskripsi);
             $(document).on('input', '.nominal', enforceNumericInput);
             $(document).on('blur', '.nominal', addCurrencySuffix);
 
             // Function to enforce numeric input
+            function enforceInputDeskripsi(event) {
+                var input = event.target;
+                var value = input.value;
+
+                if (value.length > 255) {
+                    value = value.slice(0, 255);
+                    alert('Jumlah input karakter maksimal adalah 255 huruf!');
+                }
+
+                input.value = value;
+            }
+
             function enforceNumericInput(event) {
                 var input = event.target;
                 var value = input.value;
 
                 // Remove any non-digit characters except the prefix
                 var numberValue = value.slice(4).replace(/\D/g, '');
+
+                if (numberValue.startsWith('0') && numberValue.length > 1) {
+                    numberValue = numberValue.replace(/^0+/, '');
+                }
 
                 // Restrict the input to prevent entering numbers starting with 0 (except 0 itself)
                 if (numberValue.startsWith('0')) {
@@ -339,13 +356,38 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function() {
+            // handle for when error happens in the backend
+            $('#alertModal').on('hidden.bs.modal', function() {
+                @if (session('errorDataUpdate'))
+                    const errorData = @json(session('errorDataUpdate'));
+                    $('#editModal' + errorData.id).modal('show'); 
+                    $('#editModal' + errorData.id).attr('action', `{{ url('/utang/update') }}/${errorData.id}`);
+                    $('#kodeTransaksi').val(errorData.id);
+                    $('#deskripsi').val(errorData.deskripsi);
+                    $('#batasWaktu').val(errorData.batasWaktu);
+                    $('#nominal').val(errorData.nominal);
+                    $('#jenis').val(errorData.jenis);
+                @elseif (session('errorDataInput'))
+                    const errorData = @json(session('errorDataInput'));
+                    $('#addModal').modal('show'); 
+                    $('#deskripsi').val(errorData.deskripsi);
+                    $('#batasWaktu').val(errorData.batasWaktu);
+                    $('#nominal').val(errorData.nominal);
+                    $('#jenis').val(errorData.jenis);
+                @endif
+            });
+        });
+    </script>
+
     <!-- Alert Modal Component -->
     <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="okModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body ps-4 pe-4 pb-4">
                     <center>
-                        <i class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
+                        <i id="modalIcon" class="bi bi-check-circle-fill" style="font-size: 5rem; color: rgb(0, 205, 0)"></i>
                     </center>
                     <h4 class="fw-bold text-center" id="modalText">Default Text</h4>
                     <div class="d-flex justify-content-center gap-4 mt-4">
@@ -356,19 +398,36 @@
         </div>
     </div>
 
-    <!-- Function to change modal text and show the modal -->
+    <!-- Function to change modal text, icon, and show the modal -->
     <script>
         var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
 
-        function showAlert(text) {
+        function showAlert(text, iconClass, iconColor) {
             document.getElementById('modalText').innerText = text;
+            const modalIcon = document.getElementById('modalIcon');
+            modalIcon.className = iconClass;
+            modalIcon.style.color = iconColor;
             alertModal.show();
         }
     </script>
 
     @if (session('success'))
         <script>
-            showAlert('{{ session('success') }}');
+            showAlert(
+                '{{ session('success') }}',
+                'bi bi-check-circle-fill',
+                'rgb(0, 205, 0)' // Green for success
+            );
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            showAlert(
+                '{{ session('error') }}',
+                'bi bi-exclamation-triangle-fill',
+                'red' // Red for error
+            );
         </script>
     @endif
 </x-layout>

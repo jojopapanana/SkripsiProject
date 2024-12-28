@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class StokController extends Controller
@@ -44,7 +45,39 @@ class StokController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $userid = Auth::check() ? Auth::id() : null;
+
+        $validator = \Validator::make($request->all(), [
+            'namaBarangOnboarding' => 'required|array',
+            'namaBarangOnboarding.*' => 'required|string|max:255',
+            'jumlahBarangOnboarding' => 'required|array',
+            'jumlahBarangOnboarding.*' => 'required|integer|min:1',
+            'nominalHargaBarangOnboarding' => 'required|array',
+            'nominalHargaBarangOnboarding.*' => 'required|integer|min:1',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with([
+                'error' => 'Input tidak valid! Harap periksa kembali.',
+                'errorDataInput' => $request->all()
+            ]);
+        }
+
+        foreach ($request['namaBarangOnboarding'] as $index => $productName) {
+            $productStock = $request['jumlahBarangOnboarding'][$index];
+            $productPrice = $request['nominalHargaBarangOnboarding'][$index];
+
+            Product::insert([
+                'userID' => $userid,
+                'productName' => $productName,
+                'productStock' => $productStock,
+                'productPrice' => $productPrice,
+            ]);
+        }
+
+        User::where('id', $userid)->update(['isOnboarded' => 1]);
+
+        return redirect()->back()->with('success', 'Stok barang berhasil ditambahkan!');
     }
 
     /**
@@ -68,38 +101,36 @@ class StokController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validator = \Validator::make($request->all(), [
             'nama' => 'required|string|max:255',
             'nominal' => 'required|numeric',
             'sisa' => 'required|integer',
         ]);
 
-        $product = Product::find($id);
-
-        if ($product) {
-            $product->productName = $request->input('nama');
-            $product->productPrice = $request->input('nominal');
-            $product->productStock = $request->input('sisa');
-            $product->save();
-
-            return redirect()->back()->with('success', 'Stok barang berhasil diperbarui!');
+        if ($validator->fails()) {
+            return redirect()->back()->with([
+                'error' => 'Input tidak valid! Harap periksa kembali.',
+                'errorDataUpdate' => array_merge($request->all(), ['id' => $id])
+            ]);
         }
 
-        return redirect()->back()->with('error', 'Stok barang tidak ditemukan!');
+        $product = Product::find($id);
+        $product->update([
+            'productName' => $request->nama,
+            'productPrice' => $request->nominal,
+            'productStock' => $request->sisa
+        ]);
+
+        return redirect()->back()->with('success', 'Stok barang berhasil diperbarui!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(string $id)
+    public function destroy(string $id)
     {
-        $product = Product::find($id);
+        Product::find($id)->delete();
 
-        if ($product) {
-            $product->delete();
-            return redirect()->back()->with('success', 'Stok barang berhasil di hapus!');
-        }
-
-        return redirect()->back()->with('error', 'Stok barang tidak ditemukan!');
+        return redirect()->back()->with('success', 'Stok barang berhasil di hapus!');
     }
 }

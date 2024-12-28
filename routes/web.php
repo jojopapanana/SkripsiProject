@@ -26,6 +26,9 @@ Route::delete('/transaksi/delete/{id}', [TransaksiController::class, 'destroy'])
 Route::put('/transaksi/update/{id}', [TransaksiController::class, 'update'])->name('transaksi.update');
 
 Route::get('stok', [StokController::class, 'index'])->name('stok');
+Route::post('/stok/store', [StokController::class, 'store'])->name('stok.store');
+Route::delete('/stok/{id}/delete', [StokController::class, 'destroy'])->name('stok.delete');
+Route::post('/stok/update/{id}', [StokController::class, 'update'])->name('stok.update');
 
 Route::get('labarugi', [LabaRugiController::class, 'index'])->name('labarugi');
 Route::get('/labarugi/export', [LabaRugiController::class, 'export'])->name('labarugi_export');
@@ -34,9 +37,6 @@ Route::get('aruskas', [ArusKasController::class, 'index'])->name('aruskas');
 Route::get('/aruskas/export', [ArusKasController::class, 'export'])->name('aruskas_export');
 
 Route::get('/analisis', [AnalisisTrendController::class, 'index'])->name('analisisTrend');
-
-Route::delete('/stok/{id}/delete', [StokController::class, 'delete'])->name('stok.delete');
-Route::post('/stok/update/{id}', [StokController::class, 'update'])->name('stok.update');
 
 Route::get('utangPiutang/{type?}', [UtangPiutangController::class, 'index'])->name('utangPiutang');
 Route::delete('/utang/{id}/delete', [UtangPiutangController::class, 'destroy'])->name('utang.delete');
