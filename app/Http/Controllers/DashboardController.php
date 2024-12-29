@@ -17,41 +17,46 @@ class DashboardController extends Controller
     {
         $userid = Auth::check() ? Auth::id() : null;
         $selectedMonth = Carbon::now()->format('m');
-        $pendapatan_kotor_harian = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
+        $temp_pendapatan_kotor = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                             ->join('products', 'transaction_details.productID', '=', 'products.id')
-                                            ->select('transaksis.created_at as date', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as pendapatan'))
+                                            ->select(DB::raw('month(transaksis.created_at) as month'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as pendapatan'))
                                             ->where([['transaksis.type', '=', 'Pemasukan'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], ['transaksis.userID', '=', $userid]])
-                                            ->groupBy('date')
-                                            ->get()
-                                            ->keyBy('date');
+                                            ->groupBy('month')
+                                            ->get();
 
-        $pengeluaran_harian = DB::table('transaksis')
-                                            ->select('transaksis.created_at as date', DB::raw('SUM(transaksis.nominal) as pengeluaran'))
+        $temp_pengeluaran = DB::table('transaksis')
+                                            ->select(DB::raw('month(transaksis.created_at) as month'), DB::raw('SUM(transaksis.nominal) as pengeluaran'))
                                             ->where([['transaksis.type', '=', 'Pengeluaran'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], ['transaksis.userID', '=', $userid]])
-                                            ->groupBy('date')
-                                            ->get()
-                                            ->keyBy('date');
+                                            ->groupBy('month')
+                                            ->get();
 
         $finalCollection = collect();
 
-        $allDates = $pendapatan_kotor_harian->keys()->merge($pengeluaran_harian->keys())->unique();
+        // $allDates = $pendapatan_kotor_harian->keys()->merge($pengeluaran_harian->keys())->unique();
                                             
-        foreach ($allDates as $date) {
-            $pendapatan = $pendapatan_kotor_harian->has($date) ? $pendapatan_kotor_harian->get($date)->pendapatan : 0;
-            $nominalPengeluaran = $pengeluaran_harian->has($date) ? $pengeluaran_harian->get($date)->pengeluaran : 0;
+        // foreach ($allDates as $date) {
+            // $pendapatan = $pendapatan_kotor_harian->has($date) ? $pendapatan_kotor_harian->get($date)->pendapatan : 0;
+            // $nominalPengeluaran = $pengeluaran_harian->has($date) ? $pengeluaran_harian->get($date)->pengeluaran : 0;
                                             
-            $total = $pendapatan - $nominalPengeluaran;
+            // $total = $pendapatan - $nominalPengeluaran;
                                             
-            $finalCollection->push((object)[
-                'date' => $date,
-                'total' => $total,
-            ]);
-        }
+            // $finalCollection->push((object)[
+            //     'date' => $date,
+            //     'total' => $total,
+            // ]);
+        // }
 
-        $data = $finalCollection->map(function($item) {
-            return (object) $item;
-        });
+        $temp_pendapatan_bulanan = $temp_pendapatan_kotor->isNotEmpty() ? $temp_pendapatan_kotor->first()->pendapatan : 0;
+        $temp_pengeluaran_bulanan = $temp_pengeluaran->isNotEmpty() ? $temp_pengeluaran->first()->pengeluaran : 0;
+                                            
+        $total = $temp_pendapatan_bulanan - $temp_pengeluaran_bulanan;
 
+        $finalCollection->push((object)[
+            'month' => $selectedMonth,
+            'total' => $total,
+        ]);
+
+        // $data = $finalCollection;
 
         $pendapatan_kotor = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                             ->join('products', 'transaction_details.productID', '=', 'products.id')
@@ -134,7 +139,7 @@ class DashboardController extends Controller
             'products' => $products,
             'isOnboarded' => $isOnboarded,
             'payment_methods' => $payment_methods,
-            'data' => $data,
+            'data' => $finalCollection,
             'pendapatan_bersih_bulanan' => $pendapatan_bersih_bulanan,
             'kas_bulanan' => $kas_bulanan
         ]);
