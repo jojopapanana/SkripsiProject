@@ -84,7 +84,7 @@
                                 <thead>
                                   <tr>
                                     <th scope="col">No.</th>
-                                    <th scope="col">Jenis Barang</th>
+                                    <th scope="col">Nama Produk</th>
                                     <th scope="col">Jumlah</th>
                                   </tr>
                                 </thead>
@@ -177,7 +177,7 @@
                         <div id="dynamicFields">
                             <input type="hidden" name="modalType1" value="tambahStok">
                             <div class="form-group-select position-relative mb-2" id="jenisBarangField">
-                                <label for="jenisBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
+                                <label for="jenisBarangPengeluaran" class="col-form-label" id="inputModalLabel">Nama Produk</label>
                                 <select class="form-control border-style" id="jenisBarangPengeluaran" name="jenisBarangPengeluaran">
                                     <option value="None">None</option>
                                     @foreach($products as $product)
@@ -506,7 +506,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" style="width: 8%">No.</th>
-                                    <th scope="col">Jenis Barang</th>
+                                    <th scope="col">Nama Produk</th>
                                     <th scope="col">Jumlah</th>
                                     <th scope="col" style="width: 30%">Harga Jual Satuan</th>
                                     <th scope="col"></th>
@@ -989,7 +989,7 @@
                 var selectedOption = jenisBarang.val();
 
                 if (selectedOption === 'None') {
-                    alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                    alert('Silahkan isi Nama Produk terlebih dahulu!');
                     event.preventDefault();
                 }
             }
@@ -1003,7 +1003,7 @@
                 var productStock = parseInt(selectedOption.data('stock')) || 0;
 
                 if (jenisBarang.val() === 'None') {
-                    alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                    alert('Silahkan isi Nama Produk terlebih dahulu!');
                     return;
                 }
 
@@ -1117,7 +1117,7 @@
 
                 // Check if the selected value already exists in the array
                 if (selectedValue !== 'None' && selectedItems.includes(selectedValue)) {
-                    alert('Jenis Barang ini sudah ada! Silahkan pilih jenis barang yang berbeda.');
+                    alert('Nama Produk ini sudah ada! Silahkan pilih Nama Produk yang berbeda.');
 
                     // Revert to the previous value stored in the row
                     var previousData = currentRow.data('previous'); // Retrieve both jenisBarang and jumlahBarang
@@ -1149,7 +1149,7 @@
             if (form.is('#formInputPengeluaran')) {
                 if (form.find('#jenisBarangPengeluaran').length && form.find('#jenisBarangPengeluaran').val() === 'None') {
                     e.preventDefault();
-                    alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                    alert('Silahkan isi Nama Produk terlebih dahulu!');
                     return;
                 }
                 if (form.find('#stokBaru').length) {
@@ -1297,7 +1297,7 @@
                     var jenisBarang = document.getElementById('jenisBarangPengeluaran');
 
                     if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
-                        alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                        alert('Silahkan isi Nama Produk terlebih dahulu!');
                         return false;
                     } 
                 }
@@ -1328,7 +1328,7 @@
                         var jenisBarang = document.getElementById('jenisBarangPengeluaran');
 
                         if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
-                            alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                            alert('Silahkan isi Nama Produk terlebih dahulu!');
                             return;
                         }
 
@@ -1362,7 +1362,7 @@
                         var jenisBarang = document.getElementById('jenisBarangPengeluaran');
 
                         if (jenisBarang.options[jenisBarang.selectedIndex].value === 'None') {
-                            alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                            alert('Silahkan isi Nama Produk terlebih dahulu!');
                             return;
                         }
                     }
@@ -1389,7 +1389,7 @@
                     var selectedValue = jenisBarang.options[jenisBarang.selectedIndex].value;
 
                     if (selectedValue === 'None') {
-                        alert('Silahkan pilih Jenis Barang terlebih dahulu!');
+                        alert('Silahkan isi Nama Produk terlebih dahulu!');
                         event.preventDefault();
                         return;
                     }
@@ -1514,7 +1514,7 @@
                     $('#dynamicFields').html(`
                         <input type="hidden" name="modalType1" value="tambahStok">
                         <div class="form-group-select position-relative mb-2" id="jenisBarangField">
-                            <label for="jenisBarangPengeluaran" class="col-form-label" id="inputModalLabel">Jenis Barang</label>
+                            <label for="jenisBarangPengeluaran" class="col-form-label" id="inputModalLabel">Nama Produk</label>
                             <select class="form-control border-style" id="jenisBarangPengeluaran" name="jenisBarangPengeluaran">
                                 <option value="None">None</option>
                                 @foreach($products as $product)
