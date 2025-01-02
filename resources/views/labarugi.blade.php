@@ -31,6 +31,7 @@
                 <li><a class="dropdown-item" href="#" data-value="2022">2022</a></li>
                 <li><a class="dropdown-item" href="#" data-value="2023">2023</a></li>
                 <li><a class="dropdown-item" href="#" data-value="2024">2024</a></li>
+                <li><a class="dropdown-item" href="#" data-value="2025">2025</a></li>
             </ul>
         </div>
     </div>
