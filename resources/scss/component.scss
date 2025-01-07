@@ -1,23 +1,11 @@
 // NAVBAR
-
-/* Lock the minimum screen width to prevent shrinking */
-body {
-    min-width: 1024px; /* Set your desired minimum width */
-    overflow-x: auto; /* Allow horizontal scrolling if the screen size is smaller */
+.navbar-app-logo {
+    width: 10vw;
 }
 
-@media (max-width: 1024px) {
-    html, body {
-        width: 1024px; /* Force the layout width */
-    }
-
-    .container, .navbar, .content {
-        max-width: 1024px; /* Ensure content fits within the locked width */
-    }
-}
-
-
-#navbar-container{
+#navbar-container {
+    display: flex;
+    flex-direction: column;
     width: 20%;
     background-color: rgba(30, 3, 66, 1);
     height: 100%;
@@ -25,6 +13,18 @@ body {
     left: 0;
     font-weight: 500;
     font-size: 1.3rem;
+    z-index: 10;
+}
+
+#navbar-container > .profile-bottom {
+    margin-top: auto;
+}
+
+.middle-section {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
 }
 
 table{
@@ -32,41 +32,45 @@ table{
     padding-left: 0;
 }
 
-td a {
+.styling-nav {
     display: block;
     color: white;
     text-decoration: none;
-    margin-left: 2rem;
     font-weight: 500;
+    padding-left: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
-td .profile-bottom {
-    margin-left: 2rem;
+.profile-bottom {
+    padding-left: 2rem;
 }
 
-td a:hover {
+.styling-nav:hover {
     text-decoration: none;
     color: gray;
 }
 
 .selected-part:focus {
-    outline: none; /* Remove the default outline */
-    box-shadow: none; /* Remove any focus-related shadow */
-    border: none; /* Ensure no border appears */
+    outline: none;
+    box-shadow: none;
+    border: none;
 }
 
-td .selected-part:hover {
+.selected-part:hover {
     text-decoration: none;
-    color: gray; /* Apply the hover color to all children */
+    color: gray;
 }
 
-td .selected-part a {
-    text-decoration: none; /* Remove underline by default */
+.selected-part a {
+    color: white;
+    text-decoration: none;
 }
 
-td .selected-part:hover i,
-td .selected-part:hover a {
-    color: gray; /* Change the color of both the icon and text */
+.selected-part:hover i,
+.selected-part:hover a {
+    color: gray; 
+    transition: all 0.2s ease-in-out;
 }
 
 body{
@@ -89,7 +93,6 @@ main{
     border-radius: 0.6rem;
     background-color: #1E0342;
     color: #ffffff;
-    transition: background-color 0.3s ease;
     outline: none;
     box-shadow: none;
 }
@@ -99,6 +102,7 @@ main{
     background-color: #ffffff;
     color: #1E0342;
     border: 2px solid #1E0342;
+    transition: background-color 0.2s ease-in-out;
 }
 
 #exampleModalLabel {
@@ -121,7 +125,7 @@ main{
     background-repeat: no-repeat;
     background-position: right 0.625rem center;
     background-size: 1.688rem;
-    padding-right: 1.875rem; /* Add padding to make room for the icon */
+    padding-right: 1.875rem;
 }
 
 .border-style {
@@ -211,7 +215,7 @@ main{
     align-items: center;
     justify-content: center;
     border-radius: 0.6rem; /* Add border-radius for rounded corners */
-    // transition: background-color 0.3s ease; /* Smooth transition for background color */
+    // transition: background-color 0.2s ease; /* Smooth transition for background color */
     outline: none; /* Disable the default outline */
     box-shadow: none; /* Remove any default box shadow */
 }
@@ -228,7 +232,7 @@ main{
     align-items: center;
     justify-content: center;
     border-radius: 0.6rem; /* Add border-radius for rounded corners */
-    // transition: background-color 0.3s ease; /* Smooth transition for background color */
+    // transition: background-color 0.2s ease; /* Smooth transition for background color */
     outline: none; /* Disable the default outline */
     box-shadow: none; /* Remove any default box shadow */
 }
@@ -258,12 +262,14 @@ main{
     color: #1E0342; /* Change text color to the original background color for contrast */
     outline: none; /* Ensure no outline appears on hover or active */
     box-shadow: none; /* Ensure no box shadow appears on hover or active */
+    transition: background-color 0.2s ease-in-out;
 }
 
 .btn-closed:hover {
     color: gray;
     background-color: #ffffff;
     border: 2px solid gray;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .btn-closed:focus,
@@ -278,7 +284,7 @@ main{
 }
 
 .custom-modal-btn {
-    width: 47.5%;
+    width: 35vw;
     height: 3rem;
     font-weight: 600;
     background-color: #1E0342; /* Set the background color */
@@ -289,9 +295,9 @@ main{
     align-items: center;
     justify-content: center;
     border-radius: 0.6rem; /* Add border-radius for rounded corners */
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
     outline: none; /* Disable the default outline */
     box-shadow: none; /* Remove any default box shadow */
+    min-width: 363px;
 }
 
 .custom-modal-btn:focus,
@@ -310,13 +316,18 @@ main{
     color: #1E0342; /* Change text color to the original background color for contrast */
     outline: none; /* Ensure no outline appears on hover or active */
     box-shadow: none; /* Ensure no box shadow appears on hover or active */
+    transition: background-color 0.2s ease-in-out; /* Smooth transition for background color */
+}
+
+.width-adjust {
+    width: 70vw;
 }
 
 .left-side,
 .right-side {
     display: flex;
     align-items: center;
-    min-height: 100vh;
+    min-height: 650px;
     justify-content: center;
     background-color: #ffffff;
 }
@@ -360,8 +371,8 @@ main{
     color: #1E0342;
     font-size: 1.25rem;
     font-weight: 600;
-    min-width: 60vh;
-    border: 0.125rem solid #1E0342;
+    min-width: 560px;
+    border: 0.15rem solid #1E0342;
 }
 
 .form-signup {
@@ -371,6 +382,7 @@ main{
 .btn-custom-register:hover {
     color: #ffffff;
     background-color: #1E0342;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .bg-color-signup {
@@ -379,7 +391,9 @@ main{
 
 .adjust-align-left {
     font-size: 1.25rem;
+    max-width: 560px;
     text-align: left;
+    margin: 0 auto;
 }
 
 .btn-daftar-signup {
@@ -387,7 +401,7 @@ main{
     font-size: 1.25rem;
     font-weight: 600;
     border-radius: 0.625rem;
-    min-width: inherit;
+    min-width: 560px;
     background-color: #1E0342;
     margin-top: 3.125rem;
     border: 0.125rem solid #1E0342;
@@ -397,6 +411,7 @@ main{
     border: 0.125rem solid #1E0342;
     background-color: #ffffff;
     color: #1E0342;
+    transition: background-color 0.2s ease-in-out; /* Smooth transition for background color */
 }
 
 .adjust-border-input {
@@ -474,6 +489,7 @@ main{
 
 .delete-button:hover {
     color: darkred; /* Change color on hover for better feedback */
+    transition: all 0.2s ease-in-out; /* Smooth transition for background color */
 }
 
 .delete-button:focus {
@@ -492,6 +508,7 @@ main{
 
 .icon-default-button:hover {
     color: #9AC8CD; /* Change color on hover for better feedback */
+    transition: all 0.2s ease-in-out;
 }
 
 .icon-default-button:focus {
@@ -524,6 +541,7 @@ main{
     left: 50%;
     width: 50%;
     height: 100%;
+    min-height: 650px;
     padding: 0;
     overflow: hidden;
     transition: transform 0.6s ease-in-out;
@@ -660,12 +678,18 @@ main{
 
 
 //DASHBOARD
+.responsive-dashboard-button {
+    margin-top: 8vh;
+}
+
 .dashboard-card{
     background-color: white;
     height: 15vh;
     width: 35vw;
     padding: 24px 36px;
     margin-top: 5vh;
+    min-width: 363px;
+    min-height: 130px;
 }
 
 .dashboard-trenkeuntungan{
@@ -676,6 +700,8 @@ main{
     padding: 24px 38px;
     margin-top: 5vh;
     border-radius: 20px;
+    min-width: 750px; 
+    min-height: 387.5px;
 }
 
 #dashboard-button-full{
@@ -688,6 +714,7 @@ main{
 #dashboard-button-full:hover{
     background-color: white;
     color: rgba(30, 3, 66, 1);
+    transition: background-color 0.2s ease-in-out; 
 }
 
 
@@ -701,6 +728,7 @@ main{
 #dashboard-button-outline:hover{
     background-color: rgba(30, 3, 66, 1);
     color: white;
+    transition: background-color 0.2s ease-in-out; 
 }
 
 
@@ -751,7 +779,7 @@ main{
 #utangFilterGroup .btn-group .btn {
     border-width: 2px 0 2px 2px;
     margin: 0;
-    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.2s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 #utangFilterGroup .btn-group .btn:first-of-type {
@@ -777,6 +805,7 @@ main{
     background-color: rgba(255, 102, 0, 0.1) !important;
     border-color: rgba(30, 3, 66, 1) !important;
     color: rgba(30, 3, 66, 1) !important;
+    transition: background-color 0.2s ease-in-out; 
 }
 
 .btn-outline-primary {
@@ -790,7 +819,7 @@ main{
 }
 
 .btn-outline-primary {
-    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.2s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .btn.active {
@@ -809,6 +838,14 @@ main{
     height: 100vh;
     width: 70vw;
     background-color: white;
+    color: black; 
+    margin-top: 3.5rem; 
+    min-width: 750px; 
+    min-height: 750px;
+}
+
+.calender-text-width-adjust {
+    width: 70vw;
 }
 
 .fc .fc-col-header-cell a {
@@ -862,6 +899,7 @@ table td {
 .confirm-btn:hover {
     color: white;
     background-color: rgba(210, 0, 0, 1);
+    transition: background-color 0.2s ease-in-out; 
 }
 
 .cancel-btn {
@@ -873,4 +911,124 @@ table td {
 .cancel-btn:hover {
     color: gray;
     border: 2px solid gray;
+    transition: all 0.2s ease-in-out; 
+}
+
+
+// Screen Responsiveness
+@media (max-height: 700px) {
+    .styling-nav {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    #navbar-container {
+        min-height: 555px;
+    }
+}
+
+@media (max-height: 818px) {
+    .responsive-dashboard-button {
+        margin-bottom: 3rem;
+    }
+}
+
+@media (max-width: 1028px) {
+    .disabled-on-shrink {
+        display: none;
+    }
+
+    #navbar-container {
+        max-width: 10px;
+        min-height: 520px;
+    }
+
+    main{
+        margin-left: 30px;
+        padding-left: 4.5rem;
+    }
+
+    .width-adjust {
+        width: 90vw;
+    }
+
+    .responsive-margin-end {
+        margin-right: 0rem;
+    }
+
+    #calendar, .calender-text-width-adjust, .dashboard-trenkeuntungan {
+        width: 85vw;
+    }
+
+    .dashboard-card, .custom-modal-btn {
+        width: 41.25vw;
+    }
+}
+
+@media (min-width: 1028px) {
+    .on-shrink {
+        display: none;
+    }
+}
+
+@media (max-width: 1170px) {
+    #navbar-container {
+        min-width: 55px;
+    }
+
+    .styling-nav {
+        padding-left: 1rem;
+    }
+
+    .profile-bottom {
+        padding-left: 1rem;
+    }
+}
+
+@media (max-width: 1040px) {
+    .responsive-margin-end {
+        margin-right: 3rem;
+    }
+}
+
+@media (max-width: 1204px) {
+    .overlay-container, .class-appear-up-1204 {
+        display: none;
+    }
+
+    .below-1204 {
+        min-height: 650px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .form-signup {
+        min-width: auto;
+    }
+
+    .adjust-align-left {
+        max-width: 620px;
+    }
+
+    .btn-daftar-signup {
+        width: 100%;
+        max-width: 620px;
+        min-width: auto;
+        display: block;
+        margin: 3.125rem auto;
+    }
+
+}
+
+@media (min-width: 1204px) {
+    .class-appear-below-1204 {
+        display: none;
+    }
+}
+
+@media (max-width: 1290px) {
+    .transaksi-margin-end {
+        margin-right: 3rem;
+    }
 }

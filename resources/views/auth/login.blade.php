@@ -12,15 +12,131 @@
         <img src="/assets/dark icon.png" alt="LOGO" class="icon-size">
     </div>
 
-    <div class="container-fluid">
+    <div class="container-fluid class-appear-below-1204">
+        <div class="row">
+            <div class="col below-1204" style="background-color: #ffffff">
+                <div class="login-section">
+                    <h2>MASUK</h2>
+
+                    @if ($errors->any() && session('form_type') === 'login')
+                        <div class="error-messages text-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('login.auth') }}" class="form-signup" method="POST">
+                        @csrf
+                        <div class="form-group adjust-align-left" style="margin-top: 3.125rem">
+                            <label for="Email">Email</label>
+                            <div class="input-group custom-input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="iconify" data-icon="ic:sharp-email" data-width="20" data-height="16"></span>
+                                    </div>
+                                </div>
+                                <input type="email" name="email" class="form-control @if($errors->has('email') && session('form_type') === 'login') is-invalid @endif" id="Email" placeholder="Email" value="{{ session('email') }}" required>
+                            </div>
+                        </div>
+                        <div class="form-group adjust-align-left">
+                            <label for="password">Kata Sandi</label>
+                            <div class="input-group custom-input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="iconify" data-icon="uis:lock" data-width="18" data-height="23"></span>
+                                    </div>
+                                </div>
+                                <input type="password" class="form-control edit-password @if($errors->has('password') && session('form_type') === 'login') is-invalid @endif" id="password" name="password" placeholder="Kata Sandi" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text toggle-password" style="cursor: pointer;">
+                                        <span class="iconify" data-icon="mdi:eye-off" data-width="30" data-height="20"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-daftar-signup">Masuk</button>
+                    </form>
+                </div>
+            </div>
+            <div class="w-100"></div>
+            <div class="col below-1204">
+                <div id="registration-section" class="login-section">
+                    <h2>DAFTAR</h2>
+
+                    @if ($errors->any() && session('form_type') != 'login')
+                        <div class="error-messages text-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('register') }}" class="form-signup" method="POST">
+                        @csrf
+                        <div class="form-group adjust-align-left" style="margin-top: 3.125rem">
+                            <label for="Email">Email</label>
+                            <div class="input-group custom-input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="iconify" data-icon="ic:sharp-email" data-width="20" data-height="16"></span>
+                                    </div>
+                                </div>
+                                <input type="email" name="email" class="form-control @if($errors->has('email') && session('form_type') != 'login') is-invalid @endif" id="Email" placeholder="Email" value="{{ session('form_type') != 'login' ? old('email') : '' }}" required>
+                            </div>
+                        </div>
+                        <div class="form-group adjust-align-left">
+                            <label for="password">Kata Sandi</label>
+                            <div class="input-group custom-input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="iconify" data-icon="uis:lock" data-width="18" data-height="23"></span>
+                                    </div>
+                                </div>
+                                <input type="password" class="form-control edit-password @if($errors->has('password') && session('form_type') != 'login') is-invalid @endif" id="password" name="password" placeholder="Kata Sandi" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text toggle-password" style="cursor: pointer;">
+                                        <span class="iconify" data-icon="mdi:eye-off" data-width="30" data-height="20"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group adjust-align-left">
+                            <label for="confirmPassword">Konfirmasi Kata Sandi</label>
+                            <div class="input-group custom-input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="iconify" data-icon="uis:lock" data-width="18" data-height="23"></span>
+                                    </div>
+                                </div>
+                                <input type="password" class="form-control edit-password" id="password_confirmation" name="password_confirmation" placeholder="Kata Sandi" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text toggle-password" style="cursor: pointer;">
+                                        <span class="iconify" data-icon="mdi:eye-off" data-width="30" data-height="20"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-daftar-signup">Daftar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid class-appear-up-1204">
         <div class="row bg-color-signup">
-            <div id="main" class="{{ old('form_type') === 'signup' ? 'right-panel-active' : '' }}">
+            <div id="main" class="{{ session('form_type') != 'login' ? 'right-panel-active' : '' }}">
                 <!-- Left side -->
                 <div class="col left-side transitionClassSignIn p-5">
                     <div class="login-section">
                         <h2>MASUK</h2>
     
-                        {{-- @if ($errors->any() && session('form_type') === 'login') --}}
+                        @if ($errors->any() && session('form_type') === 'login')
                             <div class="error-messages text-danger">
                                 <ul>
                                     @foreach ($errors->all() as $error)
@@ -28,7 +144,7 @@
                                     @endforeach
                                 </ul>
                             </div>
-                        {{-- @endif --}}
+                        @endif
     
                         <form action="{{ route('login.auth') }}" class="form-signup" method="POST">
                             @csrf
@@ -40,7 +156,7 @@
                                             <span class="iconify" data-icon="ic:sharp-email" data-width="20" data-height="16"></span>
                                         </div>
                                     </div>
-                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="Email" placeholder="Email" value="{{ old('email') }}" required>
+                                    <input type="email" name="email" class="form-control @if($errors->has('email') && session('form_type') === 'login') is-invalid @endif" id="Email" placeholder="Email" value="{{ session('email') }}" required>
                                 </div>
                             </div>
                             <div class="form-group adjust-align-left">
@@ -51,7 +167,7 @@
                                             <span class="iconify" data-icon="uis:lock" data-width="18" data-height="23"></span>
                                         </div>
                                     </div>
-                                    <input type="password" class="form-control edit-password @error('password') is-invalid @enderror" id="password" name="password" placeholder="Kata Sandi" required>
+                                    <input type="password" class="form-control edit-password @if($errors->has('password') && session('form_type') === 'login') is-invalid @endif" id="password" name="password" placeholder="Kata Sandi" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text toggle-password" style="cursor: pointer;">
                                             <span class="iconify" data-icon="mdi:eye-off" data-width="30" data-height="20"></span>
@@ -69,7 +185,7 @@
                     <div class="login-section">
                         <h2>DAFTAR</h2>
     
-                        {{-- @if ($errors->any() && session('form_type') === 'signup') --}}
+                        @if ($errors->any() && session('form_type') != 'login')
                             <div class="error-messages text-danger">
                                 <ul>
                                     @foreach ($errors->all() as $error)
@@ -77,13 +193,11 @@
                                     @endforeach
                                 </ul>
                             </div>
-                        {{-- @endif --}}
+                        @endif
     
                         <form action="{{ route('register') }}" class="form-signup" method="POST">
                             @csrf
                             <div class="form-group adjust-align-left">
-                                <input type="hidden" name="form_type" value="signup">
-
                                 <label for="Email">Email</label>
                                 <div class="input-group custom-input-group mb-2">
                                     <div class="input-group-prepend">
@@ -91,7 +205,7 @@
                                             <span class="iconify" data-icon="ic:sharp-email" data-width="20" data-height="16"></span>
                                         </div>
                                     </div>
-                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="Email" placeholder="Email" value="{{ old('email') }}" required>
+                                    <input type="email" name="email" class="form-control @if($errors->has('email') && session('form_type') != 'login') is-invalid @endif" id="Email" placeholder="Email" value="{{ session('form_type') != 'login' ? old('email') : '' }}" required>
                                 </div>
                             </div>
                             <div class="form-group adjust-align-left">
@@ -102,7 +216,7 @@
                                             <span class="iconify" data-icon="uis:lock" data-width="18" data-height="23"></span>
                                         </div>
                                     </div>
-                                    <input type="password" class="form-control edit-password @error('password') is-invalid @enderror" id="password" name="password" placeholder="Kata Sandi" required>
+                                    <input type="password" class="form-control edit-password @if($errors->has('password') && session('form_type') != 'login') is-invalid @endif" id="password" name="password" placeholder="Kata Sandi" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text toggle-password" style="cursor: pointer;">
                                             <span class="iconify" data-icon="mdi:eye-off" data-width="30" data-height="20"></span>
@@ -155,6 +269,21 @@
     </div>    
 
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Check if there are validation errors and the form type is not 'login'
+            @if($errors->any() && session('form_type') != 'login')
+                const registerSection = document.querySelector("#registration-section");
+                if (registerSection) {
+                    registerSection.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+                }
+            @endif
+        });
+    </script>
 
     {{-- <script>
         document.addEventListener('DOMContentLoaded', function () {

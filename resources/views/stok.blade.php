@@ -1,9 +1,8 @@
 <x-layout title="Stok">
-    <div class="d-flex justify-content-center" style="width: 70vw">
-        <h1 class="fw-bold">STOK BARANG</h1>
-    </div>
+    <h1 class="fw-bold text-center responsive-margin-end" style="font-size: 2.5rem">STOK BARANG</h1>
+    <h1 class="width-adjust"></h1>
 
-    <div class="card mt-5">
+    <div class="card responsive-margin-end" style="margin-top: 3.5rem; min-width: 750px">
         <div class="card-body py-2">
             <table class="w-100">
                 <thead>
@@ -21,7 +20,7 @@
 
     @if($stokData->count() > 0)
         @foreach($stokData as $index => $stok)
-            <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }}">
+            <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }} responsive-margin-end">
                 <div class="card-body py-2">
                     <table class="w-100">
                         <tbody>
@@ -116,9 +115,9 @@
             </div>
         @endforeach
 
-        <button type="submit" class="btn btn-primary custom-btn mt-5 mb-5 float-end" data-bs-toggle="modal" data-bs-target="#addStok">Tambah</button>
+        <button type="submit" class="btn btn-primary custom-btn mt-5 mb-5 responsive-margin-end float-end" data-bs-toggle="modal" data-bs-target="#addStok">Tambah</button>
     @else
-        <div class="card mt-3">
+        <div class="card mt-3 responsive-margin-end">
             <div class="card-body py-2 m-3">
                 <center>
                     <div class="mb-1"><img src="/assets/no-data.png" alt="NO-DATA" style="width:100px"></div>

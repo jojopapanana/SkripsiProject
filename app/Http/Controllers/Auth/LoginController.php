@@ -56,6 +56,9 @@ class LoginController extends Controller
         if ($validator->fails()) {
             return back()->withErrors([
                 'input' => 'Input tidak valid! Harap periksa kembali.',
+            ])->with([
+                'form_type' => 'login',
+                'email' => $request->email,
             ]);
         }
 
@@ -67,10 +70,16 @@ class LoginController extends Controller
             if ($userExists) {
                 return back()->withErrors([
                     'password' => 'Kata sandi tidak cocok.'
+                ])->with([
+                    'form_type' => 'login',
+                    'email' => $request->email,
                 ]);
             } else {
                 return back()->withErrors([
                     'email' => 'Email tidak terdaftar.'
+                ])->with([
+                    'form_type' => 'login',
+                    'email' => $request->email,
                 ]);
             }
         }

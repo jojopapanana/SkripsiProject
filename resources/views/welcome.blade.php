@@ -1,24 +1,24 @@
 
 <x-layout title="Halaman Utama">
-    <h1 class="fw-bold">HALAMAN UTAMA</h1>
+    <h1 class="fw-bold responsive-margin-end" style="font-size: 2.5rem">HALAMAN UTAMA</h1>
 
     <div class="d-flex gap-4">
         <div class="dashboard-card">
             <div class="d-flex justify-content-between align-items-top">
                 <div>
-                    <h4 class="fw-semibold">Pendapatan bersihmu per hari ini</h4>
-                    <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1)">Rp. {{ number_format($pendapatan_bersih_bulanan, 0, ',', '.') }}</h4>
+                    <h4 class="fw-semibold" style="font-size: 1.5rem">Pendapatan bersihmu per hari ini</h4>
+                    <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1); font-size: 1.5rem">Rp. {{ number_format($pendapatan_bersih_bulanan, 0, ',', '.') }}</h4>
                 </div>
 
                 <img src="/assets/profits.png" alt="MONEY-PROFIT" style="width: 60px; height: 60px">
             </div>
         </div>
 
-        <div class="dashboard-card">
+        <div class="dashboard-card responsive-margin-end">
             <div class="d-flex justify-content-between align-items-top">
                 <div>
-                    <h4 class="fw-semibold">Kasmu per hari ini</h4>
-                    <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1)">Rp. {{ number_format($kas_bulanan, 0, ',', '.') }}</h4>
+                    <h4 class="fw-semibold" style="font-size: 1.5rem">Kasmu per hari ini</h4>
+                    <h4 class="fw-bold" style="color: rgba(14, 70, 163, 1); font-size: 1.5rem">Rp. {{ number_format($kas_bulanan, 0, ',', '.') }}</h4>
                 </div>
 
                 <img src="/assets/wallet.png" alt="WALLET" style="width: 60px; height: 60px">
@@ -26,10 +26,10 @@
         </div>
     </div>
 
-    <div class="dashboard-trenkeuntungan">
+    <div class="dashboard-trenkeuntungan responsive-margin-end">
         <h3 class="fw-bold" style="font-size: 25px; margin-bottom: 20px;">Tren Pendapatan-mu Bulan Ini!</h3>
         @if($data->isNotEmpty())
-            <canvas id="myChart" style="width: 60vw; height: 30vh"></canvas>
+            <canvas id="myChart" style="width: 60vw; height: 30vh; z-index: -2"></canvas>
         @else
             <div class="card mt-3">
                 <div class="card-body py-2 m-3">
@@ -42,7 +42,7 @@
         @endif
     </div>
 
-    <div class="d-flex justify-content-between" style="margin-top: 70px">
+    <div class="d-flex justify-content-between responsive-dashboard-button responsive-margin-end">
         <button type="button" class="btn btn-primary custom-modal-btn mr-2" data-toggle="modal" data-target="#modalityPemasukan">
             Tambah Pemasukan
         </button>

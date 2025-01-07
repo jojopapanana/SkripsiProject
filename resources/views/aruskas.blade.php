@@ -1,11 +1,14 @@
 <x-layout title="Arus Kas">
-    <div class="d-flex justify-content-center" style="width: 70vw">
-        <h1 class="fw-bold">LAPORAN ARUS KAS</h1>
-    </div>
+    <h1 class="fw-bold text-center responsive-margin-end" style="font-size: 2.5rem">LAPORAN ARUS KAS</h1>
+    <h1 class="width-adjust"></h1>
+
+    @php
+        \Carbon\Carbon::setLocale('id');
+    @endphp
     
-    <div class="d-flex justify-content-center gap-3 mt-2" style="width: 70vw">
+    <div class="d-flex justify-content-center gap-3 mt-3 responsive-margin-end">
         <div class="dropdown">
-            <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn dropdown-toggle fw-semibold fs-5" type="button" style="min-width: 160px" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ strtoupper(\Carbon\Carbon::now()->translatedFormat('F')) }}
             </button>
             <ul class="dropdown-menu w-100" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
@@ -25,7 +28,7 @@
         </div>
     
         <div class="dropdown">
-            <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn dropdown-toggle fw-semibold fs-5" type="button" style="min-width: 160px" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
               {{ now()->year }}
             </button>
             <ul class="dropdown-menu w-100" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
@@ -37,7 +40,7 @@
         </div>
     </div>
 
-    <div class="card mt-5">
+    <div class="card mt-5 responsive-margin-end" style="min-width: 750px">
         <div class="card-body">
             <h6 class="fw-bold">Arus Kas Operasional</h6>
             <div class="row" style="margin-bottom: -5px;">
@@ -176,7 +179,7 @@
     </div>
 
     @if ($pendapatan_operasional->count() != 0 || $pengeluaran_operasional->count() != 0 || $pengeluaran_investasi->count() != 0)
-      <div class="d-flex justify-content-end mt-5 mb-5">
+      <div class="d-flex justify-content-end mt-5 mb-5 responsive-margin-end">
           <button class="btn fw-semibold" type="button" id="exportButton">
             Ekspor
           </button>
