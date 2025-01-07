@@ -1,9 +1,8 @@
 <x-layout title="Analisis Tren">
-    <div class="d-flex justify-content-center" style="width: 70vw">
-        <h1 class="fw-bold">ANALISIS TREN</h1>
-    </div>
+    <h1 class="fw-bold text-center responsive-margin-end" style="font-size: 2.5rem">ANALISIS TREN</h1>
+    <h1 class="width-adjust"></h1>
 
-    <div class="dashboard-trenkeuntungan">
+    <div class="dashboard-trenkeuntungan width-adjust responsive-margin-end" style="margin-top: 3.5rem">
         <h3 class="fw-bold text-center" style="font-size: 25px; margin-bottom: 20px;">Pendapatan dan Pengeluaran Selama 6 Bulan Terakhir!</h3>
         @if($data->isNotEmpty())
             <canvas id="myChart" style="width: 60vw; height: 30vh"></canvas>
@@ -19,7 +18,7 @@
         @endif
     </div>
 
-    <div class="dashboard-trenkeuntungan">
+    <div class="dashboard-trenkeuntungan mt-5">
         <h3 class="fw-bold text-center" style="font-size: 25px; margin-bottom: 20px;">Pendapatan dan Pengeluaran Selama 7 Hari Terakhir!</h3>
         @if($data->isNotEmpty())
             <canvas id="dailyChart" style="width: 60vw; height: 30vh"></canvas>
@@ -36,10 +35,10 @@
     </div>
 
     <div class="analisis-stok mt-5">
-        <h2 class="fw-bold text-center">Laporan Penjualan Stok Barangmu!</h2>
-        <div class="d-flex gap-3 mt-3 mb-5 justify-content-center">
+        <h2 class="fw-bold text-center responsive-margin-end" style="font-size: 2rem">Laporan Penjualan Stok Barangmu!</h2>
+        <div class="d-flex gap-3 mt-3 mb-5 justify-content-center responsive-margin-end">
             <div class="dropdown">
-                <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="timeRangeButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn dropdown-toggle fw-semibold fs-5" style="min-width: 160px" type="button" id="timeRangeButton" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ ucfirst($rangeWaktu) }}
                 </button>
                 <ul class="dropdown-menu w-100" id="time-range-items" aria-labelledby="timeRangeButton">
@@ -51,7 +50,7 @@
         </div>
     </div>
 
-    <div class="analisis-stok-content">
+    <div class="analisis-stok-content responsive-margin-end">
         @include('components.analisisStokForTrend', [
             'produkTerbanyak' => $produkTerbanyak,
             'produkTerdikit' => $produkTerdikit,

@@ -1,45 +1,67 @@
-<div class="container ms-0" id="navbar-container">
-    <table id="navbar-container">
-        <tr>
-            <td valign="top" class="pt-5"><a href="{{ route('Dashboard') }}"><img src="/assets/logo skripsi1.PNG" alt="LOGO" style="width: 150px"></a></td>
-        </tr>
-        <tr class="{{ Route::is('transaksi') ? 'active-row' : '' }}">
-            <td><a href="{{ route('transaksi') }}" style="text-decoration: none">Transaksi</a></td>
-        </tr>
-        <tr class="{{ Route::is('aruskas') ? 'active-row' : '' }}">
-            <td><a href="{{ route('aruskas') }}">Arus Kas</a></td>
-        </tr>
-        <tr class="{{ Route::is('labarugi') ? 'active-row' : '' }}">
-            <td><a href="{{ route('labarugi') }}">Laba Rugi</a></td>
-        </tr>
-        <tr class="{{ Route::is('stok') ? 'active-row' : '' }}">
-            <td><a href="{{ route('stok') }}">Stok Barang</a></td>
-        </tr>
-        <tr class="{{ Route::is('analisisTrend') ? 'active-row' : '' }}">
-            <td><a href="{{ route('analisisTrend') }}">Analisis Tren</a></td>
-        </tr>
-        <tr class="{{ Route::is('utangPiutang') ? 'active-row' : '' }}">
-            <td><a href="{{ route('utangPiutang') }}">Utang Piutang</a></td>
-        </tr>
-        <tr class="{{ Route::is('reminder') ? 'active-row' : '' }}">
-            <td><a href="{{ route('reminder') }}">Pengingat</a></td>
-        </tr>
-        <tr>
-            <td valign="bottom">
-                <div class="d-flex gap-3 pb-5 profile-bottom" id="profile" style="color: white">
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#logoutModal" class="btn p-0 me-5 selected-part" style="color: white; border: none; margin-left: 1px">
-                        <div class="d-flex gap-3 fs-5">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <a class="p-0 m-0" href="#">
-                                Keluar
-                            </a>
-                        </div>
-                    </button>
-                </div>
-            </td>
-        </tr>
-    </table>
-</div>
+<ul class="nav flex-column d-flex" id="navbar-container">
+    <li class="nav-item">
+        <a href="{{ route('Dashboard') }}" class="nav-link styling-nav">
+            <img src="/assets/logo skripsi1.PNG" class="navbar-app-logo disabled-on-shrink" alt="LOGO">
+            <i class="bi bi-house-door on-shrink"></i>
+        </a>
+    </li>
+
+    <div class="middle-section">
+        <li class="nav-item {{ Route::is('transaksi') ? 'active-row' : '' }}">
+            <a href="{{ route('transaksi') }}" class="nav-link styling-nav">
+                <i class="bi bi-receipt"></i>
+                <span class="disabled-on-shrink">&nbsp;&nbsp;Transaksi</span>
+            </a>
+        </li>
+        <li class="nav-item {{ Route::is('aruskas') ? 'active-row' : '' }}">
+            <a href="{{ route('aruskas') }}" class="nav-link styling-nav">
+                <i class="bi bi-cash-coin"></i>
+                <span class="disabled-on-shrink">&nbsp;&nbsp;Arus Kas</span>
+            </a>
+        </li>
+        <li class="nav-item {{ Route::is('labarugi') ? 'active-row' : '' }}">
+            <a href="{{ route('labarugi') }}" class="nav-link styling-nav">
+                <i class="bi bi-arrow-down-up"></i>
+                <span class="disabled-on-shrink">&nbsp;&nbsp;Laba Rugi</span>
+            </a>
+        </li>
+        <li class="nav-item {{ Route::is('stok') ? 'active-row' : '' }}">
+            <a href="{{ route('stok') }}" class="nav-link styling-nav">
+                <i class="bi bi-box2"></i>
+                <span class="disabled-on-shrink">&nbsp;&nbsp;Stok Barang</span>
+            </a>
+        </li>
+        <li class="nav-item {{ Route::is('analisisTrend') ? 'active-row' : '' }}">
+            <a href="{{ route('analisisTrend') }}" class="nav-link styling-nav">
+                <i class="bi bi-graph-up"></i>
+                <span class="disabled-on-shrink">&nbsp;&nbsp;Analisis Tren</span>
+            </a>
+        </li>
+        <li class="nav-item {{ Route::is('utangPiutang') ? 'active-row' : '' }}">
+            <a href="{{ route('utangPiutang') }}" class="nav-link styling-nav">
+                <i class="bi bi-cash-stack"></i>
+                <span class="disabled-on-shrink">&nbsp;&nbsp;Utang Piutang</span>
+            </a>
+        </li>
+        <li class="nav-item {{ Route::is('reminder') ? 'active-row' : '' }}">
+            <a href="{{ route('reminder') }}" class="nav-link styling-nav">
+                <i class="bi bi-calendar-event"></i>
+                <span class="disabled-on-shrink">&nbsp;&nbsp;Pengingat</span>
+            </a>
+        </li>
+    </div>
+    
+    <div class="d-flex gap-3 pb-5 profile-bottom" id="profile" style="color: white">
+        <button type="button" data-bs-toggle="modal" data-bs-target="#logoutModal" class="btn p-0 selected-part" style="color: white; border: none;">
+            <div class="d-flex" style="font-size: 1.3rem">
+                <i class="bi bi-box-arrow-right"></i>
+                <a class="p-0 m-0 disabled-on-shrink" href="#">
+                    &nbsp;&nbsp;&nbsp;Keluar
+                </a>
+            </div>
+        </button>
+    </div>
+</ul>
 
 <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

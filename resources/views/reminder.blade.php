@@ -1,9 +1,8 @@
 <x-layout title="Pengingat">
-    <div class="d-flex justify-content-center" style="width: 70vw">
-        <h1 class="fw-bold">PENGINGAT</h1>
-    </div>
+    <h1 class="fw-bold text-center responsive-margin-end" style="font-size: 2.5rem">PENGINGAT</h1>
+    <h1 style="calender-text-width-adjust"></h1>
 
-    <div id="calendar" class="p-5 mt-3 mb-5" style="color: black"></div>
+    <div id="calendar" class="p-5 mb-5 responsive-margin-end"></div>
 
     <div class="modal fade" id="addReminderModal" tabindex="-1" aria-labelledby="addReminderModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">

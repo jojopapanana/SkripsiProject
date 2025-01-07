@@ -1,9 +1,8 @@
 <x-layout title="Utang Piutang">
-    <div class="d-flex justify-content-center" style="width: 70vw">
-        <h1 class="fw-bold">UTANG PIUTANG</h1>
-    </div>
+    <h1 class="fw-bold text-center transaksi-margin-end" style="font-size: 2.5rem">UTANG PIUTANG</h1>
+    <h1 style="width: 70vw"></h1>
 
-    <div class="d-flex justify-content-center mt-2" id="utangFilterGroup">
+    <div class="d-flex justify-content-center mt-3 transaksi-margin-end" id="utangFilterGroup">
         <div class="btn-group" role="group" aria-label="utang filter button group">
             <input type="radio" class="btn-check" id="btncheck1" name="filter" autocomplete="off" value="Utang"
                 onclick="location.href='{{ url('utangPiutang/Utang') }}'" 
@@ -22,7 +21,7 @@
         </div>
     </div>
 
-    <div class="card mt-5">
+    <div class="card mt-5 transaksi-margin-end" style="min-width: 950px">
         <div class="card-body py-2">
             <table class="w-100">
                 <thead>
@@ -41,7 +40,7 @@
 
     @if($utangPiutang->count() > 0)
         @foreach($utangPiutang as $index => $utang)
-            <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }}">
+            <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }} transaksi-margin-end">
                 <div class="card-body py-2">
                     <table class="w-100">
                         <tbody>
@@ -178,9 +177,9 @@
             </div>
         @endforeach
 
-        <button type="submit" class="btn btn-primary custom-btn mt-5 mb-5 float-end" data-bs-toggle="modal" data-bs-target="#addModal">Tambah</button>
+        <button type="submit" class="btn btn-primary custom-btn transaksi-margin-end mt-5 mb-5 float-end" data-bs-toggle="modal" data-bs-target="#addModal">Tambah</button>
     @else
-        <div class="card mt-3">
+        <div class="card mt-3 transaksi-margin-end">
             <div class="card-body py-2 m-3">
                 <center>
                     <div class="mb-1"><img src="/assets/no-data.png" alt="NO-DATA" style="width:100px"></div>

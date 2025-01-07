@@ -1,11 +1,14 @@
 <x-layout title="Transaksi">
-    <div class="d-flex justify-content-center" style="width: 70vw">
-        <h1 class="fw-bold">LAPORAN TRANSAKSI</h1>
-    </div>
+    <h1 class="fw-bold text-center transaksi-margin-end" style="font-size: 2.5rem">LAPORAN TRANSAKSI</h1>
+    <h1 style="width: 70vw"></h1>
 
-    <div class="d-flex justify-content-center gap-3 mt-2" style="width: 70vw">
+    @php
+        \Carbon\Carbon::setLocale('id');
+    @endphp
+
+    <div class="d-flex justify-content-center gap-3 mt-3 transaksi-margin-end">
         <div class="dropdown">
-            <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn dropdown-toggle fw-semibold fs-5" style="min-width: 160px" type="button" id="monthDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ strtoupper(\Carbon\Carbon::now()->translatedFormat('F')) }}
             </button>
             <ul class="dropdown-menu w-100" id="month-dropdown-menu" aria-labelledby="monthDropdownButton">
@@ -25,7 +28,7 @@
         </div>
 
         <div class="dropdown">
-            <button class="btn dropdown-toggle fw-semibold fs-5" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn dropdown-toggle fw-semibold fs-5" style="min-width: 160px" type="button" id="yearDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ now()->year }}
             </button>
             <ul class="dropdown-menu w-100" id="year-dropdown-menu" aria-labelledby="yearDropdownButton">
@@ -37,7 +40,7 @@
         </div>
     </div>
 
-    <div class="card mt-5">
+    <div class="card mt-5 transaksi-margin-end" style="min-width: 950px">
         <div class="card-body py-2">
             <table class="w-100">
                 <thead>
@@ -57,7 +60,7 @@
 
     @if($transactions->count() > 0)
         @foreach($transactions as $index => $transaction)
-            <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }}">
+            <div class="card {{ $index === 0 ? 'mt-3' : 'mt-2' }} transaksi-margin-end">
                 <div class="card-body py-2">
                     <table class="w-100">
                         <tbody>
@@ -215,7 +218,7 @@
             </div>
         @endforeach
 
-        <div class="d-flex justify-content-end mt-5 mb-5">
+        <div class="d-flex justify-content-end mt-5 mb-5 transaksi-margin-end">
             <div class="dropdown">
                 <button class="btn dropdown-toggle fw-semibold" type="button" id="exportDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
                     Ekspor
@@ -228,7 +231,7 @@
             </div>
         </div>
     @else 
-        <div class="card mt-3">
+        <div class="card mt-3 transaksi-margin-end">
             <div class="card-body py-2 m-3">
                 <center>
                     <div class="mb-1"><img src="/assets/no-data.png" alt="NO-DATA" style="width:100px"></div>
