@@ -371,12 +371,12 @@ main{
     color: #1E0342;
     font-size: 1.25rem;
     font-weight: 600;
-    min-width: 560px;
+    min-width: 45vw;
     border: 0.15rem solid #1E0342;
 }
 
 .form-signup {
-    min-width: 80vh;
+    min-width: 45vw;
 }
 
 .btn-custom-register:hover {
@@ -391,7 +391,6 @@ main{
 
 .adjust-align-left {
     font-size: 1.25rem;
-    max-width: 560px;
     text-align: left;
     margin: 0 auto;
 }
@@ -401,7 +400,7 @@ main{
     font-size: 1.25rem;
     font-weight: 600;
     border-radius: 0.625rem;
-    min-width: 560px;
+    min-width: 45vw;
     background-color: #1E0342;
     margin-top: 3.125rem;
     border: 0.125rem solid #1E0342;
@@ -991,7 +990,7 @@ table td {
     }
 }
 
-@media (max-width: 1204px) {
+@media (max-width: 820px) {
     .overlay-container, .class-appear-up-1204 {
         display: none;
     }
@@ -1007,13 +1006,8 @@ table td {
         min-width: auto;
     }
 
-    .adjust-align-left {
-        max-width: 620px;
-    }
-
     .btn-daftar-signup {
         width: 100%;
-        max-width: 620px;
         min-width: auto;
         display: block;
         margin: 3.125rem auto;
@@ -1021,7 +1015,7 @@ table td {
 
 }
 
-@media (min-width: 1204px) {
+@media (min-width: 820px) {
     .class-appear-below-1204 {
         display: none;
     }
