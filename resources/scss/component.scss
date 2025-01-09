@@ -138,14 +138,21 @@ main{
     border:  0.063rem solid #000000;
     border-radius: 0.6rem;
     height: 2.35rem;
-    width: 95%;
+    width: 14rem;
 }
 
 .border-style-jenisBarang-onboarding {
     border:  0.063rem solid #000000;
     border-radius: 0.6rem;
     height: 2.35rem;
-    width: 100%;
+    width: 14rem;
+}
+
+.border-style-nominalHarga-onboarding {
+    border:  0.063rem solid #000000;
+    border-radius: 0.6rem;
+    height: 2.35rem;
+    width: 10.15rem;
 }
 
 .border-style-jenisBarangJumlah {
@@ -160,7 +167,7 @@ main{
     align-items: center; /* This aligns the content vertically in the center */
     justify-content: center;
     height: 2.35rem; /* Set a consistent height for the input group */
-    width: 8.5rem;
+    width: 10.2rem;
 }
 
 .input-group-outline-pemasukan .btn {
@@ -177,7 +184,7 @@ main{
     align-items: center; /* This aligns the content vertically in the center */
     justify-content: center;
     height: 2.5rem; /* Set a consistent height for the input group */
-    width: 10.25rem;
+    width: 11.3rem;
 }
 
 .input-group-outline .btn {
@@ -279,8 +286,19 @@ main{
 }
 
 .custom-modal-width {
-    max-width: 37.5rem;
-    width: 100%;
+    min-width: 25.63rem;
+}
+
+.custom-modal-width-pemasukan {
+    min-width: 35.31rem;
+}
+
+.custom-modal-width-reminder {
+    min-width: 30.83rem;
+}
+
+.custom-modal-width-onboarding-3 {
+    min-width: 47.1rem;
 }
 
 .custom-modal-btn {
@@ -870,16 +888,6 @@ main{
     color: #1E0342;
 }
 
-// icon in onboarding
-.icon-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 9rem;
-    margin-left: 7rem;
-    overflow: hidden;
-}
 
 table th,
 table td {

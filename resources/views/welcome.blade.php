@@ -53,7 +53,7 @@
 
     <!-- Modal Pemasukan -->
     <div class="modal fade" id="modalityPemasukan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered custom-modal-width" role="document">
+        <div class="modal-dialog modal-dialog-centered custom-modal-width-pemasukan" role="document">
             <div class="modal-content pl-3 pr-3">
                 <div class="modal-header justify-content-center">
                     <p class="modal-title" id="exampleModalLabel">Tambah Transaksi</p>
@@ -83,9 +83,10 @@
                             <table class="table mt-2" id="barangTable">
                                 <thead>
                                   <tr>
-                                    <th scope="col">No.</th>
-                                    <th scope="col">Nama Produk</th>
-                                    <th scope="col">Jumlah</th>
+                                    <th scope="col" style="width: 11%;">No.</th>
+                                    <th scope="col" style="width: 44%;">Nama Produk</th>
+                                    <th scope="col" style="width: 34%;">Jumlah</th>
+                                    <th scope="col" style="width: 11%;"></th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -111,6 +112,8 @@
                                                 <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
                                             </button>
                                         </div>
+                                    </td>
+                                    <td>
                                         <div class="overlay-button">
                                             <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
                                                 <i class="bi bi-trash3-fill"></i>
@@ -453,12 +456,12 @@
     </script>
 
     <div class="modal fade" id="onboarding-modal-1" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body ps-4 pe-4 pb-4">
-                    <div class="icon-container">
-                        <img src="/assets/dark icon.png" alt="LOGO" class="icon-size">
-                    </div>
+                    <center>
+                        <img src="/assets/dark icon.png" alt="LOGO" style="height: 6rem; margin-bottom: 2rem">
+                    </center>
                     <h4 class="fw-bold text-center" id="modalText">Selamat Datang di BukuKasUMKM</h4>
                     <div class="d-flex justify-content-center gap-4 custom-button-container">
                         <button class="btn btn-primary custom-btn-modal-onboarding" id="nextModalButton">Lanjut</button>
@@ -469,7 +472,7 @@
     </div>
 
     <div class="modal fade" id="onboarding-modal-2" tabindex="-1" role="dialog" aria-labelledby="okModalLabel" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered custom-modal-size" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body ps-4 pe-4 pb-4">
                     <h3 class="fw-bold text-center" id="modalText">Hampir Selesai</h3>
@@ -486,7 +489,7 @@
     </div>
 
     <div class="modal fade" id="onboarding-modal-3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered custom-modal-width" role="document">
+        <div class="modal-dialog modal-dialog-centered custom-modal-width-onboarding-3" role="document">
             <div class="modal-content pl-3 pr-3">
                 <div class="modal-header justify-content-center">
                     <p class="modal-title" id="exampleModalLabel">Daftar Stok Barang</p>
@@ -505,11 +508,11 @@
                             <table class="table mt-2" id="barangTableOnboarding">
                                 <thead>
                                 <tr>
-                                    <th scope="col" style="width: 8%">No.</th>
-                                    <th scope="col">Nama Produk</th>
-                                    <th scope="col">Jumlah</th>
-                                    <th scope="col" style="width: 30%">Harga Jual Satuan</th>
-                                    <th scope="col"></th>
+                                    <th scope="col" style="width: 10%">No.</th>
+                                    <th scope="col" style="width: 31%">Nama Produk</th>
+                                    <th scope="col" style="width: 24.5%">Jumlah</th>
+                                    <th scope="col" style="width: 24.5%">Harga Jual Satuan</th>
+                                    <th scope="col" style="width: 10%"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -530,7 +533,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control border-style-jenisBarang-onboarding" name="nominalHargaBarangOnboarding[]" id="nominalHargaBarangOnboarding" value="Rp. " required>
+                                        <input type="text" class="form-control border-style-nominalHarga-onboarding" name="nominalHargaBarangOnboarding[]" id="nominalHargaBarangOnboarding" value="Rp. " required>
                                     </td>
                                     <td class="text-center">
                                         <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
@@ -720,10 +723,6 @@
                 var input = event.target;
                 var value = input.value
 
-                if (value === '') {
-                    value = 1;
-                }
-
                 if (value.startsWith('0') && value.length > 1) {
                     value = value.replace(/^0+/, '');
                 }
@@ -759,7 +758,7 @@
                             </div>
                         </td>
                         <td>
-                            <input type="text" class="form-control border-style-jenisBarang-onboarding" name="nominalHargaBarangOnboarding[]" value="Rp. " required>
+                            <input type="text" class="form-control border-style-nominalHarga-onboarding" name="nominalHargaBarangOnboarding[]" value="Rp. " required>
                         </td>
                         <td class="text-center">
                             <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
@@ -780,9 +779,11 @@
                 }
 
                 var input = $(this).closest('tr').find('input[name="jumlahBarangOnboarding[]"]');
-                var currentVal = parseInt(input.val()) || 1;
+                var currentVal = parseInt(input.val()) || 0;
 
-                if (currentVal < 99999) {
+                if (currentVal === 0) {
+                    input.val(1);
+                } else if (currentVal < 99999) {
                     input.val(currentVal + 1);
                 } else {
                     alert('Batas maksimum input jumlah barang adalah 5 digit angka!');
@@ -798,6 +799,8 @@
                 var currentVal = parseInt(input.val()) || 1;
                 if (currentVal > 1) {
                     input.val(currentVal - 1);
+                } else {
+                    input.val(1)
                 }
             });
 
@@ -942,11 +945,15 @@
                     var selectedOption = jenisBarang.find('option:selected');
                     var pricePerItem = parseInt(selectedOption.data('price')) || 0;
                     var productStock = parseInt(selectedOption.data('stock')) || 1;
-                    var jumlahBarang = parseInt($(this).attr('data-input-value')) || 1;
+                    var jumlahBarang = parseInt($(this).attr('data-input-value')) || 0;
 
                     if (jumlahBarang > productStock) {
                         jumlahBarang = productStock;
                         row.find('input[name="jumlahBarang[]"]').val(productStock);
+                    }
+                    
+                    if (isNaN(parseInt($(this).attr('data-input-value')))) {
+                        jumlahBarang = 1;
                     }
 
                     var nominal = pricePerItem * jumlahBarang;
@@ -970,12 +977,15 @@
 
                 if (value > productStock) {
                     alert('Jumlah tidak boleh melebihi stok yang tersedia: ' + productStock);
-                    input.value = prevValue;
-                    return;
+
+                    if (prevValue != 0) {
+                        input.value = prevValue;
+                        return;
+                    }
                 }
 
                 if (input.value === '') {
-                    input.value = 1
+                    value = 0;
                 }
 
                 row.attr('data-input-value', value);
@@ -1007,10 +1017,12 @@
                     return;
                 }
 
-                var currentVal = parseInt(jumlahBarang.val()) || 1;
-
+                var currentVal = parseInt(jumlahBarang.val()) || 0;
                 if (button.attr('id') === 'increment') {
-                    if (currentVal < productStock) {
+                    if (currentVal === 0) {
+                        currentVal = 1;
+                        jumlahBarang.val(currentVal);
+                    } else if (currentVal < productStock) {
                         currentVal++;
                         jumlahBarang.val(currentVal);
                     } else {
@@ -1019,6 +1031,9 @@
                 } else if (button.attr('id') === 'decrement') {
                     if (currentVal > 1) {
                         currentVal--;
+                        jumlahBarang.val(currentVal);
+                    } else {
+                        currentVal = 1;
                         jumlahBarang.val(currentVal);
                     }
                 }
@@ -1078,6 +1093,8 @@
                                     <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
                                 </button>
                             </div>
+                        </td>
+                        <td>
                             <div class="overlay-button">
                                 <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
                                     <i class="bi bi-trash3-fill"></i>
@@ -1087,7 +1104,13 @@
                     </tr>
                 `;
 
-                $('#barangTable tbody').append(newRow);
+                const productOptions = $('#jenisBarang option[value]').not('[value="None"]');
+                if (productOptions.length >= rowCount) {
+                    console.log(productOptions.length)
+                    $('#barangTable tbody').append(newRow);
+                } else {
+                    alert("Anda hanya memiliki " + productOptions.length + " jenis produk yang tersedia!");
+                }
             });
 
             // Store the previous selected value and jumlahBarang in data attributes when the select gains focus
@@ -1249,7 +1272,7 @@
                 if (deskripsiValue === 'Tambah Stok') {
                     var jenisBarang = document.getElementById('jenisBarangPengeluaran');
                     var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
-                    var productStock = parseInt(selectedOption.dataset.stock) || 1;
+                    var productStock = parseInt(selectedOption.dataset.stock) || 0;
                     var maxProductToBeAdded = 99999 - productStock;
 
                     if (value > maxProductToBeAdded) {
@@ -1258,17 +1281,13 @@
                     }
                 }
 
-                if (value === '') {
-                    value = '1';
-                }
-
                 if (value.startsWith('0') && value.length > 1) {
                     value = value.replace(/^0+/, '');
                 }
 
                 if (value.length > 5) {
-                    value = value.slice(0, 5);
-                    alert('Batas maksimum input jumlah barang adalah 5 digit angka!');  
+                    alert('Batas maksimum input jumlah barang adalah 5 digit angka!');
+                    value = String(globalInputValue);  
                 }
 
                 // Update the input value
@@ -1311,6 +1330,8 @@
                 var jumlahBarang = $('#jumlahBarangPengeluaran');
 
                 $('#incrementPengeluaran').on('click', function() {
+                    var currentValTambahStok = parseInt(jumlahBarang.val()) || 0;
+
                     if (deskripsiValue === 'Tambah Stok Baru') {
                         var jenisBarang = document.getElementById('stokBaru')
 
@@ -1319,7 +1340,9 @@
                             return;
                         }
 
-                        if (parseInt(jumlahBarang.val()) < 99999) {
+                        if (currentValTambahStok === 0) {
+                            jumlahBarang.val(1);
+                        } else if (parseInt(jumlahBarang.val()) < 99999) {
                             jumlahBarang.val(parseInt(jumlahBarang.val()) + 1);
                         } else {
                             alert('Batas maksimum input jumlah barang adalah 5 digit angka!');
@@ -1335,10 +1358,12 @@
                         // pake if === Tambah Stok cuman buat make sure aja yang valuenya si Tambah Stok
                         if (deskripsiValue === 'Tambah Stok') {
                             var selectedOption = jenisBarang.options[jenisBarang.selectedIndex];
-                            var productStock = parseInt(selectedOption.dataset.stock) || 1;
+                            var productStock = parseInt(selectedOption.dataset.stock) || 0;
                             var maxProductToBeAdded = 99999 - productStock;
 
-                            if (parseInt(jumlahBarang.val()) >= maxProductToBeAdded) {
+                            if (currentValTambahStok === 0) {
+                                jumlahBarang.val(1);
+                            } else if (parseInt(jumlahBarang.val()) >= maxProductToBeAdded) {
                                 alert('Jumlah stok maksimal yang dapat ditambahkan adalah ' + maxProductToBeAdded);
                                 return;
                             } else {
@@ -1369,6 +1394,9 @@
 
                     if (parseInt(jumlahBarang.val()) > 1) {
                         jumlahBarang.val(parseInt(jumlahBarang.val()) - 1);
+                        globalInputValue = parseInt(jumlahBarang.val());
+                    } else {
+                        jumlahBarang.val(1);
                         globalInputValue = parseInt(jumlahBarang.val());
                     }
                 });
