@@ -140,7 +140,7 @@
                     <center>
                         <i class="bi bi-info-circle-fill" style="font-size: 5rem; color: #1E0342;"></i>
                     </center>
-                    <p class="fw-normal text-center pb-3 pt-3" style="background-color: #E1F7F5; border-radius: 10px">Tambah stok dapat dilakukan di Halaman Utama dengan menekan tombol <strong>Tambah Pengeluaran</strong></p>
+                    <p class="fw-normal text-center ps-3 pe-3 pb-3 pt-3" style="background-color: #E1F7F5; border-radius: 10px">Tambah stok dapat dilakukan di Halaman Utama dengan menekan tombol <strong>Tambah Pengeluaran</strong></p>
                     <div class="d-flex justify-content-center gap-4 mt-4">
                         <form action="{{ route('Dashboard') }}" method="GET">
                             <input type="hidden" name="status" value="1">

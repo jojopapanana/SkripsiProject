@@ -5,7 +5,7 @@
     <div id="calendar" class="p-5 mb-5 responsive-margin-end"></div>
 
     <div class="modal fade" id="addReminderModal" tabindex="-1" aria-labelledby="addReminderModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered custom-modal-width" role="document">
             <div class="modal-content pl-3 pr-3">
                 <div class="modal-header justify-content-center">
                     <p class="modal-title" id="exampleModalLabel">Tambah Pengingat</p>
@@ -36,7 +36,7 @@
     </div>
 
     <div class="modal fade" id="editReminderModal" tabindex="-1" aria-labelledby="editReminderModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered custom-modal-width-reminder" role="document">
             <div class="modal-content pl-3 pr-3">
                 <div class="modal-header justify-content-center">
                     <p class="modal-title" id="exampleModalLabel">Detail Pengingat</p>

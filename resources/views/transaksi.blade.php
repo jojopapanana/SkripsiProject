@@ -237,7 +237,7 @@
                     <div class="mb-1"><img src="/assets/no-data.png" alt="NO-DATA" style="width:100px"></div>
                     <p class="fw-bold mb-2" style="font-size: 1.5rem">Oops..!</p>
                     <p class="fw-semibold mb-5">Saat ini belum ada data transaksi nih. Yuk, tambahkan pemasukan atau pengeluaranmu untuk mulai melihat data!</p>
-                    <a href="{{ route('Dashboard') }}" style="text-decoration: none"><button type="submit" class="btn btn-primary custom-btn">Tambah</button></a>
+                    <button type="submit" class="btn btn-primary custom-btn" data-bs-toggle="modal" data-bs-target="#addTransaksi">Tambah</button>
                 </center>
             </div>
         </div>
@@ -245,6 +245,22 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <div class="modal fade" id="addTransaksi" tabindex="-1" aria-labelledby="addTransaksiModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body ps-4 pe-4 pb-4">
+                    <center>
+                        <i class="bi bi-info-circle-fill" style="font-size: 5rem; color: #1E0342;"></i>
+                    </center>
+                    <p class="fw-normal text-center ps-3 pe-3 pb-3 pt-3" style="background-color: #E1F7F5; border-radius: 10px">Tambah transaksi dapat dilakukan di Halaman Utama dengan menekan tombol <strong>Tambah Pemasukan</strong> atau <strong>Tambah Pengeluaran</strong></p>
+                    <div class="d-flex justify-content-center gap-4 mt-4">
+                        <a href="{{ route('Dashboard') }}" style="text-decoration: none"><button type="submit" class="btn btn-primary custom-btn-modal-onboarding">Lanjut</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.querySelectorAll('form').forEach(function(form) {
