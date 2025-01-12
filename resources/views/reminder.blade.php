@@ -5,7 +5,7 @@
     <div id="calendar" class="p-5 mb-5 responsive-margin-end"></div>
 
     <div class="modal fade" id="addReminderModal" tabindex="-1" aria-labelledby="addReminderModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered custom-modal-width" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content pl-3 pr-3">
                 <div class="modal-header justify-content-center">
                     <p class="modal-title" id="exampleModalLabel">Tambah Pengingat</p>
@@ -27,8 +27,8 @@
                         </div>
                     </div>
                     <div class="modal-footer mb-2">
-                        <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
+                        <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed footer-button" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary custom-btn mt-2 footer-button">Tambah</button>
                     </div>
                 </form>
             </div>
@@ -60,12 +60,12 @@
                         </div>
                     </div>
                     <div class="modal-footer mb-2">
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="btn p-0 me-5 delete-button" style="border: none; font-size: 1.2rem">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="btn p-0 delete-button footer-button-reminder reminder-delete-btn">
                             <i class="bi bi-trash3-fill"></i>
                         </button>
-                        <button type="button" class="btn btn-primary custom-btn ms-3 mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
+                        <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed footer-button-reminder tutup-btn" data-bs-dismiss="modal">Tutup</button>
                         @method('PUT')
-                        <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
+                        <button type="submit" class="btn btn-primary custom-btn mt-2 footer-button-reminder">Simpan</button>
                     </div>
                 </form>
             </div>

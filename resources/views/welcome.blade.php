@@ -73,56 +73,58 @@
                             <input type="hidden" id="jenisTransaksi" name="jenisTransaksi" value="Pemasukan">
                         </div>
                         <div class="form-group-select position-relative mb-2 mt-4">
-                            <div class=" d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <label for="daftarBarang" class="col-form-label" id="inputModalLabel">Daftar Barang</label>
                                 <button class="btn p-0 d-flex align-items-center" type="button" id="addDaftarBarang">
                                     <span class="ms-2 mt-1 mb-1 iconify" data-icon="ph:plus-fill" data-width="20" data-height="20"></span>
                                     <span class="ms-1 me-2">Tambah Barang</span>
                                 </button>
                             </div>
-                            <table class="table mt-2" id="barangTable">
-                                <thead>
-                                  <tr>
-                                    <th scope="col" style="width: 11%;">No.</th>
-                                    <th scope="col" style="width: 44%;">Nama Produk</th>
-                                    <th scope="col" style="width: 34%;">Jumlah</th>
-                                    <th scope="col" style="width: 11%;"></th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <th scope="row">1</th>
-                                    <td>
-                                        <select class="form-control border-style-jenisBarang" id="jenisBarang" name="jenisBarang[]">
-                                            <option value="None">None</option>
-                                            @foreach($products as $product)
-                                                @if($product->productStock > 0)
-                                                    <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
-                                            <button class="btn" type="button" id="decrement">
-                                                <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
-                                            </button>
-                                            <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang[]" id="jumlahBarang" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
-                                            <button class="btn" type="button" id="increment">
-                                                <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="overlay-button">
-                                            <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
-                                                <i class="bi bi-trash3-fill"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                            </table>
+                            <div class="custom-modal-body-pemasukan">
+                                <table class="table mt-2 scroll-area-table-pemasukan" id="barangTable">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" style="width: 11%;">No.</th>
+                                        <th scope="col" style="width: 44%;">Nama Produk</th>
+                                        <th scope="col" style="width: 34%;">Jumlah</th>
+                                        <th scope="col" style="width: 11%;"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>
+                                            <select class="form-control border-style-jenisBarang" id="jenisBarang" name="jenisBarang[]">
+                                                <option value="None">None</option>
+                                                @foreach($products as $product)
+                                                    @if($product->productStock > 0)
+                                                        <option value="{{ $product->id }}" data-stock="{{ $product->productStock }}" data-price="{{ $product->productPrice }}">{{ $product->productName }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
+                                                <button class="btn" type="button" id="decrement">
+                                                    <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
+                                                </button>
+                                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center" name="jumlahBarang[]" id="jumlahBarang" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
+                                                <button class="btn" type="button" id="increment">
+                                                    <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="overlay-button">
+                                                <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
+                                                    <i class="bi bi-trash3-fill"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="form-group position-relative mb-2">
                             <label for="nominal" class="col-form-label" id="inputModalLabel">Total Harga Barang</label>
@@ -139,8 +141,8 @@
                         </div>
                     </div>
                     <div class="modal-footer mb-2">
-                        <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
+                        <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed footer-button" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary custom-btn mt-2 footer-button">Tambah</button>
                     </div>
                 </form>
             </div>
@@ -149,7 +151,7 @@
 
     <!-- Modal Pengeluaran -->
     <div class="modal fade" id="modalityPengeluaran" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered custom-modal-width" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content pl-3 pr-3">
                 <div class="modal-header justify-content-center">
                     <p class="modal-title" id="exampleModalLabel">Tambah Transaksi</p>
@@ -218,8 +220,8 @@
                         </div>
                     </div>
                     <div class="modal-footer mb-2">
-                        <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-primary custom-btn mt-2">Tambah</button>
+                        <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed footer-button" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary custom-btn mt-2 footer-button">Tambah</button>
                     </div>
                 </form>
             </div>
@@ -505,44 +507,46 @@
                                     <span class="ms-1 me-2">Tambah Barang</span>
                                 </button>
                             </div>
-                            <table class="table mt-2" id="barangTableOnboarding">
-                                <thead>
-                                <tr>
-                                    <th scope="col" style="width: 10%">No.</th>
-                                    <th scope="col" style="width: 31%">Nama Produk</th>
-                                    <th scope="col" style="width: 24.5%">Jumlah</th>
-                                    <th scope="col" style="width: 24.5%">Harga Jual Satuan</th>
-                                    <th scope="col" style="width: 10%"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>
-                                        <input type="text" class="form-control border-style-jenisBarang-onboarding" name="namaBarangOnboarding[]" id="namaBarangOnboarding"  value="None" required>
-                                    </td>
-                                    <td>
-                                        <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
-                                            <button class="btn decrement" type="button">
-                                                <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
+                            <div class="custom-modal-body">
+                                <table class="table mt-2  scroll-area-table" id="barangTableOnboarding">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" style="width: 10%">No.</th>
+                                        <th scope="col" style="width: 31%">Nama Produk</th>
+                                        <th scope="col" style="width: 24.5%">Jumlah</th>
+                                        <th scope="col" style="width: 24.5%">Harga Jual Satuan</th>
+                                        <th scope="col" style="width: 10%"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>
+                                            <input type="text" class="form-control border-style-jenisBarang-onboarding" name="namaBarangOnboarding[]" id="namaBarangOnboarding"  value="None" required>
+                                        </td>
+                                        <td>
+                                            <div class="input-group-pemasukan input-group-outline-pemasukan border-style-jenisBarangJumlah">
+                                                <button class="btn decrement" type="button">
+                                                    <span class="iconify" data-icon="ph:minus-bold" data-width="20" data-height="20"></span>
+                                                </button>
+                                                <input type="text" class="form-control border-style-jenisBarangJumlah text-center jumlahBarang" name="jumlahBarangOnboarding[]" id="jumlahBarangOnboarding" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
+                                                <button class="btn increment" type="button">
+                                                    <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control border-style-nominalHarga-onboarding" name="nominalHargaBarangOnboarding[]" id="nominalHargaBarangOnboarding" value="Rp. " required>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
+                                                <i class="bi bi-trash3-fill"></i>
                                             </button>
-                                            <input type="text" class="form-control border-style-jenisBarangJumlah text-center jumlahBarang" name="jumlahBarangOnboarding[]" id="jumlahBarangOnboarding" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required min="1">
-                                            <button class="btn increment" type="button">
-                                                <span class="iconify" data-icon="ic:round-plus" data-width="20" data-height="20"></span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control border-style-nominalHarga-onboarding" name="nominalHargaBarangOnboarding[]" id="nominalHargaBarangOnboarding" value="Rp. " required>
-                                    </td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn delete-button" style="font-size: 1.2rem;">
-                                            <i class="bi bi-trash3-fill"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer mb-2">

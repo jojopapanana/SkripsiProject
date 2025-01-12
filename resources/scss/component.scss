@@ -20,6 +20,14 @@
     margin-top: auto;
 }
 
+.on-shrink {
+    display: none;
+}
+
+.class-appear-below-1204 {
+    display: none;
+}
+
 .middle-section {
     display: flex;
     flex-direction: column;
@@ -244,6 +252,11 @@ main{
     box-shadow: none; /* Remove any default box shadow */
 }
 
+.reminder-delete-btn {
+    border: none; 
+    font-size: 1.2rem;
+}
+
 .btn-closed {
     color: #1E0342;
     background-color: #ffffff;
@@ -285,20 +298,16 @@ main{
     box-shadow: none; /* Remove any focus-related box shadow */
 }
 
-.custom-modal-width {
-    min-width: 25.63rem;
-}
-
 .custom-modal-width-pemasukan {
-    min-width: 35.31rem;
+    max-width: 35.31rem;
 }
 
 .custom-modal-width-reminder {
-    min-width: 30.83rem;
+    max-width: 30.83rem;
 }
 
 .custom-modal-width-onboarding-3 {
-    min-width: 47.1rem;
+    max-width: 47.1rem;
 }
 
 .custom-modal-btn {
@@ -888,6 +897,10 @@ main{
     color: #1E0342;
 }
 
+.tutup-btn {
+    margin-left: auto;
+}
+
 
 table th,
 table td {
@@ -940,9 +953,42 @@ table td {
     }
 }
 
+@media (max-width: 823px) {
+    .overlay-container, .class-appear-up-1204 {
+        display: none;
+    }
+
+    .class-appear-below-1204 {
+        display: block;
+    }
+
+    .below-1204 {
+        min-height: 650px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .form-signup {
+        min-width: auto;
+    }
+
+    .btn-daftar-signup {
+        width: 100%;
+        min-width: auto;
+        display: block;
+        margin: 3.125rem auto;
+    }
+
+}
+
 @media (max-width: 1028px) {
     .disabled-on-shrink {
         display: none;
+    }
+
+    .on-shrink {
+        display: flex;
     }
 
     #navbar-container {
@@ -972,9 +1018,9 @@ table td {
     }
 }
 
-@media (min-width: 1028px) {
-    .on-shrink {
-        display: none;
+@media (max-width: 1040px) {
+    .responsive-margin-end {
+        margin-right: 3rem;
     }
 }
 
@@ -992,45 +1038,89 @@ table td {
     }
 }
 
-@media (max-width: 1040px) {
-    .responsive-margin-end {
-        margin-right: 3rem;
-    }
-}
-
-@media (max-width: 820px) {
-    .overlay-container, .class-appear-up-1204 {
-        display: none;
-    }
-
-    .below-1204 {
-        min-height: 650px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .form-signup {
-        min-width: auto;
-    }
-
-    .btn-daftar-signup {
-        width: 100%;
-        min-width: auto;
-        display: block;
-        margin: 3.125rem auto;
-    }
-
-}
-
-@media (min-width: 820px) {
-    .class-appear-below-1204 {
-        display: none;
-    }
-}
-
 @media (max-width: 1290px) {
     .transaksi-margin-end {
         margin-right: 3rem;
+    }
+}
+
+
+// below is used for form modality
+@media (max-width: 47.1rem) {
+    .custom-modal-body {
+        overflow-x: auto; /* Enable horizontal scrolling */
+    }
+    
+    .scroll-area-table {
+        display: inline-block; /* Ensure the items stay inline */
+        width: 43rem; /* Set a fixed width for each group */
+    }
+}
+
+@media (max-width: 36rem) {
+    .custom-modal-body-pemasukan {
+        overflow-x: auto; /* Enable horizontal scrolling */
+    }
+
+    .scroll-area-table-pemasukan {
+        display: inline-block; /* Ensure the items stay inline */
+        width: 31.185rem; /* Set a fixed width for each group */
+    }
+}
+
+@media (max-width: 26.59rem) {
+    .footer-button {
+        width: 100vw;
+    }
+}
+
+@media (max-width: 230px) {
+    .input-group-outline {
+        width: 9rem;
+    }
+}
+
+@media (max-width: 469.08px) {
+    .footer-button-reminder {
+        width: 100vw;
+    }
+
+    .tutup-btn {
+        margin-left: 0.25rem;
+    }
+
+    .reminder-delete-btn {
+        height: 2.5rem;
+        font-weight: 600;
+        background-color: red; /* Set the background color */
+        color: #ffffff; /* Set the text color to white */
+        border: 2px red;
+        font-size: 1.25rem; /* Adjust the font size */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.6rem; /* Add border-radius for rounded corners */
+        // transition: background-color 0.2s ease; /* Smooth transition for background color */
+        outline: none; /* Disable the default outline */
+        box-shadow: none; /* Remove any default box shadow */
+    }
+
+    .reminder-delete-btn:focus,
+    .reminder-delete-btn:active,
+    .reminder-delete-btn:visited {
+        background-color: red; /* Change background color when hovered or active */
+        border-color: red;
+        color: #ffffff; /* Change text color to the original background color for contrast */
+        outline: none; /* Ensure no outline appears on hover or active */
+        box-shadow: none; /* Ensure no box shadow appears on hover or active */
+    }
+
+    .reminder-delete-btn:hover {
+        background-color: rgba(210, 0, 0, 1); /* Change background color when hovered or active */
+        border-color: rgba(210, 0, 0, 1);
+        color: #ffffff; /* Change text color to the original background color for contrast */
+        outline: none; /* Ensure no outline appears on hover or active */
+        box-shadow: none; /* Ensure no box shadow appears on hover or active */
+        transition: background-color 0.2s ease-in-out;
     }
 }
