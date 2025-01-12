@@ -46,7 +46,7 @@
             </div>
 
             <div class="modal fade" id="editModal{{ $stok->stok_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered custom-modal-width">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content pl-3 pr-3">
                         <div class="modal-header justify-content-center">
                             <p class="modal-title" id="exampleModalLabel">Detail Stok Barang</p>
@@ -82,8 +82,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer mb-2">
-                                <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed" data-bs-dismiss="modal">Tutup</button>
-                                <button type="submit" class="btn btn-primary custom-btn mt-2">Simpan</button>
+                                <button type="button" class="btn btn-primary custom-btn mt-2 btn-closed footer-button" data-bs-dismiss="modal">Tutup</button>
+                                <button type="submit" class="btn btn-primary custom-btn mt-2 footer-button">Simpan</button>
                             </div>
                         </form>
                     </div>
