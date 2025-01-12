@@ -19,24 +19,24 @@ class DashboardController extends Controller
         $selectedMonth = Carbon::now()->format('m');
         $pendapatan_kotor_harian = DB::table('transaksis')->join('transaction_details', 'transaksis.id', '=', 'transaction_details.transactionID')
                                             ->join('products', 'transaction_details.productID', '=', 'products.id')
-                                            ->select('transaksis.created_at as date', DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as pendapatan'))
+                                            ->select(DB::raw('DATE(transaksis.created_at) as date'), DB::raw('SUM(transaction_details.productQuantity * products.productPrice) as pendapatan'))
                                             ->where([['transaksis.type', '=', 'Pemasukan'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], ['transaksis.userID', '=', $userid]])
-                                            ->groupBy('date')
-                                            ->orderBy('date')
+                                            ->groupBy(DB::raw('DATE(transaksis.created_at)'))
+                                            ->orderBy('date', 'asc')
                                             ->get()
                                             ->keyBy('date');
 
         $pengeluaran_harian = DB::table('transaksis')
-                                            ->select('transaksis.created_at as date', DB::raw('SUM(transaksis.nominal) as pengeluaran'))
+                                            ->select(DB::raw('DATE(transaksis.created_at) as date'), DB::raw('SUM(transaksis.nominal) as pengeluaran'))
                                             ->where([['transaksis.type', '=', 'Pengeluaran'], [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], ['transaksis.userID', '=', $userid]])
-                                            ->groupBy('date')
-                                            ->orderBy('date')
+                                            ->groupBy(DB::raw('DATE(transaksis.created_at)'))
+                                            ->orderBy('date', 'asc')
                                             ->get()
                                             ->keyBy('date');
 
         $finalCollection = collect();
 
-        $allDates = $pendapatan_kotor_harian->keys()->merge($pengeluaran_harian->keys())->unique();
+        $allDates = $pendapatan_kotor_harian->keys()->merge($pengeluaran_harian->keys())->unique()->sort();
                                             
         foreach ($allDates as $date) {
             $pendapatan = $pendapatan_kotor_harian->has($date) ? $pendapatan_kotor_harian->get($date)->pendapatan : 0;
