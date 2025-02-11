@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class StokController extends Controller
 {
@@ -47,7 +48,7 @@ class StokController extends Controller
     {
         $userid = Auth::check() ? Auth::id() : null;
 
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'namaBarangOnboarding' => 'required|array',
             'namaBarangOnboarding.*' => 'required|string|max:255',
             'jumlahBarangOnboarding' => 'required|array',
@@ -67,7 +68,7 @@ class StokController extends Controller
             $productStock = $request['jumlahBarangOnboarding'][$index];
             $productPrice = $request['nominalHargaBarangOnboarding'][$index];
 
-            Product::insert([
+            Product::create([
                 'userID' => $userid,
                 'productName' => $productName,
                 'productStock' => $productStock,
@@ -101,7 +102,7 @@ class StokController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:255',
             'nominal' => 'required|numeric',
             'sisa' => 'required|integer',

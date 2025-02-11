@@ -50,5 +50,3 @@ Route::delete('reminder/delete/{id}', [ReminderController::class, 'destroy'])->n
 Route::post('/add-utang-to-reminder/{utang}', [ReminderController::class, 'addUtangtoReminder'])->name('addUtangToReminder');
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

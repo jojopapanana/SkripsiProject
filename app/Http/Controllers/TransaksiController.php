@@ -12,6 +12,7 @@ use App\Models\TransactionDetail;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class TransaksiController extends Controller
 {
@@ -19,19 +20,22 @@ class TransaksiController extends Controller
     public function export_excel(Request $request){
         $month = $request->input('month');
         $year = $request->input('year');
-        return Excel::download(new TransaksiExport($month, $year), 'transaksi.xlsx');
+        $userid = Auth::check() ? Auth::id() : null;
+        return Excel::download(new TransaksiExport($month, $year, $userid), 'transaksi.xlsx');
     }
 
     public function export_csv(Request $request){
         $month = $request->input('month');
         $year = $request->input('year');
-        return Excel::download(new TransaksiExport($month, $year), 'transaksi.csv');
+        $userid = Auth::check() ? Auth::id() : null;
+        return Excel::download(new TransaksiExport($month, $year, $userid), 'transaksi.csv');
     }
 
     public function export_pdf(Request $request){
         $month = $request->input('month');
         $year = $request->input('year');
-        return Excel::download(new TransaksiExport($month, $year), 'transaksi.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+        $userid = Auth::check() ? Auth::id() : null;
+        return Excel::download(new TransaksiExport($month, $year, $userid), 'transaksi.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
     }
     /**
      * Display a listing of the resource.
@@ -91,7 +95,7 @@ class TransaksiController extends Controller
     private function tambahPemasukan(Request $request) {
         $userid = Auth::check() ? Auth::id() : null;
 
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
             'nominal' => 'required|numeric',
@@ -123,7 +127,7 @@ class TransaksiController extends Controller
                 ->where('id', $productID)
                 ->decrement('productStock', $request['jumlahBarang'][$index]);
 
-            TransactionDetail::insert([
+            TransactionDetail::create([
                 'transactionID' => $transactionID,
                 'productID' => $productID,
                 'productQuantity' => $request['jumlahBarang'][$index]
@@ -134,7 +138,7 @@ class TransaksiController extends Controller
     private function tambahStokPengeluaran(Request $request) {
         $userid = Auth::check() ? Auth::id() : null;
 
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
             'deskripsi' => 'required|string',
@@ -155,7 +159,7 @@ class TransaksiController extends Controller
             ->where('id', $request->jenisBarangPengeluaran)
             ->increment('productStock', $request->jumlahBarangPengeluaran);
 
-        Transaksi::insert([
+        Transaksi::create([
             [
                 'created_at' => $request->tanggal,
                 'userID' => $userid,
@@ -171,7 +175,7 @@ class TransaksiController extends Controller
     private function tambahLainnyaPengeluaran(Request $request) {
         $userid = Auth::check() ? Auth::id() : null;
 
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
             'deskripsiTransaksi' => 'required|string|max:255',
@@ -187,7 +191,7 @@ class TransaksiController extends Controller
             ]);
         }
 
-        Transaksi::insert([
+        Transaksi::create([
             [
                 'created_at' => $request->tanggal,
                 'userID' => $userid,
@@ -203,7 +207,7 @@ class TransaksiController extends Controller
     private function tambahStokBaruPengeluaran(Request $request) {
         $userid = Auth::check() ? Auth::id() : null;
 
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'tanggal' => 'required|date',
             'jenisTransaksi' => 'required|string',
             'deskripsi' => 'required|string',
@@ -221,14 +225,14 @@ class TransaksiController extends Controller
             ]);
         }
 
-        Product::insert([
+        Product::create([
             'userID' => $userid,
             'productName' => $request->stokBaru,
             'productStock' => $request->jumlahBarangPengeluaran,
             'productPrice' => $request->hargaJualSatuan
         ]);
 
-        Transaksi::insert([
+        Transaksi::create([
             'created_at' => $request->tanggal,
             'userID' => $userid,
             'nominal' => $request->nominalPengeluaran,
@@ -280,7 +284,7 @@ class TransaksiController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'nominalTransaksi' => 'required|numeric',
             'kategoriTransaksi' => 'required|string|max:255',
             'metodeTransaksi' => 'required|string|exists:payment_methods,name',

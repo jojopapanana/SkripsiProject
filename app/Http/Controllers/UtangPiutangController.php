@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\Models\UtangPiutang;
 use App\Models\Reminder;
 
@@ -54,7 +55,7 @@ class UtangPiutangController extends Controller
     {
         $userid = Auth::check() ? Auth::id() : null;
 
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'deskripsi' => 'required|string|max:255',
             'batasWaktu' => 'required|date',
             'nominal' => 'required',
@@ -103,7 +104,7 @@ class UtangPiutangController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'deskripsi' => 'required|string|max:255',
             'batasWaktu' => 'required|date',
             'nominal' => 'required|numeric',

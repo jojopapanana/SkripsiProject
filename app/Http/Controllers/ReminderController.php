@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Reminder;
 use App\Models\UtangPiutang;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ReminderController extends Controller
 {
@@ -56,7 +57,7 @@ class ReminderController extends Controller
     {
         $userid = Auth::check() ? Auth::id() : null;
 
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'judul' => 'required|string|max:255',
             'deadline' => 'required|date',
             'deskripsi' => 'required|string|max:255',
@@ -100,7 +101,7 @@ class ReminderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'judul' => 'required|string|max:255',
             'deadline' => 'required|date',
             'deskripsi' => 'required|string|max:255',
@@ -115,7 +116,7 @@ class ReminderController extends Controller
 
         $utangPiutang = UtangPiutang::where('reminderID', $id)->first();
         if ($utangPiutang) {
-            $validator = \Validator::make($request->only('deskripsi'), [
+            $validator = Validator::make($request->only('deskripsi'), [
                 'deskripsi' => 'required|numeric|max:999999999999',
             ]);
 
