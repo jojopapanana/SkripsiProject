@@ -190,15 +190,13 @@ class TransaksiController extends Controller
         }
 
         Transaksi::create([
-            [
-                'created_at' => $request->tanggal,
-                'userID' => $userid,
-                'nominal' => $request->nominalPengeluaran,
-                'type' => $request->jenisTransaksi,
-                'category' => $request->kategori,
-                'methodID' => $this->getMethodIdByName($request->metode),
-                'description' => $request->deskripsiTransaksi
-            ]
+            'created_at' => $request->tanggal,
+            'userID' => $userid,
+            'nominal' => $request->nominalPengeluaran,
+            'type' => $request->jenisTransaksi,
+            'category' => $request->kategori,
+            'methodID' => $this->getMethodIdByName($request->metode),
+            'description' => $request->deskripsiTransaksi
         ]);
     }
 
