@@ -160,15 +160,13 @@ class TransaksiController extends Controller
             ->increment('productStock', $request->jumlahBarangPengeluaran);
 
         Transaksi::create([
-            [
-                'created_at' => $request->tanggal,
-                'userID' => $userid,
-                'nominal' => $request->nominalPengeluaran,
-                'type' => $request->jenisTransaksi,
-                'category' => 'Operasional',
-                'methodID' => $this->getMethodIdByName($request->metode),
-                'description' => $request->deskripsi
-            ]
+            'created_at' => $request->tanggal,
+            'userID' => $userid,
+            'nominal' => $request->nominalPengeluaran,
+            'type' => $request->jenisTransaksi,
+            'category' => 'Operasional',
+            'methodID' => $this->getMethodIdByName($request->metode),
+            'description' => $request->deskripsi
         ]);
     }
 
