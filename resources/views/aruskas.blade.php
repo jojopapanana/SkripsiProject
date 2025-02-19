@@ -58,20 +58,20 @@
                 </div>
             </div>
 
+            @foreach ($semua_pengeluaran_operasional as $p)
             <div class="row" style="margin-bottom: -5px;">
                 <div class="col">
                         <div class="justify-content-start">
-                            <h3 class="text-start fs-6 fw-normal mt-2">Biaya Operasional Usaha</h3>
+                            <h3 class="text-start fs-6 fw-normal mt-2">{{ $p->deskripsi }}</h3>
                         </div>
                 </div>
                 <div class="col">
-                    @foreach ($pengeluaran_operasional as $p)
                     <div class="justify-content-end">
-                        <h3 class="text-end fs-6 fw-bold" style="color: red">(Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }})</h3>
+                        <h3 class="text-end fs-6 fw-bold" style="color: red">(Rp. {{ number_format($p->nominal, 0, ',', '.') }})</h3>
                     </div>
-                    @endforeach
                 </div>
             </div>
+            @endforeach
 
             <hr class="my-2">
 

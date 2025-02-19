@@ -40,6 +40,15 @@ class ArusKasController extends Controller
                                                         ->groupBy('transactionMonth')
                                                         ->get();
 
+        $semua_pengeluaran_operasional = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                        ->where([
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
+                                                            ['transaksis.category', '=', 'Operasional'], 
+                                                            ['transaksis.type', '=', 'Pengeluaran'], 
+                                                            ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                        ->select('transaksis.nominal as nominal', 'transaksis.description as deskripsi')
+                                                        ->get();
+
         $totalPendapatan = $pendapatan_operasional->isNotEmpty() ? $pendapatan_operasional->first()->totalPerMonth : 0;
         $totalPengeluaran = $pengeluaran_operasional->isNotEmpty() ? $pengeluaran_operasional->first()->totalPerMonth : 0;
 
@@ -89,6 +98,7 @@ class ArusKasController extends Controller
         $data = [
             'pendapatan_operasional' => $pendapatan_operasional,
             'pengeluaran_operasional' => $pengeluaran_operasional,
+            'semua_pengeluaran_operasional' => $semua_pengeluaran_operasional,
             'total_arus_kas_operasional' => $total_arus_kas_operasional,
             'pengeluaran_investasi' => $pengeluaran_investasi,
             'total_pengeluaran_investasi' => $total_arus_kas_investasi,
@@ -130,6 +140,15 @@ class ArusKasController extends Controller
                                                             ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
                                                         ->select(DB::raw('month(transaksis.created_at) as transactionMonth'), DB::raw('SUM(transaksis.nominal) as totalPerMonth'))
                                                         ->groupBy('transactionMonth')
+                                                        ->get();
+
+        $semua_pengeluaran_operasional = DB::table('transaksis')->join('payment_methods', 'transaksis.methodID', '=', 'payment_methods.id')
+                                                        ->where([
+                                                            [DB::raw('month(transaksis.created_at)'), '=', $selectedMonth], [DB::raw('year(transaksis.created_at)'), '=', $selectedYear],
+                                                            ['transaksis.category', '=', 'Operasional'], 
+                                                            ['transaksis.type', '=', 'Pengeluaran'], 
+                                                            ['payment_methods.name', '=', 'Tunai'], ['transaksis.userID', '=', $userid]])
+                                                        ->select('transaksis.nominal as nominal', 'transaksis.description as deskripsi')
                                                         ->get();
 
         $totalPendapatan = $pendapatan_operasional->isNotEmpty() ? $pendapatan_operasional->first()->totalPerMonth : 0;
@@ -181,6 +200,7 @@ class ArusKasController extends Controller
         return view('aruskas', [
             'pendapatan_operasional' => $pendapatan_operasional,
             'pengeluaran_operasional' => $pengeluaran_operasional,
+            'semua_pengeluaran_operasional' => $semua_pengeluaran_operasional,
             'total_arus_kas_operasional' => $total_arus_kas_operasional,
             'pengeluaran_investasi' => $pengeluaran_investasi,
             'total_pengeluaran_investasi' => $total_arus_kas_investasi,

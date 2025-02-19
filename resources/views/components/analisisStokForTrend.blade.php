@@ -6,6 +6,9 @@
                 <thead>
                     <tr>
                         <th class="text-start" style="width: 20%;">Periode</th>
+                        @if($rangeWaktu == 'mingguan')
+                            <th class="text-start" style="width: 20%;">Bulan</th>
+                        @endif
                         <th class="text-start" style="width: 30%;">Nama Produk</th>
                         <th class="text-start" style="width: 25%;">Jumlah Terjual</th>
                     </tr>
@@ -23,13 +26,16 @@
                             <tr>
                                 <td class="text-start" style="width: 20%;">
                                     @if($rangeWaktu == 'bulanan')
-                                        {{ date('F', mktime(0, 0, 0, $product->bulan)) }}
+                                        {{ \Carbon\Carbon::createFromDate(null, $product->bulan, null)->translatedFormat('F') }}
                                     @elseif($rangeWaktu == 'mingguan')
                                         Minggu ke-{{ $product->minggu }}
                                     @elseif($rangeWaktu == 'tahunan')
                                         {{ $product->tahun }}
                                     @endif
                                 </td>
+                                @if($rangeWaktu == 'mingguan')
+                                    <td class="text-start" style="width: 20%;">{{ \Carbon\Carbon::createFromDate(null, $product->bulan, null)->translatedFormat('F') }}</td>
+                                @endif
                                 <td class="text-start" style="width: 30%;">{{ $product->productName }}</td>
                                 <td class="text-start" style="width: 25%;">{{ $product->total_terjual }}</td>
                             </tr>
@@ -58,6 +64,9 @@
                 <thead>
                     <tr>
                         <th class="text-start" style="width: 20%;">Periode</th>
+                        @if($rangeWaktu == 'mingguan')
+                            <th class="text-start" style="width: 20%;">Bulan</th>
+                        @endif
                         <th class="text-start" style="width: 30%;">Nama Produk</th>
                         <th class="text-start" style="width: 25%;">Jumlah Terjual</th>
                     </tr>
@@ -75,13 +84,16 @@
                             <tr>
                                 <td class="text-start" style="width: 20%;">
                                     @if($rangeWaktu == 'bulanan')
-                                        {{ date('F', mktime(0, 0, 0, $product->bulan)) }}
+                                        {{ \Carbon\Carbon::createFromDate(null, $product->bulan, null)->translatedFormat('F') }}
                                     @elseif($rangeWaktu == 'mingguan')
                                         Minggu ke-{{ $product->minggu }}
                                     @elseif($rangeWaktu == 'tahunan')
                                         {{ $product->tahun }}
                                     @endif
                                 </td>
+                                @if($rangeWaktu == 'mingguan')
+                                    <td class="text-start" style="width: 20%;">{{ \Carbon\Carbon::createFromDate(null, $product->bulan, null)->translatedFormat('F') }}</td>
+                                @endif
                                 <td class="text-start" style="width: 30%;">{{ $product->productName }}</td>
                                 <td class="text-start" style="width: 25%;">{{ $product->total_terjual }}</td>
                             </tr>

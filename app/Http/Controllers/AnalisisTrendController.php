@@ -16,49 +16,50 @@ class AnalisisTrendController extends Controller
     public function index(Request $request)
     {
         $userid = Auth::check() ? Auth::id() : null;
-        $rangeWaktu = $request->input('rangeWaktu', 'mingguan'); 
+        $rangeWaktu = $request->input('rangeWaktu', 'mingguan');
+        $thisYear = Carbon::now()->year; 
 
         $produkTerbanyak = collect();
         $produkTerdikit = collect();
 
         if ($rangeWaktu == 'bulanan') {
             $produkTerbanyak = DB::table('transaction_details')
-                ->select(DB::raw('MONTH(transaksis.created_at) as bulan, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
+                ->select(DB::raw('MONTH(transaksis.created_at) as bulan, YEAR(transaksis.created_at) as tahun, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
                 ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
-                ->where('transaksis.userID', '=', $userid)
-                ->groupBy('bulan', 'products.productName')
+                ->where([['transaksis.userID', '=', $userid], [DB::raw('YEAR(transaksis.created_at)'), '=', $thisYear]])
+                ->groupBy('bulan', 'products.productName', 'transaksis.created_at')
                 ->orderBy('total_terjual', 'desc')
                 ->get()
                 ->groupBy('bulan');
 
             $produkTerdikit = DB::table('transaction_details')
-                ->select(DB::raw('MONTH(transaksis.created_at) as bulan, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
+                ->select(DB::raw('MONTH(transaksis.created_at) as bulan, YEAR(transaksis.created_at) as tahun, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
                 ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
-                ->where('transaksis.userID', '=', $userid)
-                ->groupBy('bulan', 'products.productName')
+                ->where([['transaksis.userID', '=', $userid], [DB::raw('YEAR(transaksis.created_at)'), '=', $thisYear]])
+                ->groupBy('bulan', 'products.productName', 'transaksis.created_at')
                 ->orderBy('total_terjual', 'asc')
                 ->get()
                 ->groupBy('bulan');
 
         } elseif ($rangeWaktu == 'mingguan') {
             $produkTerbanyak = DB::table('transaction_details')
-                ->select(DB::raw('WEEK(transaksis.created_at) as minggu, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
+                ->select(DB::raw('WEEK(transaksis.created_at) as minggu, MONTH(transaksis.created_at) as bulan, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
                 ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
-                ->where('transaksis.userID', '=', $userid)
-                ->groupBy('minggu', 'products.productName')
+                ->where([['transaksis.userID', '=', $userid], [DB::raw('YEAR(transaksis.created_at)'), '=', $thisYear]])
+                ->groupBy('minggu', 'products.productName', 'transaksis.created_at')
                 ->orderBy('total_terjual', 'desc')
                 ->get()
                 ->groupBy('minggu');
 
             $produkTerdikit = DB::table('transaction_details')
-                ->select(DB::raw('WEEK(transaksis.created_at) as minggu, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
+                ->select(DB::raw('WEEK(transaksis.created_at) as minggu, MONTH(transaksis.created_at) as bulan, products.productName, SUM(transaction_details.productQuantity) as total_terjual'))
                 ->join('products', 'transaction_details.productID', '=', 'products.id')
                 ->join('transaksis', 'transaction_details.transactionID', '=', 'transaksis.id')
-                ->where('transaksis.userID', '=', $userid)
-                ->groupBy('minggu', 'products.productName')
+                ->where([['transaksis.userID', '=', $userid], [DB::raw('YEAR(transaksis.created_at)'), '=', $thisYear]])
+                ->groupBy('minggu', 'products.productName', 'transaksis.created_at')
                 ->orderBy('total_terjual', 'asc')
                 ->get()
                 ->groupBy('minggu');

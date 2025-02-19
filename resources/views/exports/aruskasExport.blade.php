@@ -12,12 +12,12 @@
         </div>
 
         <div class="d-flex justify-content-between">
-            <div class="text-start fs-6 fw-normal">Biaya Operasional Usaha</div>
-            <div class="text-end fs-6 fw-bold" style="color: red">
-                @foreach ($pengeluaran_operasional as $p)
-                    (Rp. {{ number_format($p->totalPerMonth, 0, ',', '.') }})
-                @endforeach
-            </div>
+            @foreach ($semua_pengeluaran_operasional as $p)
+                <div class="text-start fs-6 fw-normal">{{ $p->deskripsi }}</div>
+                <div class="text-end fs-6 fw-bold" style="color: red">
+                    (Rp. {{ number_format($p->nominal, 0, ',', '.') }})
+                </div>
+            @endforeach
         </div>
 
         <hr class="my-2">
