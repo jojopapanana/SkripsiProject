@@ -116,11 +116,11 @@ class ReminderController extends Controller
 
         $utangPiutang = UtangPiutang::where('reminderID', $id)->first();
         if ($utangPiutang) {
-            $validator = Validator::make($request->only('deskripsi'), [
-                'deskripsi' => 'required|numeric|max:999999999999',
-            ]);
-
-            if ($validator->fails()) {
+            try {
+                $request->validate([
+                    'deskripsi' => 'required|numeric|max:999999999999',
+                ]);
+            } catch (\Illuminate\Validation\ValidationException $e) {
                 return redirect()->back()->with([
                     'error' => 'Input kolom Deskripsi harus berupa numeric dengan maks 12 digit angka untuk pengingat ini karena berkaitan dengan utang piutang!',
                     'errorDataUpdate' => array_merge($request->all(), ['id' => $id])
